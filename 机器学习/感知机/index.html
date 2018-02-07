@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="ss," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -79,23 +79,22 @@
 
 
 
-<meta name="description" content="感知机模型假设输入空间（特征空间）是$X \in R^{n}$，输出空间是$Y={+1,-1}$。输入的表示实例的特征向量，对应于输入空间的点，输出表示实例的类别。输入空间到输出空间的映射函数是$$f(x)=sign(\omegax+b)$$称为感知机，其中$sign$是符号函数，即：$$sign(x)=\begin{cases} 1, &amp;amp; x&amp;gt;0 \ -1, &amp;amp; x&amp;l">
-<meta name="keywords" content="ss">
+<meta name="description" content="感知机模型假设输入空间（特征空间）是$X \in R^{n}$，输出空间是$Y=\{+1,-1\}$。输入的表示实例的特征向量，对应于输入空间的点，输出表示实例的类别。输入空间到输出空间的映射函数是   f(x)=sign(\omega * x+b)称为感知机，其中$sign$是符号函数，即：  sign(x)=\begin{cases} 1, &amp; x&amp;gt;0 \\ -1, &amp; x">
 <meta property="og:type" content="article">
-<meta property="og:title" content="logistic regression">
-<meta property="og:url" content="http://yoursite.com/sss/logistic-regression/index.html">
+<meta property="og:title" content="感知机">
+<meta property="og:url" content="http://yoursite.com/机器学习/感知机/index.html">
 <meta property="og:site_name" content="Lim的博客">
-<meta property="og:description" content="感知机模型假设输入空间（特征空间）是$X \in R^{n}$，输出空间是$Y={+1,-1}$。输入的表示实例的特征向量，对应于输入空间的点，输出表示实例的类别。输入空间到输出空间的映射函数是$$f(x)=sign(\omegax+b)$$称为感知机，其中$sign$是符号函数，即：$$sign(x)=\begin{cases} 1, &amp;amp; x&amp;gt;0 \ -1, &amp;amp; x&amp;l">
+<meta property="og:description" content="感知机模型假设输入空间（特征空间）是$X \in R^{n}$，输出空间是$Y=\{+1,-1\}$。输入的表示实例的特征向量，对应于输入空间的点，输出表示实例的类别。输入空间到输出空间的映射函数是   f(x)=sign(\omega * x+b)称为感知机，其中$sign$是符号函数，即：  sign(x)=\begin{cases} 1, &amp; x&amp;gt;0 \\ -1, &amp; x">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E6%84%9F%E7%9F%A5%E6%9C%BA%E7%AE%97%E6%B3%95%E5%8E%9F%E5%A7%8B%E5%BD%A2%E5%BC%8F.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E6%84%9F%E7%9F%A5%E6%9C%BA%E5%AF%B9%E5%81%B6%E5%BD%A2%E5%BC%8F1.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E6%84%9F%E7%9F%A5%E6%9C%BA%E5%AF%B9%E5%81%B6%E5%BD%A2%E5%BC%8F2.png">
-<meta property="og:image" content="http://yoursite.com/sss/logistic-regression/output_9_0.png">
-<meta property="og:image" content="http://yoursite.com/sss/logistic-regression/output_13_0.png">
-<meta property="og:updated_time" content="2018-02-07T15:28:24.178Z">
+<meta property="og:image" content="http://yoursite.com/机器学习/感知机/output_9_0.png">
+<meta property="og:image" content="http://yoursite.com/机器学习/感知机/output_13_0.png">
+<meta property="og:updated_time" content="2018-02-07T16:37:46.375Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="logistic regression">
-<meta name="twitter:description" content="感知机模型假设输入空间（特征空间）是$X \in R^{n}$，输出空间是$Y={+1,-1}$。输入的表示实例的特征向量，对应于输入空间的点，输出表示实例的类别。输入空间到输出空间的映射函数是$$f(x)=sign(\omegax+b)$$称为感知机，其中$sign$是符号函数，即：$$sign(x)=\begin{cases} 1, &amp;amp; x&amp;gt;0 \ -1, &amp;amp; x&amp;l">
+<meta name="twitter:title" content="感知机">
+<meta name="twitter:description" content="感知机模型假设输入空间（特征空间）是$X \in R^{n}$，输出空间是$Y=\{+1,-1\}$。输入的表示实例的特征向量，对应于输入空间的点，输出表示实例的类别。输入空间到输出空间的映射函数是   f(x)=sign(\omega * x+b)称为感知机，其中$sign$是符号函数，即：  sign(x)=\begin{cases} 1, &amp; x&amp;gt;0 \\ -1, &amp; x">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E6%84%9F%E7%9F%A5%E6%9C%BA%E7%AE%97%E6%B3%95%E5%8E%9F%E5%A7%8B%E5%BD%A2%E5%BC%8F.png">
 
 
@@ -126,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/sss/logistic-regression/"/>
+  <link rel="canonical" href="http://yoursite.com/机器学习/感知机/"/>
 
 
 
 
 
-  <title>logistic regression | Lim的博客</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>感知机 | Lim的博客</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -259,7 +258,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/sss/logistic-regression/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/机器学习/感知机/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="刘力铭">
@@ -276,7 +275,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">logistic regression</h1>
+          <h1 class="post-title" itemprop="name headline">感知机</h1>
         
 
         <div class="post-meta">
@@ -288,8 +287,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-07T22:56:23+08:00">
-                2018-02-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-07T22:56:23+08:00">
+                2017-12-07
               </time>
             
 
@@ -311,8 +310,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/sss/" itemprop="url" rel="index">
-                    <span itemprop="name">sss</span>
+                  <a href="/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
                   </a>
                 </span>
 
@@ -348,16 +347,24 @@
       
 
       
-        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
-
-<h1 id="感知机"><a href="#感知机" class="headerlink" title="感知机"></a>感知机</h1><h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>假设输入空间（特征空间）是$X \in R^{n}$，输出空间是$Y={+1,-1}$。输入的表示实例的特征向量，对应于输入空间的点，输出表示实例的类别。输入空间到输出空间的映射函数是$$f(x)=sign(\omega<em>x+b)$$称为感知机，其中$sign$是符号函数，即：$$sign(x)=\begin{cases} 1, &amp; x&gt;0 \ -1, &amp; x&lt;0 \end{cases}$$<br>感知机模型的假设空间是定义在特征空间中所有线性分类模型，即函数集${f|f(x)=\omega</em>x+b}$</p>
+        <h1 id="感知机"><a href="#感知机" class="headerlink" title="感知机"></a>感知机</h1><h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>假设输入空间（特征空间）是$X \in R^{n}$，输出空间是$Y=\{+1,-1\}$。输入的表示实例的特征向量，对应于输入空间的点，输出表示实例的类别。输入空间到输出空间的映射函数是 </p>
+<script type="math/tex; mode=display">
+f(x)=sign(\omega * x+b)</script><p>称为感知机，其中$sign$是符号函数，即：</p>
+<script type="math/tex; mode=display">
+sign(x)=\begin{cases} 1, & x>0 \\ -1, & x<0 \end{cases}</script><p>感知机模型的假设空间是定义在特征空间中所有线性分类模型，即函数集$\{f|f(x)=\omega*x+b\}$</p>
 <h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><p>假设训练数据集是线性可分的，感知机学习的目的是求得一个能够将训练数据正负实例完全正确分开的分离超平面。<br>感知机采用的损失函数是：所有误分类的点到超平面的总距离。</p>
-<ul>
-<li>点到直线距离<br>回顾一下点到直线距离的推导：<br>假设有直线L：$w^{T}x+b=0$，点$P$是直线外的一点，点$P^{<em>}$是经过点$P$与直线L垂直相交的点，L的法向量为$w$，则有：$$\begin{cases} P-P^{</em>}=\alpha \ w^{T}p+b=0 \end{cases}$$<br>将式1带入式2，两边同时左乘$w^{T}$，有$$w^{T}p-w^{T}p^{*}=\alpha ||w|| $$ $$\alpha=\frac{w^{T}p+b}{||w||}$$<br>$\alpha$就是点到直线的距离</li>
-</ul>
-<p>对于误分类的点集合M，经验风险为：$$L(w,b)=-\sum\limits<em>{x</em>{i} \in M}y<em>{i}(w*x</em>{i}+b)$$</p>
-<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><p>对于L，分别对w和b求梯度下降方向得$$\begin{cases} \nabla <em>{w}L(w,b)=-\sum y</em>{i}x<em>{i} \ \nabla </em>{b}L(w,b)=-\sum y<em>{i} \end{cases}$$<br>更新权值：$$\begin{cases} w=w+\eta y</em>{i}x<em>{i} \ b=b+\eta y</em>{i} \end{cases}$$</p>
-<h2 id="算法原始形式"><a href="#算法原始形式" class="headerlink" title="算法原始形式"></a>算法原始形式</h2><p>整理一下，算法的原始形式步骤如下所示：<br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E6%84%9F%E7%9F%A5%E6%9C%BA%E7%AE%97%E6%B3%95%E5%8E%9F%E5%A7%8B%E5%BD%A2%E5%BC%8F.png" width="600" alt="感知机算法原始形式"></p>
+<blockquote>
+<p>点到直线距离<br>回顾一下点到直线距离的推导：<br>假设有直线L：$w^{T}x+b=0$，点$P$是直线外的一点，点$P^{*}$是经过点$P$与直线L垂直相交的点，L的法向量为$w$，则有：</p>
+<script type="math/tex; mode=display">
+\begin{cases} P-P^{*}=\alpha \\ w^{T}p+b=0 \end{cases}</script><p>将式1带入式2，两边同时左乘$w^{T}$，有</p>
+<script type="math/tex; mode=display">
+w^{T}p-w^{T}p^{*}=\alpha ||w||</script><script type="math/tex; mode=display">\alpha=\frac{w^{T}p+b}{||w||}</script><p>$\alpha$就是点到直线的距离</p>
+</blockquote>
+<p>对于误分类的点集合M，经验风险为：<script type="math/tex">L(w,b)=-\sum\limits_{x_{i} \in M}y_{i}(w*x_{i}+b)</script></p>
+<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><p>对于L，分别对w和b求梯度下降方向得</p>
+<script type="math/tex; mode=display">
+\begin{cases} \nabla _{w}L(w,b)=-\sum y_{i}x_{i} \\ \nabla _{b}L(w,b)=-\sum y_{i} \end{cases}</script><p>更新权值：</p>
+<script type="math/tex; mode=display">\begin{cases} w=w+\eta y_{i}x_{i} \\ b=b+\eta y_{i} \end{cases}</script><h2 id="算法原始形式"><a href="#算法原始形式" class="headerlink" title="算法原始形式"></a>算法原始形式</h2><p>整理一下，算法的原始形式步骤如下所示：<br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E6%84%9F%E7%9F%A5%E6%9C%BA%E7%AE%97%E6%B3%95%E5%8E%9F%E5%A7%8B%E5%BD%A2%E5%BC%8F.png" width="600" alt="感知机算法原始形式"></p>
 <h2 id="对偶形式"><a href="#对偶形式" class="headerlink" title="对偶形式"></a>对偶形式</h2><p>对偶形式的基本想法是：将$w$和$b$表示为实例$x<em>{i}$和标记$y</em>{i}$的线性组合的形式，通过求解其系数而求得$w$和$b$<br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E6%84%9F%E7%9F%A5%E6%9C%BA%E5%AF%B9%E5%81%B6%E5%BD%A2%E5%BC%8F1.png" width="600" alt="感知机算法对偶形式1"><br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E6%84%9F%E7%9F%A5%E6%9C%BA%E5%AF%B9%E5%81%B6%E5%BD%A2%E5%BC%8F2.png" width="600" alt="感知机算法对偶形式2"></p>
 <h2 id="Try-it-with-Python"><a href="#Try-it-with-Python" class="headerlink" title="Try it with Python."></a>Try it with Python.</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">%matplotlib inline</span><br></pre></td></tr></table></figure>
 <ul>
@@ -384,7 +391,7 @@ w: [ 2.20510554 -1.06788728], b: -1.0
 <p><img src="output_13_0.png" alt="png"></p>
 <ul>
 <li>经过10次内的迭代，我们可以看到绿色的分类线（二维）可以完全把数据集分开。</li>
-<li>可以将线性可分的数据集完全分类的分界线有无数个，但是哪一个是最优的呢？那就要学习统计学习算法中的顶上明珠–SVM了！<h2 id="enjoy-it"><a href="#enjoy-it" class="headerlink" title="enjoy it."></a>enjoy it.</h2></li>
+<li>可以将线性可分的数据集完全分类的分界线有无数个，但是哪一个是最优的呢？那就要学习统计学习算法中的顶上明珠—SVM了！<h2 id="enjoy-it"><a href="#enjoy-it" class="headerlink" title="enjoy it."></a>enjoy it.</h2></li>
 </ul>
 
       
@@ -400,12 +407,6 @@ w: [ 2.20510554 -1.06788728], b: -1.0
     
 
     <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/ss/" rel="tag"># ss</a>
-          
-        </div>
       
 
       
@@ -506,15 +507,6 @@ w: [ 2.20510554 -1.06788728], b: -1.0
               </div>
             
 
-            
-              
-              
-              <div class="site-state-item site-state-tags">
-                
-                  <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">标签</span>
-                
-              </div>
             
 
           </nav>
@@ -707,24 +699,7 @@ w: [ 2.20510554 -1.06788728], b: -1.0
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
 
 
 
@@ -777,6 +752,45 @@ w: [ 2.20510554 -1.06788728], b: -1.0
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
 
   
 
