@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="ss," />
 
 
 
@@ -79,13 +79,24 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Lim的博客">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="感知机模型假设输入空间（特征空间）是$X \in R^{n}$，输出空间是$Y={+1,-1}$。输入的表示实例的特征向量，对应于输入空间的点，输出表示实例的类别。输入空间到输出空间的映射函数是$$f(x)=sign(\omegax+b)$$称为感知机，其中$sign$是符号函数，即：$$sign(x)=\begin{cases} 1, &amp;amp; x&amp;gt;0 \ -1, &amp;amp; x&amp;l">
+<meta name="keywords" content="ss">
+<meta property="og:type" content="article">
+<meta property="og:title" content="logistic regression">
+<meta property="og:url" content="http://yoursite.com/uncategorized/logistic-regression/index.html">
 <meta property="og:site_name" content="Lim的博客">
+<meta property="og:description" content="感知机模型假设输入空间（特征空间）是$X \in R^{n}$，输出空间是$Y={+1,-1}$。输入的表示实例的特征向量，对应于输入空间的点，输出表示实例的类别。输入空间到输出空间的映射函数是$$f(x)=sign(\omegax+b)$$称为感知机，其中$sign$是符号函数，即：$$sign(x)=\begin{cases} 1, &amp;amp; x&amp;gt;0 \ -1, &amp;amp; x&amp;l">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E6%84%9F%E7%9F%A5%E6%9C%BA%E7%AE%97%E6%B3%95%E5%8E%9F%E5%A7%8B%E5%BD%A2%E5%BC%8F.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E6%84%9F%E7%9F%A5%E6%9C%BA%E5%AF%B9%E5%81%B6%E5%BD%A2%E5%BC%8F1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E6%84%9F%E7%9F%A5%E6%9C%BA%E5%AF%B9%E5%81%B6%E5%BD%A2%E5%BC%8F2.png">
+<meta property="og:image" content="http://yoursite.com/uncategorized/logistic-regression/output_9_0.png">
+<meta property="og:image" content="http://yoursite.com/uncategorized/logistic-regression/output_13_0.png">
+<meta property="og:updated_time" content="2018-02-07T15:12:33.367Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Lim的博客">
+<meta name="twitter:title" content="logistic regression">
+<meta name="twitter:description" content="感知机模型假设输入空间（特征空间）是$X \in R^{n}$，输出空间是$Y={+1,-1}$。输入的表示实例的特征向量，对应于输入空间的点，输出表示实例的类别。输入空间到输出空间的映射函数是$$f(x)=sign(\omegax+b)$$称为感知机，其中$sign$是符号函数，即：$$sign(x)=\begin{cases} 1, &amp;amp; x&amp;gt;0 \ -1, &amp;amp; x&amp;l">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E6%84%9F%E7%9F%A5%E6%9C%BA%E7%AE%97%E6%B3%95%E5%8E%9F%E5%A7%8B%E5%BD%A2%E5%BC%8F.png">
 
 
 
@@ -115,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/uncategorized/logistic-regression/"/>
 
 
 
 
 
-  <title>Lim的博客</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>logistic regression | Lim的博客</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -140,8 +151,7 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left 
-  page-home">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -234,9 +244,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -266,9 +276,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/uncategorized/logistic-regression/" itemprop="url">logistic regression</a></h1>
+          <h1 class="post-title" itemprop="name headline">logistic regression</h1>
         
 
         <div class="post-meta">
@@ -318,9 +326,7 @@
       
 
       
-        
-          
-            <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
 <h1 id="感知机"><a href="#感知机" class="headerlink" title="感知机"></a>感知机</h1><h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>假设输入空间（特征空间）是$X \in R^{n}$，输出空间是$Y={+1,-1}$。输入的表示实例的特征向量，对应于输入空间的点，输出表示实例的类别。输入空间到输出空间的映射函数是$$f(x)=sign(\omega<em>x+b)$$称为感知机，其中$sign$是符号函数，即：$$sign(x)=\begin{cases} 1, &amp; x&gt;0 \ -1, &amp; x&lt;0 \end{cases}$$<br>感知机模型的假设空间是定义在特征空间中所有线性分类模型，即函数集${f|f(x)=\omega</em>x+b}$</p>
 <h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><p>假设训练数据集是线性可分的，感知机学习的目的是求得一个能够将训练数据正负实例完全正确分开的分离超平面。<br>感知机采用的损失函数是：所有误分类的点到超平面的总距离。</p>
@@ -359,8 +365,6 @@ w: [ 2.20510554 -1.06788728], b: -1.0
 <li>可以将线性可分的数据集完全分类的分界线有无数个，但是哪一个是最优的呢？那就要学习统计学习算法中的顶上明珠–SVM了！<h2 id="enjoy-it"><a href="#enjoy-it" class="headerlink" title="enjoy it."></a>enjoy it.</h2></li>
 </ul>
 
-          
-        
       
     </div>
     
@@ -375,14 +379,20 @@ w: [ 2.20510554 -1.06788728], b: -1.0
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/ss/" rel="tag"># ss</a>
+          
+        </div>
+      
+
+      
+      
+      
 
       
 
       
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -392,10 +402,11 @@ w: [ 2.20510554 -1.06788728], b: -1.0
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -403,6 +414,10 @@ w: [ 2.20510554 -1.06788728], b: -1.0
 
 
           
+
+  
+
+
 
         </div>
         
@@ -423,8 +438,17 @@ w: [ 2.20510554 -1.06788728], b: -1.0
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -495,6 +519,22 @@ w: [ 2.20510554 -1.06788728], b: -1.0
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#感知机"><span class="nav-number">1.</span> <span class="nav-text">感知机</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模型"><span class="nav-number">1.1.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#损失函数"><span class="nav-number">1.2.</span> <span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优化"><span class="nav-number">1.3.</span> <span class="nav-text">优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算法原始形式"><span class="nav-number">1.4.</span> <span class="nav-text">算法原始形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对偶形式"><span class="nav-number">1.5.</span> <span class="nav-text">对偶形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Try-it-with-Python"><span class="nav-number">1.6.</span> <span class="nav-text">Try it with Python.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#enjoy-it"><span class="nav-number">1.7.</span> <span class="nav-text">enjoy it.</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -628,6 +668,10 @@ w: [ 2.20510554 -1.06788728], b: -1.0
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
