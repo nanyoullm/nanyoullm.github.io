@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="&amp;emsp;&amp;emsp;PyTorch 由 Adam Paszke、Sam Gross 与 Soumith Chintala 等人牵头开发，其成员来自 Facebook FAIR 和其他多家实验室。它是一种 Python 优先的深度学习框架，在今年 1 月被开源，提供了两种高层面的功能：使用强大的 GPU 加速的 Tensor 计算（类似 numpy）构建于基于 tape 的 autograd 系">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初识pyTorch">
+<meta property="og:url" content="http://yoursite.com/深度学习/pyTorch/初识pyTorch/index.html">
+<meta property="og:site_name" content="Lim的博客">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;PyTorch 由 Adam Paszke、Sam Gross 与 Soumith Chintala 等人牵头开发，其成员来自 Facebook FAIR 和其他多家实验室。它是一种 Python 优先的深度学习框架，在今年 1 月被开源，提供了两种高层面的功能：使用强大的 GPU 加速的 Tensor 计算（类似 numpy）构建于基于 tape 的 autograd 系">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://github.com/nanyoullm/nanyoullm.github.io/blob/master/img/backpro.png?raw=true">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/variable.png">
+<meta property="og:updated_time" content="2018-02-08T16:15:28.843Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="初识pyTorch">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;PyTorch 由 Adam Paszke、Sam Gross 与 Soumith Chintala 等人牵头开发，其成员来自 Facebook FAIR 和其他多家实验室。它是一种 Python 优先的深度学习框架，在今年 1 月被开源，提供了两种高层面的功能：使用强大的 GPU 加速的 Tensor 计算（类似 numpy）构建于基于 tape 的 autograd 系">
+<meta name="twitter:image" content="https://github.com/nanyoullm/nanyoullm.github.io/blob/master/img/backpro.png?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/深度学习/pyTorch/初识pyTorch/"/>
+
+
+
+
+
+  <title>初识pyTorch | Lim的博客</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/nanyoullm/nanyoullm.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lim的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/深度学习/pyTorch/初识pyTorch/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="刘力铭">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/keji2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lim的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">初识pyTorch</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-09T00:12:45+08:00">
+                2018-02-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/深度学习/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/深度学习/pyTorch/" itemprop="url" rel="index">
+                    <span itemprop="name">pyTorch</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&emsp;&emsp;PyTorch 由 Adam Paszke、Sam Gross 与 Soumith Chintala 等人牵头开发，其成员来自 Facebook FAIR 和其他多家实验室。它是一种 Python 优先的深度学习框架，在今年 1 月被开源，提供了两种高层面的功能：使用强大的 GPU 加速的 Tensor 计算（类似 numpy）构建于基于 tape 的 autograd 系统的深度神经网络。<br>&emsp;&emsp;相比Tensorflow，博主认为pyTorch更加轻量级，接口更加友好，实现起来更快。这里是我学习官网教程后写的一些快速入门总结，欢迎参考。<br><a id="more"></a></p>
+<h2 id="Tensors"><a href="#Tensors" class="headerlink" title="Tensors"></a>Tensors</h2><ul>
+<li>这里我们学习一下pyTorch的Tensors基本数据操作</li>
+</ul>
+<h3 id="1-实现一个简单的神经网络反向传播"><a href="#1-实现一个简单的神经网络反向传播" class="headerlink" title="1.实现一个简单的神经网络反向传播"></a>1.实现一个简单的神经网络反向传播</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># batch size</span></span><br><span class="line">batch_size = <span class="number">100</span></span><br><span class="line"><span class="comment"># 输入维度</span></span><br><span class="line">input_size = <span class="number">64</span></span><br><span class="line"><span class="comment"># 隐层维度</span></span><br><span class="line">hidden_size = <span class="number">1000</span></span><br><span class="line"><span class="comment"># 输出维度</span></span><br><span class="line">output_size = <span class="number">10</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 正态分布随机定义训练数据</span></span><br><span class="line"><span class="comment"># type可以将tensor转换成指定的数据格式</span></span><br><span class="line">x = torch.randn(batch_size, input_size).type(torch.FloatTensor)</span><br><span class="line">y = torch.randn(batch_size, output_size).type(torch.FloatTensor)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 可训练参数定义</span></span><br><span class="line">w1 = torch.randn(input_size, hidden_size)</span><br><span class="line">w2 = torch.randn(hidden_size, output_size)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">learning_rate = <span class="number">1e-6</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>我们看一下反向传播的计算步骤，图片截自课程<a href="http://deeplearning.stanford.edu/wiki/index.php/%E5%8F%8D%E5%90%91%E4%BC%A0%E5%AF%BC%E7%AE%97%E6%B3%95" target="_blank" rel="noopener">UFLDL</a></li>
+</ul>
+<p><img src="https://github.com/nanyoullm/nanyoullm.github.io/blob/master/img/backpro.png?raw=true" alt="反向传播计算步骤"><br><br\></br\></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">    <span class="comment"># torch.mm（a, b）矩阵点乘操作</span></span><br><span class="line">    h = x.mm(w1)</span><br><span class="line">    <span class="comment"># 实现relu，及取 x 和 0 之间的大值</span></span><br><span class="line">    h_relu = h.clamp(min=<span class="number">0</span>)</span><br><span class="line">    y_pred = h_relu.mm(w2)</span><br><span class="line">    <span class="comment"># 计算loss</span></span><br><span class="line">    loss = (y_pred - y).pow(<span class="number">2</span>).sum()</span><br><span class="line">    <span class="keyword">if</span> i % <span class="number">10</span> == <span class="number">0</span>:</span><br><span class="line">        print(<span class="string">'step: &#123;&#125;, loss: &#123;&#125;'</span>.format(i, loss))</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 计算梯度，激活层的函数为relu</span></span><br><span class="line">    grad_y_pred = <span class="number">2.0</span> * (y_pred - y)</span><br><span class="line">    grad_w2 = h_relu.t().mm(grad_y_pred)</span><br><span class="line">    grad_h_relu = grad_y_pred.mm(w2.t())</span><br><span class="line">    grad_h = grad_h_relu.clone()</span><br><span class="line">    grad_h[h &lt; <span class="number">0</span>] = <span class="number">0</span></span><br><span class="line">    grad_w1 = x.t().mm(grad_h)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 权重更新</span></span><br><span class="line">    w1 = w1 - learning_rate * grad_w1</span><br><span class="line">    w2 = w2 - learning_rate * grad_w2</span><br></pre></td></tr></table></figure>
+<pre><code>step: 0, loss: 30453627.075980008
+step: 10, loss: 96118006.45569089
+step: 20, loss: 6532067.706399638
+step: 30, loss: 334688.0713296371
+step: 40, loss: 115934.43128277308
+step: 50, loss: 54652.07092030634
+step: 60, loss: 26871.274211959113
+step: 70, loss: 13525.872293335078
+step: 80, loss: 6936.796671634329
+step: 90, loss: 3612.269671562068
+</code></pre><ul>
+<li>以上对pyTorch的Tensor操作有一个简单认识，如mm点乘操作。</li>
+</ul>
+<h3 id="2-自动求导"><a href="#2-自动求导" class="headerlink" title="2.自动求导"></a>2.自动求导</h3><ul>
+<li>pyTorch有一个重要的对象，就是Variable，将Tensor转化为Variable后，pyTorch可以根据我们自定义的公式或者网络结构，实现自动梯度求导；</li>
+</ul>
+<p><br\><br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/variable.png" alt="variable"><br><br\></br\></br\></p>
+<ul>
+<li>上图是Variable的重要属性。对于一个Variable对象，.data可以获得原始的tensor对象;当计算梯度后，该变量的梯度可以累计到，grad；</li>
+<li>我们先感受一下这个强大的功能，<strong>很真实</strong>；</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch.autograd <span class="keyword">import</span> Variable</span><br><span class="line">x = Variable(torch.ones(<span class="number">2</span>,<span class="number">2</span>), requires_grad=<span class="keyword">True</span>)</span><br><span class="line">print(x.data)</span><br></pre></td></tr></table></figure>
+<pre><code> 1  1
+ 1  1
+[torch.FloatTensor of size 2x2]
+</code></pre><ul>
+<li>现在我们自定义一个$y$，$y=x+2$</li>
+<li>自定义一个$z$，$z=3*y^{2}$</li>
+<li>$out=\frac{1}{4}*z$</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">y = x + <span class="number">2</span></span><br><span class="line">print(y)</span><br><span class="line">z = <span class="number">3</span> * y * y</span><br><span class="line">print(z)</span><br><span class="line">out = z.mean()</span><br><span class="line">print(out)</span><br></pre></td></tr></table></figure>
+<pre><code>Variable containing:
+ 3  3
+ 3  3
+[torch.FloatTensor of size 2x2]
+
+Variable containing:
+ 27  27
+ 27  27
+[torch.FloatTensor of size 2x2]
+
+Variable containing:
+ 27
+[torch.FloatTensor of size 1]
+</code></pre><ul>
+<li>现在我们对out进行反向求导；</li>
+<li>$out$对$x$的求导结果为：$\frac{3}{2}*(x+2)$，$x$取矩阵中对应的值1，故为4.5</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">out.backward()</span><br><span class="line">print(x.grad)</span><br><span class="line">print(y.grad)</span><br></pre></td></tr></table></figure>
+<pre><code>Variable containing:
+ 4.5000  4.5000
+ 4.5000  4.5000
+[torch.FloatTensor of size 2x2]
+
+None
+</code></pre><ul>
+<li>请注意上面的结果，在out进行反向计算后，我们可以看到关系链最前段的x变量的梯度，但是我们无法看到y的梯度，返回了一个None，这是为什么呢？这里有一个合理的解释<a href="https://www.zhihu.com/question/61044004" target="_blank" rel="noopener">pytorch_hook</a></li>
+<li>pyTorch的开发者解释道：中间变量在完成了自身的反向传播使命后会被释放掉，因此我们想看中间变量的梯度，可以为其添加一个钩（hook)；直观理解，就是在这个中间变量完成反向传播计算的时候，再额外完成另一些任务，我们修改代码如下。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 用于记录y变量的梯度</span></span><br><span class="line">y_grads = []</span><br><span class="line"></span><br><span class="line">x = Variable(torch.ones(<span class="number">2</span>,<span class="number">2</span>), requires_grad=<span class="keyword">True</span>)</span><br><span class="line">y = x + <span class="number">2</span></span><br><span class="line">z = <span class="number">3</span> * y * y</span><br><span class="line">out = z.mean()</span><br><span class="line"><span class="comment"># 在反向传播之前，为y注册一个hook，任务是记录梯度</span></span><br><span class="line">y.register_hook(<span class="keyword">lambda</span> grad: y_grads.append(grad))</span><br><span class="line"></span><br><span class="line">out.backward()</span><br><span class="line">print(x.grad)</span><br><span class="line">print(y_grads)</span><br></pre></td></tr></table></figure>
+<pre><code>Variable containing:
+ 4.5000  4.5000
+ 4.5000  4.5000
+[torch.FloatTensor of size 2x2]
+
+[Variable containing:
+ 4.5000  4.5000
+ 4.5000  4.5000
+[torch.FloatTensor of size 2x2]
+]
+</code></pre><ul>
+<li>有公式我们知道，x和y的梯度应该是一样的；</li>
+<li><p>同时我们再思考一下，这个hook还有什么用呢？</p>
+<blockquote>
+<p>当你训练了一个网络，想提取中间层的参数或者CNN中的feature map时，hook就可以排上用场啦！</p>
+</blockquote>
+</li>
+<li><p>了解了Variable，现在我们使用Variable来重新实现上面的反向求导;</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">x = torch.randn(batch_size, input_size).type(torch.FloatTensor)</span><br><span class="line">x = Variable(x, requires_grad=<span class="keyword">False</span>)</span><br><span class="line">y = torch.randn(batch_size, output_size).type(torch.FloatTensor)</span><br><span class="line">y = Variable(y, requires_grad=<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line">w1 = torch.randn(input_size, hidden_size).type(torch.FloatTensor)</span><br><span class="line">w1 = Variable(w1, requires_grad=<span class="keyword">True</span>)</span><br><span class="line">w2 = torch.randn(hidden_size, output_size).type(torch.FloatTensor)</span><br><span class="line">w2 = Variable(w2, requires_grad=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">    y_pred = x.mm(w1).clamp(min=<span class="number">0</span>).mm(w2)</span><br><span class="line">    loss = (y_pred - y).pow(<span class="number">2</span>).sum()</span><br><span class="line">    <span class="keyword">if</span> i % <span class="number">10</span> == <span class="number">0</span>:</span><br><span class="line">        print(<span class="string">'step: &#123;&#125;, loss: &#123;&#125;'</span>.format(i, loss.data[<span class="number">0</span>]))</span><br><span class="line">    </span><br><span class="line">    loss.backward()</span><br><span class="line">    w1.data = w1.data - learning_rate * w1.grad.data</span><br><span class="line">    w2.data = w2.data - learning_rate * w2.grad.data</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 注意！！！ 前面我们说到，Variable的grad是会累计的，所以每次计算之后需要清零</span></span><br><span class="line">    w1.grad.data.zero_()</span><br><span class="line">    w2.grad.data.zero_()</span><br></pre></td></tr></table></figure>
+<pre><code>step: 0, loss: 30182246.0
+step: 10, loss: 110130184.0
+step: 20, loss: 6302686.0
+step: 30, loss: 294130.6875
+step: 40, loss: 114886.25
+step: 50, loss: 55154.7421875
+step: 60, loss: 27675.9296875
+step: 70, loss: 14308.21875
+step: 80, loss: 7567.3125
+step: 90, loss: 4075.057373046875
+</code></pre><ul>
+<li>前面我们说到，Variable的grad是会累计的，所以每次计算之后需要清零;</li>
+<li>另外Variable.data可以获取到tensor对象;</li>
+<li>通过自动计算梯度，我们可以免去自行推公式的繁琐，并且保证不会出错;</li>
+</ul>
+<h3 id="Tensor-VS-Numpy"><a href="#Tensor-VS-Numpy" class="headerlink" title="Tensor VS Numpy"></a>Tensor VS Numpy</h3><p>pyTorch内设置了tensor和numpy的array的转换桥梁</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="comment"># array to tensor</span></span><br><span class="line">a = torch.from_numpy(np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]))</span><br><span class="line">print(a)</span><br></pre></td></tr></table></figure>
+<pre><code> 1
+ 2
+ 3
+[torch.LongTensor of size 3]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tensor to array</span></span><br><span class="line">b = torch.ones(<span class="number">2</span>, <span class="number">2</span>).numpy()</span><br><span class="line">print(b)</span><br></pre></td></tr></table></figure>
+<pre><code>[[ 1.  1.]
+ [ 1.  1.]]
+</code></pre><h3 id="自定义autograd函数"><a href="#自定义autograd函数" class="headerlink" title="自定义autograd函数"></a>自定义autograd函数</h3><ul>
+<li>pytorch里，用户可以自定义autograd函数，可以参考<a href="http://pytorch.org/tutorials/beginner/pytorch_with_examples.html#pytorch-defining-new-autograd-functions" target="_blank" rel="noopener">autograd</a></li>
+</ul>
+<h2 id="enjoy-it"><a href="#enjoy-it" class="headerlink" title="enjoy it"></a>enjoy it</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/机器学习/近朱者赤k-nn/" rel="next" title="近朱者赤k-nn">
+                <i class="fa fa-chevron-left"></i> 近朱者赤k-nn
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/keji2.jpg"
+                alt="刘力铭" />
+            
+              <p class="site-author-name" itemprop="name">刘力铭</p>
+              <p class="site-description motion-element" itemprop="description">趣事之多 吾知甚少 学无止境 唯有努力</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/nanyoullm" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:nanyoullm@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Tensors"><span class="nav-number">1.</span> <span class="nav-text">Tensors</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-实现一个简单的神经网络反向传播"><span class="nav-number">1.1.</span> <span class="nav-text">1.实现一个简单的神经网络反向传播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-自动求导"><span class="nav-number">1.2.</span> <span class="nav-text">2.自动求导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tensor-VS-Numpy"><span class="nav-number">1.3.</span> <span class="nav-text">Tensor VS Numpy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义autograd函数"><span class="nav-number">1.4.</span> <span class="nav-text">自定义autograd函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#enjoy-it"><span class="nav-number">2.</span> <span class="nav-text">enjoy it</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-Lim Lau"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lim的博客</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

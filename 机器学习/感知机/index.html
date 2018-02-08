@@ -79,22 +79,22 @@
 
 
 
-<meta name="description" content="感知机是二类分类的线性分类模型，输入为实力的特征向量，输出为实例的类别，是判别模型。感知机学习旨在求出将训练数据进行线性划分的分离超平面，是神经网络和支持向量机的基础。这是博主接触的第一个ml算法，至今还记得导师布置的用感知机提取红色印章的小作业。 感知机模型假设输入空间（特征空间）是$X \in R^{n}$，输出空间是$Y=\{+1,-1\}$。输入的表示实例的特征向量，对应于输入空间的点，输">
+<meta name="description" content="&amp;emsp;&amp;emsp;感知机是二类分类的线性分类模型，输入为实力的特征向量，输出为实例的类别，是判别模型。感知机学习旨在求出将训练数据进行线性划分的分离超平面，是神经网络和支持向量机的基础。这是博主接触的第一个ml算法，至今还记得导师布置的用感知机提取红色印章的小作业。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="感知机">
 <meta property="og:url" content="http://yoursite.com/机器学习/感知机/index.html">
 <meta property="og:site_name" content="Lim的博客">
-<meta property="og:description" content="感知机是二类分类的线性分类模型，输入为实力的特征向量，输出为实例的类别，是判别模型。感知机学习旨在求出将训练数据进行线性划分的分离超平面，是神经网络和支持向量机的基础。这是博主接触的第一个ml算法，至今还记得导师布置的用感知机提取红色印章的小作业。 感知机模型假设输入空间（特征空间）是$X \in R^{n}$，输出空间是$Y=\{+1,-1\}$。输入的表示实例的特征向量，对应于输入空间的点，输">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;感知机是二类分类的线性分类模型，输入为实力的特征向量，输出为实例的类别，是判别模型。感知机学习旨在求出将训练数据进行线性划分的分离超平面，是神经网络和支持向量机的基础。这是博主接触的第一个ml算法，至今还记得导师布置的用感知机提取红色印章的小作业。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/uploads/%E6%84%9F%E7%9F%A5%E6%9C%BA%E7%AE%97%E6%B3%95%E5%8E%9F%E5%A7%8B%E5%BD%A2%E5%BC%8F.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/uploads/%E6%84%9F%E7%9F%A5%E6%9C%BA%E5%AF%B9%E5%81%B6%E5%BD%A2%E5%BC%8F1.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/uploads/%E6%84%9F%E7%9F%A5%E6%9C%BA%E5%AF%B9%E5%81%B6%E5%BD%A2%E5%BC%8F2.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/uploads/jupyter/%E6%84%9F%E7%9F%A5%E6%9C%BA/output_9_0.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/uploads/jupyter/%E6%84%9F%E7%9F%A5%E6%9C%BA/output_13_0.png">
-<meta property="og:updated_time" content="2018-02-07T17:09:13.078Z">
+<meta property="og:updated_time" content="2018-02-08T15:16:36.647Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="感知机">
-<meta name="twitter:description" content="感知机是二类分类的线性分类模型，输入为实力的特征向量，输出为实例的类别，是判别模型。感知机学习旨在求出将训练数据进行线性划分的分离超平面，是神经网络和支持向量机的基础。这是博主接触的第一个ml算法，至今还记得导师布置的用感知机提取红色印章的小作业。 感知机模型假设输入空间（特征空间）是$X \in R^{n}$，输出空间是$Y=\{+1,-1\}$。输入的表示实例的特征向量，对应于输入空间的点，输">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;感知机是二类分类的线性分类模型，输入为实力的特征向量，输出为实例的类别，是判别模型。感知机学习旨在求出将训练数据进行线性划分的分离超平面，是神经网络和支持向量机的基础。这是博主接触的第一个ml算法，至今还记得导师布置的用感知机提取红色印章的小作业。">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/uploads/%E6%84%9F%E7%9F%A5%E6%9C%BA%E7%AE%97%E6%B3%95%E5%8E%9F%E5%A7%8B%E5%BD%A2%E5%BC%8F.png">
 
 
@@ -105,7 +105,7 @@
     root: '/',
     scheme: 'Mist',
     version: '5.1.4',
-    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
     fancybox: true,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
@@ -152,6 +152,8 @@
 
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
+    <a href="https://github.com/nanyoullm/nanyoullm.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
@@ -166,7 +168,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle">学无止境</p>
+        <p class="site-subtitle"></p>
       
   </div>
 
@@ -263,7 +265,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="刘力铭">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/keji.png">
+      <meta itemprop="image" content="/uploads/keji2.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -347,13 +349,13 @@
       
 
       
-        <p>感知机是二类分类的线性分类模型，输入为实力的特征向量，输出为实例的类别，是判别模型。<br>感知机学习旨在求出将训练数据进行线性划分的分离超平面，是神经网络和支持向量机的基础。<br>这是博主接触的第一个ml算法，至今还记得导师布置的用感知机提取红色印章的小作业。</p>
-<h1 id="感知机"><a href="#感知机" class="headerlink" title="感知机"></a>感知机</h1><h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>假设输入空间（特征空间）是$X \in R^{n}$，输出空间是$Y=\{+1,-1\}$。输入的表示实例的特征向量，对应于输入空间的点，输出表示实例的类别。输入空间到输出空间的映射函数是 </p>
+        <p>&emsp;&emsp;感知机是二类分类的线性分类模型，输入为实力的特征向量，输出为实例的类别，是判别模型。感知机学习旨在求出将训练数据进行线性划分的分离超平面，是神经网络和支持向量机的基础。这是博主接触的第一个ml算法，至今还记得导师布置的用感知机提取红色印章的小作业。<br><a id="more"></a></p>
+<h1 id="感知机"><a href="#感知机" class="headerlink" title="感知机"></a>感知机</h1><h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>&emsp;&emsp;假设输入空间（特征空间）是$X \in R^{n}$，输出空间是$Y=\\{+1,-1\\}$。输入的表示实例的特征向量，对应于输入空间的点，输出表示实例的类别。输入空间到输出空间的映射函数是 </p>
 <script type="math/tex; mode=display">
 f(x)=sign(\omega * x+b)</script><p>称为感知机，其中$sign$是符号函数，即：</p>
 <script type="math/tex; mode=display">
-sign(x)=\begin{cases} 1, & x>0 \\ -1, & x<0 \end{cases}</script><p>感知机模型的假设空间是定义在特征空间中所有线性分类模型，即函数集$\{f|f(x)=\omega*x+b\}$</p>
-<h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><p>假设训练数据集是线性可分的，感知机学习的目的是求得一个能够将训练数据正负实例完全正确分开的分离超平面。<br>感知机采用的损失函数是：所有误分类的点到超平面的总距离。</p>
+sign(x)=\begin{cases} 1, & x>0 \\ -1, & x<0 \end{cases}</script><p>感知机模型的假设空间是定义在特征空间中所有线性分类模型，即函数集$\\{f|f(x)=\omega*x+b\\}$</p>
+<h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><p>&emsp;&emsp;假设训练数据集是线性可分的，感知机学习的目的是求得一个能够将训练数据正负实例完全正确分开的分离超平面。<br>感知机采用的损失函数是：所有误分类的点到超平面的总距离。</p>
 <blockquote>
 <p>点到直线距离<br>回顾一下点到直线距离的推导：<br>假设有直线L：$w^{T}x+b=0$，点$P$是直线外的一点，点$P^{*}$是经过点$P$与直线L垂直相交的点，L的法向量为$w$，则有：</p>
 <script type="math/tex; mode=display">
@@ -362,12 +364,12 @@ sign(x)=\begin{cases} 1, & x>0 \\ -1, & x<0 \end{cases}</script><p>感知机模�
 w^{T}p-w^{T}p^{*}=\alpha ||w||</script><script type="math/tex; mode=display">
 \alpha=\frac{w^{T}p+b}{||w||}</script><p>$\alpha$就是点到直线的距离</p>
 </blockquote>
-<p>对于误分类的点集合M，经验风险为：<script type="math/tex">L(w,b)=-\sum\limits_{x_{i} \in M}y_{i}(w*x_{i}+b)</script></p>
-<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><p>对于L，分别对w和b求梯度下降方向得</p>
+<p>&emsp;&emsp;对于误分类的点集合M，经验风险为：<script type="math/tex">L(w,b)=-\sum\limits_{x_{i} \in M}y_{i}(w*x_{i}+b)</script></p>
+<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><p>&emsp;&emsp;对于L，分别对w和b求梯度下降方向得</p>
 <script type="math/tex; mode=display">
 \begin{cases} \nabla _{w}L(w,b)=-\sum y_{i}x_{i} \\ \nabla _{b}L(w,b)=-\sum y_{i} \end{cases}</script><p>更新权值：</p>
-<script type="math/tex; mode=display">\begin{cases} w=w+\eta y_{i}x_{i} \\ b=b+\eta y_{i} \end{cases}</script><h2 id="算法原始形式"><a href="#算法原始形式" class="headerlink" title="算法原始形式"></a>算法原始形式</h2><p>整理一下，算法的原始形式步骤如下所示：<br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/uploads/%E6%84%9F%E7%9F%A5%E6%9C%BA%E7%AE%97%E6%B3%95%E5%8E%9F%E5%A7%8B%E5%BD%A2%E5%BC%8F.png" width="600" alt="感知机算法原始形式"></p>
-<h2 id="对偶形式"><a href="#对偶形式" class="headerlink" title="对偶形式"></a>对偶形式</h2><p>对偶形式的基本想法是：将$w$和$b$表示为实例$x<em>{i}$和标记$y</em>{i}$的线性组合的形式，通过求解其系数而求得$w$和$b$<br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/uploads/%E6%84%9F%E7%9F%A5%E6%9C%BA%E5%AF%B9%E5%81%B6%E5%BD%A2%E5%BC%8F1.png" width="600" alt="感知机算法对偶形式1"><br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/uploads/%E6%84%9F%E7%9F%A5%E6%9C%BA%E5%AF%B9%E5%81%B6%E5%BD%A2%E5%BC%8F2.png" width="600" alt="感知机算法对偶形式2"></p>
+<script type="math/tex; mode=display">\begin{cases} w=w+\eta y_{i}x_{i} \\ b=b+\eta y_{i} \end{cases}</script><h2 id="算法原始形式"><a href="#算法原始形式" class="headerlink" title="算法原始形式"></a>算法原始形式</h2><p>&emsp;&emsp;整理一下，算法的原始形式步骤如下所示：<br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/uploads/%E6%84%9F%E7%9F%A5%E6%9C%BA%E7%AE%97%E6%B3%95%E5%8E%9F%E5%A7%8B%E5%BD%A2%E5%BC%8F.png" width="600" alt="感知机算法原始形式"></p>
+<h2 id="对偶形式"><a href="#对偶形式" class="headerlink" title="对偶形式"></a>对偶形式</h2><p>&emsp;&emsp;对偶形式的基本想法是：将$w$和$b$表示为实例$x_{i}$和标记$y_{i}$的线性组合的形式，通过求解其系数而求得$w$和$b$<br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/uploads/%E6%84%9F%E7%9F%A5%E6%9C%BA%E5%AF%B9%E5%81%B6%E5%BD%A2%E5%BC%8F1.png" width="600" alt="感知机算法对偶形式1"><br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/uploads/%E6%84%9F%E7%9F%A5%E6%9C%BA%E5%AF%B9%E5%81%B6%E5%BD%A2%E5%BC%8F2.png" width="600" alt="感知机算法对偶形式2"></p>
 <h2 id="Try-it-with-Python"><a href="#Try-it-with-Python" class="headerlink" title="Try it with Python."></a>Try it with Python.</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">%matplotlib inline</span><br></pre></td></tr></table></figure>
 <ul>
 <li>正样本点：[3, 3], [2, 2]</li>
@@ -415,6 +417,22 @@ w: [ 2.20510554 -1.06788728], b: -1.0
       
       
 
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/机器学习/统计学习方法概论/" rel="prev" title="统计学习方法概论">
+                统计学习方法概论 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
 
       
@@ -478,11 +496,11 @@ w: [ 2.20510554 -1.06788728], b: -1.0
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
-                src="/uploads/keji.png"
+                src="/uploads/keji2.jpg"
                 alt="刘力铭" />
             
               <p class="site-author-name" itemprop="name">刘力铭</p>
-              <p class="site-description motion-element" itemprop="description"></p>
+              <p class="site-description motion-element" itemprop="description">趣事之多 吾知甚少 学无止境 唯有努力</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -492,7 +510,7 @@ w: [ 2.20510554 -1.06788728], b: -1.0
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -503,7 +521,7 @@ w: [ 2.20510554 -1.06788728], b: -1.0
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -576,23 +594,17 @@ w: [ 2.20510554 -1.06788728], b: -1.0
       <div class="footer-inner">
         <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
-    <i class="fa fa-user"></i>
+    <i class="fa fa-Lim Lau"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">刘力铭</span>
+  <span class="author" itemprop="copyrightHolder">Lim的博客</span>
 
   
 </div>
 
 
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
 
 
 
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
 
 
 
@@ -612,6 +624,8 @@ w: [ 2.20510554 -1.06788728], b: -1.0
     
       <div class="back-to-top">
         <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
         
       </div>
     
