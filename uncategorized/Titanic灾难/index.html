@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="kaggle,数据科学," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="&amp;emsp;&amp;emsp;相信对kaggle有一定了解和初入数据领域的同学们都做过titanic竞赛。titanic竞赛是一个分类问题，参赛同学通过对训练集中每位乘客的年龄、票等级、家庭信息等情况进行分析，判断测试集中每位乘客的存活情况，最后使用accuracy作为标准进行评价。虽然这是一个入门的竞赛题，网上也非常多的参考，但博主还是有很认真的做（前前后后花了1个多月的时间，虽然成绩还是有点不满意）">
+<meta name="keywords" content="kaggle,数据科学">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Titanic灾难">
+<meta property="og:url" content="http://yoursite.com/uncategorized/Titanic灾难/index.html">
+<meta property="og:site_name" content="Lim的博客">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;相信对kaggle有一定了解和初入数据领域的同学们都做过titanic竞赛。titanic竞赛是一个分类问题，参赛同学通过对训练集中每位乘客的年龄、票等级、家庭信息等情况进行分析，判断测试集中每位乘客的存活情况，最后使用accuracy作为标准进行评价。虽然这是一个入门的竞赛题，网上也非常多的参考，但博主还是有很认真的做（前前后后花了1个多月的时间，虽然成绩还是有点不满意）">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_13_1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_14_1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_17_0.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_25_0.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_29_0.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_32_0.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_35_0.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_38_0.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_40_0.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_41_0.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_43_0.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_47_1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_49_0.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_51_0.png">
+<meta property="og:updated_time" content="2018-02-10T17:53:21.178Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Titanic灾难">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;相信对kaggle有一定了解和初入数据领域的同学们都做过titanic竞赛。titanic竞赛是一个分类问题，参赛同学通过对训练集中每位乘客的年龄、票等级、家庭信息等情况进行分析，判断测试集中每位乘客的存活情况，最后使用accuracy作为标准进行评价。虽然这是一个入门的竞赛题，网上也非常多的参考，但博主还是有很认真的做（前前后后花了1个多月的时间，虽然成绩还是有点不满意）">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_13_1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/uncategorized/Titanic灾难/"/>
+
+
+
+
+
+  <title>Titanic灾难 | Lim的博客</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/nanyoullm/nanyoullm.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lim的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/uncategorized/Titanic灾难/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="刘力铭">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/keji2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lim的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Titanic灾难</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-10T19:47:24+08:00">
+                2017-10-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&emsp;&emsp;相信对kaggle有一定了解和初入数据领域的同学们都做过titanic竞赛。titanic竞赛是一个分类问题，参赛同学通过对训练集中每位乘客的年龄、票等级、家庭信息等情况进行分析，判断测试集中每位乘客的存活情况，最后使用accuracy作为标准进行评价。虽然这是一个入门的竞赛题，网上也非常多的参考，但博主还是有很认真的做（前前后后花了1个多月的时间，虽然成绩还是有点不满意），最高成绩是排在Top6%左右。<br><a id="more"></a></p>
+<ul>
+<li>泰坦尼克灾难是kaggle的经典题目，这里结合我之前对这个题目的经验和后续参考其他大牛的分析方法，做一个汇总，希望能达到<strong>Top3%</strong>的水平。</li>
+<li>之前尝试过对空值的进行处理（包括对年龄字段进行拟合），并且做了不少的特征工程，得到的结果往往是在cross validation中可以获得约0.85左右的得分，但是在test集中降到0.76左右。</li>
+<li>后来参考过了其他同学的一些建议，发现这是一个过拟合的现象，train集和test集有一定的偏差，所以还是需要做一些特征筛选。</li>
+<li>在调研过程中，有一位大牛通过对age、freq(ticket、fare和cabin的)、familysize对乘客进行<strong>分群</strong>，然后结合pclass和sex的条件存活概率计算log likelihood值，最后针对不同的群，对对应的log likelihood进行加权或惩罚，最后仅使用这一个特征进行预测，预测结果在样本内验证集上约0.83左右的分值，在测试集上也可以达到约0.82左右的分值，泛化效果很好。原版：<a href="https://www.kaggle.com/pliptor/divide-and-conquer-0-82296" target="_blank" rel="noopener">https://www.kaggle.com/pliptor/divide-and-conquer-0-82296</a> python版：<a href="https://www.kaggle.com/krasserm/divide-and-conquer-in-python-0-82296" target="_blank" rel="noopener">https://www.kaggle.com/krasserm/divide-and-conquer-in-python-0-82296</a></li>
+<li>另一位做了很多和我之前类似的特征工程，但是做了特征选择，据其文档描述也达到了0.81左右的分数，</li>
+</ul>
+<p>分析步骤：</p>
+<ul>
+<li>数据基本概况</li>
+<li>空值处理</li>
+<li>特征工程</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line"></span><br><span class="line">%matplotlib inline</span><br><span class="line">sns.set_style(<span class="string">"whitegrid"</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="数据基本概况"><a href="#数据基本概况" class="headerlink" title="数据基本概况"></a>数据基本概况</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">train = pd.read_csv(<span class="string">'train.csv'</span>)</span><br><span class="line">test = pd.read_csv(<span class="string">'test.csv'</span>)</span><br></pre></td></tr></table></figure>
+<p>以下是官方提供的数据维度解释</p>
+<ul>
+<li>survival    Survival/y变量    0 = No, 1 = Yes</li>
+<li>pclass    Ticket class/船票等级    1 = 1st, 2 = 2nd, 3 = 3rd</li>
+<li>sex    Sex/性别    </li>
+<li>Age    Age in years/年龄    </li>
+<li>sibsp    # of siblings / spouses aboard the Titanic/同船的同胞兄弟和配偶数</li>
+<li>parch    # of parents / children aboard the Titanic/同船的子女和父母数</li>
+<li>ticket    Ticket number/ 票号</li>
+<li>fare    Passenger fare/　费用(后经调研，为家庭总费用)</li>
+<li>cabin    Cabin number/　船舱号</li>
+<li>embarked    Port of Embarkation/登船的港口</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 删除离群点</span></span><br><span class="line"><span class="comment"># 返回离群点的index</span></span><br><span class="line"><span class="comment"># df: 数据</span></span><br><span class="line"><span class="comment"># n: 当某行数据有大于n个离群点，则drop</span></span><br><span class="line"><span class="comment"># columns: 字段</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">delect_outliers</span><span class="params">(df, n, columns)</span>:</span></span><br><span class="line">    outliers_index = []</span><br><span class="line">    <span class="keyword">for</span> c <span class="keyword">in</span> columns:</span><br><span class="line">        q1 = np.percentile(df[c], <span class="number">25</span>)</span><br><span class="line">        q3 = np.percentile(df[c], <span class="number">75</span>)</span><br><span class="line">        iqr = q3 - q1</span><br><span class="line">        outlier_step = <span class="number">1.5</span> * iqr</span><br><span class="line">        </span><br><span class="line">        outliers = df[(df[c]&lt;q1-outlier_step) | (df[c]&gt;q3+outlier_step)].index</span><br><span class="line">        outliers_index.extend(outliers)</span><br><span class="line">    delete_target = Counter(outliers_index)</span><br><span class="line">    indexes = [i <span class="keyword">for</span> i, v <span class="keyword">in</span> delete_target.items() <span class="keyword">if</span> v &gt; n]</span><br><span class="line">    <span class="keyword">return</span> indexes</span><br><span class="line"></span><br><span class="line">outliers_index = delect_outliers(train, <span class="number">2</span>, [<span class="string">'Pclass'</span>, <span class="string">'Fare'</span>, <span class="string">'SibSp'</span>, <span class="string">'Parch'</span>])</span><br><span class="line">train.drop(outliers_index, axis=<span class="number">0</span>, inplace=<span class="keyword">True</span>)</span><br><span class="line">train_len = train.shape[<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show_count_ratio</span><span class="params">(data, x, y, xsize, ysize)</span>:</span></span><br><span class="line">    fig = plt.figure(figsize=(xsize, ysize))</span><br><span class="line">    ax = fig.add_subplot(<span class="number">111</span>)</span><br><span class="line">    ax.set_xticklabels(data[x].values, rotation=<span class="number">45</span>)</span><br><span class="line">    ax2 = ax.twinx()</span><br><span class="line">    a1 = sns.countplot(data=data, x=x, ax=ax, palette=<span class="string">'colorblind'</span>, alpha=<span class="number">0.7</span>)</span><br><span class="line">    a2 = sns.pointplot(data=data, x=x, y=y, ci=<span class="keyword">None</span>, scale=<span class="number">0.8</span>, ax=ax2, alpha=<span class="number">0.8</span>)</span><br><span class="line">    ax2.set_ylim((<span class="number">0</span>,<span class="number">0.8</span>))</span><br><span class="line">    ax.legend([<span class="string">'count'</span>],loc=(<span class="number">.75</span>,<span class="number">.90</span>), fontsize=<span class="number">15</span>)</span><br><span class="line">    ax2.legend([<span class="string">'ratio'</span>],loc=(<span class="number">.75</span>, <span class="number">.85</span>), fontsize=<span class="number">15</span>)</span><br><span class="line">    </span><br><span class="line">    ax.grid(<span class="keyword">False</span>)</span><br><span class="line">    ax2.grid(<span class="keyword">False</span>)</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">combined = pd.concat([train, test], axis=<span class="number">0</span>, ignore_index=<span class="keyword">True</span>)</span><br><span class="line">combined_test = combined.copy()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">u'空值情况'</span>)</span><br><span class="line">train.isnull().sum()</span><br></pre></td></tr></table></figure>
+<pre><code>空值情况
+
+
+
+
+
+PassengerId      0
+Survived         0
+Pclass           0
+Name             0
+Sex              0
+Age            177
+SibSp            0
+Parch            0
+Ticket           0
+Fare             0
+Cabin          687
+Embarked         2
+dtype: int64
+</code></pre><ul>
+<li>Age字段缺失170，如果进行拟合可能会变成噪声，可以构造是否有年龄这一特征，同时对有年龄的乘客中进行一些分析。  </li>
+<li>Cabin字段缺失太多，暂时不做填充</li>
+<li>Embarked字段可以用多数值填补</li>
+</ul>
+<h2 id="数据探索-amp-特征工程"><a href="#数据探索-amp-特征工程" class="headerlink" title="数据探索&amp;特征工程"></a>数据探索&amp;特征工程</h2><h3 id="Age-amp-Pclass"><a href="#Age-amp-Pclass" class="headerlink" title="Age &amp; Pclass"></a>Age &amp; Pclass</h3><ul>
+<li>看下0/1乘客的年龄分布，可以发现14岁一下的乘客的存活率相对较高</li>
+<li>结合pclass和sex条件下看年龄的分布</li>
+<li>又可以发现，pclass为2和3下，年龄小于14的乘客存活率相对其他更高</li>
+<li>结合以上观点，针对p2和p3的年龄小于14的乘客做做文章</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">g = sns.kdeplot(train[(train.Survived==<span class="number">1</span>)&amp;(train[<span class="string">'Age'</span>].notnull())][<span class="string">'Age'</span>], </span><br><span class="line">                color=<span class="string">'Red'</span>, shade=<span class="keyword">True</span>)</span><br><span class="line">g = sns.kdeplot(train[(train.Survived==<span class="number">0</span>)&amp;(train[<span class="string">'Age'</span>].notnull())][<span class="string">'Age'</span>], </span><br><span class="line">                color=<span class="string">'Blue'</span>, shade=<span class="keyword">True</span>)</span><br><span class="line">g.set_xlabel(<span class="string">'Age'</span>)</span><br><span class="line">g.set_ylabel(<span class="string">'Frequency'</span>)</span><br><span class="line">g.legend([<span class="string">'Survived'</span>, <span class="string">'not Survived'</span>])</span><br><span class="line">g.set_ylim(<span class="number">0</span>, <span class="number">0.04</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>(0, 0.04)
+</code></pre><p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_13_1.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sns.violinplot(data=train, x=<span class="string">'Pclass'</span>, y=<span class="string">'Age'</span>, hue=<span class="string">'Survived'</span>, split=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f45a2a686d8&gt;
+</code></pre><p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_14_1.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 对于p2和p3中小于14岁的乘客打标</span></span><br><span class="line">combined_test[<span class="string">'Child'</span>] = combined_test.loc[:,<span class="string">'Age'</span>] &lt; <span class="number">14</span></span><br></pre></td></tr></table></figure>
+<h3 id="Pclass-amp-Sex"><a href="#Pclass-amp-Sex" class="headerlink" title="Pclass &amp; Sex"></a>Pclass &amp; Sex</h3><ul>
+<li>看一下Pclass和Sex的条件分布</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g = sns.factorplot(data=combined_test, x=<span class="string">'Pclass'</span>, y=<span class="string">'Survived'</span>, hue=<span class="string">'Sex'</span>, kind=<span class="string">'bar'</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_17_0.png" alt="png"></p>
+<ul>
+<li>上图中可以发现，女乘客的存活率远高于男乘客。</li>
+<li>但是p3中，女乘客的存活率，相比p1和p2低很多，接近50%左右</li>
+<li>同时，p1的男乘客的存活率，相对与p2和p3高很多</li>
+<li>构建log likelyhood特征</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># log(p/(1-p)) -&gt; lr表达式</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log_lr</span><span class="params">(x)</span>:</span></span><br><span class="line">    a = max(x, <span class="number">0.01</span>)</span><br><span class="line">    a = min(x, <span class="number">0.99</span>)</span><br><span class="line">    <span class="keyword">return</span> np.log(a/(<span class="number">1</span>-a))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">survived_rate = train.groupby([<span class="string">'Pclass'</span>, <span class="string">'Sex'</span>]).Survived.mean()</span><br><span class="line">survived_rate</span><br><span class="line"></span><br><span class="line">combined_test[<span class="string">'SLogR'</span>] = combined_test.apply(<span class="keyword">lambda</span> x: log_lr(survived_rate[x.Pclass, x.Sex]), axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>看下SLogR变量与Surivived的相关性</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">combined_test[[<span class="string">'Survived'</span>, <span class="string">'SLogR'</span>]].corr()</span><br></pre></td></tr></table></figure>
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Survived</th>
+      <th>SLogR</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Survived</th>
+      <td>1.000000</td>
+      <td>0.623948</td>
+    </tr>
+    <tr>
+      <th>SLogR</th>
+      <td>0.623948</td>
+      <td>1.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+<h3 id="Family信息，涉及Name-Parch-SibSp"><a href="#Family信息，涉及Name-Parch-SibSp" class="headerlink" title="Family信息，涉及Name|Parch|SibSp"></a>Family信息，涉及Name|Parch|SibSp</h3><ul>
+<li>提取每位乘客的first name</li>
+<li>每位乘客的家庭人数</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">first_name</span><span class="params">(name)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> name.split(<span class="string">','</span>)[<span class="number">0</span>].strip()</span><br><span class="line">combined_test[<span class="string">'FirstName'</span>] = combined_test[<span class="string">'Name'</span>].map(first_name)</span><br><span class="line">combined_test[<span class="string">'FamilySize'</span>] = combined_test[<span class="string">'Parch'</span>] + combined_test[<span class="string">'SibSp'</span>] + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show_count_ratio(combined_test, <span class="string">'FamilySize'</span>, <span class="string">'Survived'</span>, <span class="number">8</span>, <span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_25_0.png" alt="png"></p>
+<h3 id="Frequency，看下FirstName-Fare-Ticket-Cabin出现频次"><a href="#Frequency，看下FirstName-Fare-Ticket-Cabin出现频次" class="headerlink" title="Frequency，看下FirstName|Fare|Ticket|Cabin出现频次"></a>Frequency，看下FirstName|Fare|Ticket|Cabin出现频次</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> column <span class="keyword">in</span> [<span class="string">'FirstName'</span>,<span class="string">'Fare'</span>,<span class="string">'Ticket'</span>,<span class="string">'Cabin'</span>]:</span><br><span class="line">    freq_name = column + <span class="string">'Freq'</span></span><br><span class="line">    freq = combined_test[column].value_counts().to_frame()</span><br><span class="line">    freq.columns = [freq_name]</span><br><span class="line">    combined_test[freq_name] = combined_test.merge(freq, how=<span class="string">'left'</span>, left_on=column, right_index=<span class="keyword">True</span>)[freq_name]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">TicketFreqLevel</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> x &gt;= <span class="number">2</span> <span class="keyword">and</span> x &lt;= <span class="number">4</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">2</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">combined_test[<span class="string">'TicketFreqLevel'</span>] = combined_test.TicketFreq.map(TicketFreqLevel)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show_count_ratio(combined_test, <span class="string">'TicketFreqLevel'</span>, <span class="string">'Survived'</span>, <span class="number">8</span>, <span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_29_0.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">combined_test[[<span class="string">'Survived'</span>, <span class="string">'TicketFreqLevel'</span>]].corr()</span><br></pre></td></tr></table></figure>
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Survived</th>
+      <th>TicketFreqLevel</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Survived</th>
+      <td>1.000000</td>
+      <td>0.315591</td>
+    </tr>
+    <tr>
+      <th>TicketFreqLevel</th>
+      <td>0.315591</td>
+      <td>1.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+<ul>
+<li>下图是FareFreq的分布和存活概率，貌似没看出什么规律</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show_count_ratio(combined_test, <span class="string">'CabinFreq'</span>, <span class="string">'Survived'</span>, <span class="number">8</span>, <span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_32_0.png" alt="png"></p>
+<ul>
+<li>CabinFreq的存活率普遍高，可以构造是否有Cabin值作为一个特征，看看存活情况</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">combined_test[<span class="string">'HasCabin'</span>] = <span class="number">0</span></span><br><span class="line">combined_test.loc[combined_test[<span class="string">'Cabin'</span>].notnull(), <span class="string">'HasCabin'</span>] = <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show_count_ratio(combined_test, <span class="string">'HasCabin'</span>, <span class="string">'Survived'</span>, <span class="number">8</span>, <span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_35_0.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">combined_test[[<span class="string">'Survived'</span>, <span class="string">'HasCabin'</span>]].corr()</span><br></pre></td></tr></table></figure>
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Survived</th>
+      <th>HasCabin</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Survived</th>
+      <td>1.000000</td>
+      <td>0.316912</td>
+    </tr>
+    <tr>
+      <th>HasCabin</th>
+      <td>0.316912</td>
+      <td>1.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+<ul>
+<li>对于FareFreq没有太明显的规律，不如直接看一下Fare的分布</li>
+<li>test中的Fare有一个空值，用中位数填充</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">combined_test.loc[combined_test[<span class="string">'Fare'</span>].isnull(), <span class="string">'Fare'</span>] = combined_test.Fare.median()</span><br><span class="line">sns.distplot(combined_test[<span class="string">'Fare'</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_38_0.png" alt="png"></p>
+<ul>
+<li>这个图不够平滑，取对数值看看</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log_fare</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> x &lt;= <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> np.round(np.log(<span class="number">0.1</span>), <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> np.round(np.log(x), <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">combined_test[<span class="string">'FareLog'</span>] = combined_test[<span class="string">'Fare'</span>].map(log_fare)</span><br><span class="line">sns.distplot(combined_test[<span class="string">'FareLog'</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_40_0.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show_count_ratio(combined_test, <span class="string">'FareLog'</span>, <span class="string">'Survived'</span>, <span class="number">8</span>, <span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_41_0.png" alt="png"></p>
+<ul>
+<li>对Fare取了Log后，看起来是具有单调性的，干脆再进行一下合并，然后再看下分布和存活概率</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log_fare_level</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> x &lt;=<span class="number">2</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">elif</span> x &gt;= <span class="number">4</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">2</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line">combined_test[<span class="string">'FareLogLevel'</span>] = combined_test[<span class="string">'FareLog'</span>].map(log_fare_level)</span><br><span class="line">show_count_ratio(combined_test, <span class="string">'FareLogLevel'</span>, <span class="string">'Survived'</span>, <span class="number">8</span>, <span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_43_0.png" alt="png"></p>
+<ul>
+<li>如上图所示，好像还可以的样子</li>
+</ul>
+<h3 id="暂时停车，回顾下现在的情况"><a href="#暂时停车，回顾下现在的情况" class="headerlink" title="暂时停车，回顾下现在的情况"></a>暂时停车，回顾下现在的情况</h3><ul>
+<li>缺失值情况</li>
+<li>已有的特征</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">combined_test.isnull().sum()</span><br></pre></td></tr></table></figure>
+<pre><code>Age                 263
+Cabin              1014
+Embarked              2
+Fare                  0
+Name                  0
+Parch                 0
+PassengerId           0
+Pclass                0
+Sex                   0
+SibSp                 0
+Survived            418
+Ticket                0
+Child                 0
+SLogR                 0
+FirstName             0
+FamilySize            0
+FirstNameFreq         0
+FareFreq              1
+TicketFreq            0
+CabinFreq          1014
+TicketFreqLevel       0
+HasCabin              0
+FareLog               0
+FareLogLevel          0
+dtype: int64
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fig = plt.figure(figsize=(<span class="number">10</span>, <span class="number">8</span>))</span><br><span class="line">ax = fig.add_subplot(<span class="number">111</span>)</span><br><span class="line">sns.heatmap(combined_test.corr(), annot=<span class="keyword">True</span>, ax=ax, fmt=<span class="string">'.2f'</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f45a23f4b38&gt;
+</code></pre><p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_47_1.png" alt="png"></p>
+<h3 id="Name-Title"><a href="#Name-Title" class="headerlink" title="Name Title"></a>Name Title</h3><ul>
+<li>每个乘客的Title可以还提取出来，如Mr,Miss等</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_title</span><span class="params">(x)</span>:</span></span><br><span class="line">    title = x.split(<span class="string">','</span>)[<span class="number">1</span>].split(<span class="string">'.'</span>)[<span class="number">0</span>].strip()</span><br><span class="line">    <span class="keyword">if</span> title <span class="keyword">in</span> [<span class="string">'Mr'</span>, <span class="string">'Master'</span>]:</span><br><span class="line">        <span class="keyword">return</span> title</span><br><span class="line">    <span class="keyword">elif</span> title <span class="keyword">in</span> [<span class="string">'Miss'</span>, <span class="string">'Mrs'</span>, <span class="string">'Ms'</span>, <span class="string">'Mme'</span>, <span class="string">'Mlle'</span>]:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'Miss-Mrs'</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'Other'</span></span><br><span class="line"></span><br><span class="line">combined_test[<span class="string">'Title'</span>]=combined_test[<span class="string">'Name'</span>].map(get_title)</span><br><span class="line">show_count_ratio(combined_test, <span class="string">'Title'</span>, <span class="string">'Survived'</span>, <span class="number">8</span>, <span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_49_0.png" alt="png"></p>
+<ul>
+<li>可以考虑将Miss-Mrs和Master归为一类，Mr和other归为一类</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">title_level</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> x == <span class="string">'Mr'</span> <span class="keyword">or</span> x == <span class="string">'Other'</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line">combined_test[<span class="string">'TitleLevel'</span>]=combined_test[<span class="string">'Title'</span>].map(title_level)</span><br><span class="line">show_count_ratio(combined_test, <span class="string">'TitleLevel'</span>, <span class="string">'Survived'</span>, <span class="number">8</span>, <span class="number">5</span>)</span><br><span class="line">combined_test[[<span class="string">'Survived'</span>, <span class="string">'TitleLevel'</span>]].corr()</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/titanic/output_51_0.png" alt="png"></p>
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Survived</th>
+      <th>TitleLevel</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Survived</th>
+      <td>1.000000</td>
+      <td>0.558615</td>
+    </tr>
+    <tr>
+      <th>TitleLevel</th>
+      <td>0.558615</td>
+      <td>1.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+<ul>
+<li>嗯，感觉还阔以，再看看有什么特征可以做</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pd.set_option(<span class="string">'max_column'</span>, <span class="number">100</span>)</span><br><span class="line">combined_test.head()</span><br></pre></td></tr></table></figure>
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Age</th>
+      <th>Cabin</th>
+      <th>Embarked</th>
+      <th>Fare</th>
+      <th>Name</th>
+      <th>Parch</th>
+      <th>PassengerId</th>
+      <th>Pclass</th>
+      <th>Sex</th>
+      <th>SibSp</th>
+      <th>Survived</th>
+      <th>Ticket</th>
+      <th>Child</th>
+      <th>SLogR</th>
+      <th>FirstName</th>
+      <th>FamilySize</th>
+      <th>FirstNameFreq</th>
+      <th>FareFreq</th>
+      <th>TicketFreq</th>
+      <th>CabinFreq</th>
+      <th>TicketFreqLevel</th>
+      <th>HasCabin</th>
+      <th>FareLog</th>
+      <th>FareLogLevel</th>
+      <th>Title</th>
+      <th>TitleLevel</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>22.0</td>
+      <td>NaN</td>
+      <td>S</td>
+      <td>7.2500</td>
+      <td>Braund, Mr. Owen Harris</td>
+      <td>0</td>
+      <td>1</td>
+      <td>3</td>
+      <td>male</td>
+      <td>1</td>
+      <td>0.0</td>
+      <td>A/5 21171</td>
+      <td>False</td>
+      <td>-1.853635</td>
+      <td>Braund</td>
+      <td>2</td>
+      <td>2</td>
+      <td>18.0</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>1</td>
+      <td>0</td>
+      <td>2.0</td>
+      <td>0</td>
+      <td>Mr</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>38.0</td>
+      <td>C85</td>
+      <td>C</td>
+      <td>71.2833</td>
+      <td>Cumings, Mrs. John Bradley (Florence Briggs Th...</td>
+      <td>0</td>
+      <td>2</td>
+      <td>1</td>
+      <td>female</td>
+      <td>1</td>
+      <td>1.0</td>
+      <td>PC 17599</td>
+      <td>False</td>
+      <td>3.412247</td>
+      <td>Cumings</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>2</td>
+      <td>1</td>
+      <td>4.0</td>
+      <td>2</td>
+      <td>Miss-Mrs</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>26.0</td>
+      <td>NaN</td>
+      <td>S</td>
+      <td>7.9250</td>
+      <td>Heikkinen, Miss. Laina</td>
+      <td>0</td>
+      <td>3</td>
+      <td>3</td>
+      <td>female</td>
+      <td>0</td>
+      <td>1.0</td>
+      <td>STON/O2. 3101282</td>
+      <td>False</td>
+      <td>0.000000</td>
+      <td>Heikkinen</td>
+      <td>1</td>
+      <td>1</td>
+      <td>23.0</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>1</td>
+      <td>0</td>
+      <td>2.0</td>
+      <td>0</td>
+      <td>Miss-Mrs</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>35.0</td>
+      <td>C123</td>
+      <td>S</td>
+      <td>53.1000</td>
+      <td>Futrelle, Mrs. Jacques Heath (Lily May Peel)</td>
+      <td>0</td>
+      <td>4</td>
+      <td>1</td>
+      <td>female</td>
+      <td>1</td>
+      <td>1.0</td>
+      <td>113803</td>
+      <td>False</td>
+      <td>3.412247</td>
+      <td>Futrelle</td>
+      <td>2</td>
+      <td>2</td>
+      <td>6.0</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>2</td>
+      <td>1</td>
+      <td>4.0</td>
+      <td>2</td>
+      <td>Miss-Mrs</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>35.0</td>
+      <td>NaN</td>
+      <td>S</td>
+      <td>8.0500</td>
+      <td>Allen, Mr. William Henry</td>
+      <td>0</td>
+      <td>5</td>
+      <td>3</td>
+      <td>male</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>373450</td>
+      <td>False</td>
+      <td>-1.853635</td>
+      <td>Allen</td>
+      <td>1</td>
+      <td>2</td>
+      <td>60.0</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>1</td>
+      <td>0</td>
+      <td>2.0</td>
+      <td>0</td>
+      <td>Mr</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x_train = combined_test[:train.shape[<span class="number">0</span>]][[<span class="string">'SLogR'</span>,<span class="string">'TicketFreqLevel'</span>,<span class="string">'TitleLevel'</span>,<span class="string">'FareLogLevel'</span>]].values</span><br><span class="line">y_train = combined_test[:train.shape[<span class="number">0</span>]][<span class="string">'Survived'</span>].values</span><br></pre></td></tr></table></figure>
+<h2 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> GridSearchCV</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> StratifiedKFold</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> GradientBoostingClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> cross_val_score</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> StratifiedKFold</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score</span><br><span class="line"><span class="keyword">import</span> xgboost <span class="keyword">as</span> xgb</span><br><span class="line"></span><br><span class="line">kfold = StratifiedKFold(n_splits=<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>大致先看一下xgboost默认参数在cv集上的性能</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">clf = xgb.XGBClassifier()</span><br><span class="line"></span><br><span class="line">accuracy_scores = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(n_repeat):</span><br><span class="line">    <span class="keyword">for</span> train_idx, validate_idx <span class="keyword">in</span> skf.split(x_train, y_train):</span><br><span class="line">        split_train_x = x_train[train_idx]</span><br><span class="line">        split_train_y = y_train[train_idx]</span><br><span class="line">        clf.fit(split_train_x, split_train_y)</span><br><span class="line">        </span><br><span class="line">        split_validate_x = x_train[validate_idx]</span><br><span class="line">        split_validate_y = y_train[validate_idx]</span><br><span class="line">        </span><br><span class="line">        predict_y = clf.predict(split_validate_x)</span><br><span class="line">        accuracy_scores.append(accuracy_score(split_validate_y, predict_y))</span><br><span class="line">np.array(accuracy_scores).mean()</span><br></pre></td></tr></table></figure>
+<pre><code>0.82781823856542958
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">xgb_clf = xgb.XGBClassifier()</span><br><span class="line">param_grid = &#123;</span><br><span class="line">    <span class="string">'n_estimators'</span>: [<span class="number">80</span>,<span class="number">100</span>,<span class="number">120</span>,<span class="number">140</span>,<span class="number">160</span>,<span class="number">180</span>,<span class="number">200</span>],</span><br><span class="line">    <span class="string">'learning_rate'</span>: [<span class="number">0.01</span>,<span class="number">0.03</span>,<span class="number">0.1</span>,<span class="number">0.3</span>],</span><br><span class="line">    <span class="string">'subsample'</span>:[<span class="number">0.5</span>,<span class="number">0.8</span>,<span class="number">1</span>],</span><br><span class="line">    <span class="string">'max_depth'</span>:[<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">&#125;</span><br><span class="line">gs_xgb = GridSearchCV(xgb_clf, param_grid=param_grid,</span><br><span class="line">                      cv=kfold, scoring=<span class="string">'accuracy'</span>)</span><br><span class="line">gs_xgb.fit(x_train, y_train)</span><br><span class="line">gs_xgb.best_params_</span><br></pre></td></tr></table></figure>
+<pre><code>{&#39;learning_rate&#39;: 0.3, &#39;max_depth&#39;: 2, &#39;n_estimators&#39;: 180, &#39;subsample&#39;: 0.5}
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">rf_clf = RandomForestClassifier()</span><br><span class="line">param_grid = &#123;</span><br><span class="line">    <span class="string">'n_estimators'</span>: range(<span class="number">100</span>, <span class="number">150</span>, <span class="number">5</span>),</span><br><span class="line">    <span class="string">'max_features'</span>:[<span class="number">0.5</span>,<span class="number">0.8</span>,<span class="number">1</span>],</span><br><span class="line">    <span class="string">'max_depth'</span>:[<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">&#125;</span><br><span class="line">gs_rf = GridSearchCV(rf_clf, param_grid=param_grid,</span><br><span class="line">                     cv=kfold, scoring=<span class="string">'accuracy'</span>)</span><br><span class="line">gs_rf.fit(x_train, y_train)</span><br><span class="line">gs_rf.best_params_</span><br></pre></td></tr></table></figure>
+<pre><code>{&#39;max_depth&#39;: 4, &#39;max_features&#39;: 1, &#39;n_estimators&#39;: 110}
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">gb_clf = GradientBoostingClassifier()</span><br><span class="line">param_grid = &#123;</span><br><span class="line">    <span class="string">'n_estimators'</span>: range(<span class="number">80</span>, <span class="number">160</span>, <span class="number">10</span>),</span><br><span class="line">    <span class="string">'learning_rate'</span>: [<span class="number">0.01</span>,<span class="number">0.03</span>,<span class="number">0.1</span>,<span class="number">0.3</span>],</span><br><span class="line">    <span class="string">'subsample'</span>:[<span class="number">0.5</span>,<span class="number">0.8</span>,<span class="number">1</span>],</span><br><span class="line">    <span class="string">'max_depth'</span>:[<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">&#125;</span><br><span class="line">gs_gb = GridSearchCV(gb_clf, param_grid=param_grid,</span><br><span class="line">                     cv=kfold, scoring=<span class="string">'accuracy'</span>)</span><br><span class="line">gs_gb.fit(x_train, y_train)</span><br><span class="line">gs_gb.best_params_</span><br></pre></td></tr></table></figure>
+<pre><code>{&#39;learning_rate&#39;: 0.3, &#39;max_depth&#39;: 5, &#39;n_estimators&#39;: 90, &#39;subsample&#39;: 0.5}
+</code></pre><h3 id="模型融合之stacking"><a href="#模型融合之stacking" class="headerlink" title="模型融合之stacking"></a>模型融合之stacking</h3><ul>
+<li>sklearn没有集成stacking模块，这里建议使用mlxtend，也是一个不错的机器学习包，还支持在2维特征空间的分类效果展示模块</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mlxtend.classifier <span class="keyword">import</span> StackingClassifier</span><br><span class="line"><span class="keyword">from</span> mlxtend.classifier <span class="keyword">import</span> StackingCVClassifier</span><br><span class="line">sclf = StackingClassifier(classifiers=[gs_xgb.best_estimator_,</span><br><span class="line">                                       gs_gb.best_estimator_,</span><br><span class="line">                                       gs_rf.best_estimator_],</span><br><span class="line">                         meta_classifier=LogisticRegression(),</span><br><span class="line">                         use_probas=<span class="keyword">True</span>, average_probas=<span class="keyword">False</span>)</span><br><span class="line">scores = cross_val_score(sclf, x_train, y_train, cv=<span class="number">5</span>, scoring=<span class="string">'accuracy'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sclf.fit(x_train, y_train)</span><br></pre></td></tr></table></figure>
+<pre><code>StackingClassifier(average_probas=False,
+          classifiers=[XGBClassifier(base_score=0.5, colsample_bylevel=1, colsample_bytree=1,
+       gamma=0, learning_rate=0.3, max_delta_step=0, max_depth=2,
+       min_child_weight=1, missing=None, n_estimators=180, nthread=-1,
+       objective=&#39;binary:logistic&#39;, reg_alpha=0, reg_lambda=1,
+       scale_pos...imators=110, n_jobs=1, oob_score=False, random_state=None,
+            verbose=0, warm_start=False)],
+          meta_classifier=LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
+          intercept_scaling=1, max_iter=100, multi_class=&#39;ovr&#39;, n_jobs=1,
+          penalty=&#39;l2&#39;, random_state=None, solver=&#39;liblinear&#39;, tol=0.0001,
+          verbose=0, warm_start=False),
+          use_features_in_secondary=False, use_probas=True, verbose=0)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scores.mean()</span><br></pre></td></tr></table></figure>
+<pre><code>0.80375198552231075
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cross_val_score(gs_xgb.best_estimator_, x_train, y_train, cv=<span class="number">5</span>, scoring=<span class="string">'accuracy'</span>).mean()</span><br></pre></td></tr></table></figure>
+<pre><code>0.81827712518711526
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">x_test = combined_test[train.shape[<span class="number">0</span>]:][[<span class="string">'SLogR'</span>,<span class="string">'TicketFreqLevel'</span>,<span class="string">'TitleLevel'</span>,<span class="string">'FareLogLevel'</span>]].values</span><br><span class="line"></span><br><span class="line">submission = pd.DataFrame(&#123; <span class="string">'PassengerId'</span>: combined[train.shape[<span class="number">0</span>]:][<span class="string">'PassengerId'</span>], <span class="string">'Survived'</span>: sclf.predict(x_test).astype(int)&#125;)</span><br><span class="line">submission.to_csv(<span class="string">"tt_analysis_stacking.csv"</span>, index=<span class="keyword">False</span>)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/kaggle/" rel="tag"># kaggle</a>
+          
+            <a href="/tags/数据科学/" rel="tag"># 数据科学</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/uncategorized/统计学习方法概论/" rel="prev" title="统计学习方法概论">
+                统计学习方法概论 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/keji2.jpg"
+                alt="刘力铭" />
+            
+              <p class="site-author-name" itemprop="name">刘力铭</p>
+              <p class="site-description motion-element" itemprop="description">趣事之多 吾知甚少 学无止境 唯有努力</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/nanyoullm" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:nanyoullm@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据基本概况"><span class="nav-number">1.</span> <span class="nav-text">数据基本概况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据探索-amp-特征工程"><span class="nav-number">2.</span> <span class="nav-text">数据探索&amp;特征工程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Age-amp-Pclass"><span class="nav-number">2.1.</span> <span class="nav-text">Age &amp; Pclass</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pclass-amp-Sex"><span class="nav-number">2.2.</span> <span class="nav-text">Pclass &amp; Sex</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Family信息，涉及Name-Parch-SibSp"><span class="nav-number">2.3.</span> <span class="nav-text">Family信息，涉及Name|Parch|SibSp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Frequency，看下FirstName-Fare-Ticket-Cabin出现频次"><span class="nav-number">2.4.</span> <span class="nav-text">Frequency，看下FirstName|Fare|Ticket|Cabin出现频次</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#暂时停车，回顾下现在的情况"><span class="nav-number">2.5.</span> <span class="nav-text">暂时停车，回顾下现在的情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Name-Title"><span class="nav-number">2.6.</span> <span class="nav-text">Name Title</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型训练"><span class="nav-number">3.</span> <span class="nav-text">模型训练</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型融合之stacking"><span class="nav-number">3.1.</span> <span class="nav-text">模型融合之stacking</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-Lim Lau"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lim的博客</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <script type="text/javascript" opacity='0.5' zIndex="-2" count="99"
+   src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>

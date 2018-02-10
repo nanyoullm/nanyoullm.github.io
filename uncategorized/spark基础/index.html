@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="spark,大数据工具," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="&amp;emsp;&amp;emsp;我们身处于大数据的一个起步时代，作为一个码农，掌握大数据计算平台的使用还是必须的。Apache Spark作为近年来最流行的大数据开源项目，可以说是占据了大小互联网的生产环境，是一个“快如闪电的集群计算”工具。关于Spark的介绍我也不多说啦，可以看看官网Spark。这里需要说明的是，博主并没有阅读过Spark的源码，对Spark较多的是停留在应用层面。博主对Spark的应">
+<meta name="keywords" content="spark,大数据工具">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spark基础">
+<meta property="og:url" content="http://yoursite.com/uncategorized/spark基础/index.html">
+<meta property="og:site_name" content="Lim的博客">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;我们身处于大数据的一个起步时代，作为一个码农，掌握大数据计算平台的使用还是必须的。Apache Spark作为近年来最流行的大数据开源项目，可以说是占据了大小互联网的生产环境，是一个“快如闪电的集群计算”工具。关于Spark的介绍我也不多说啦，可以看看官网Spark。这里需要说明的是，博主并没有阅读过Spark的源码，对Spark较多的是停留在应用层面。博主对Spark的应">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/spark-cluster.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/Untitled%20Diagram.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/rdd_dependency.png">
+<meta property="og:updated_time" content="2018-02-10T17:53:21.182Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="spark基础">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;我们身处于大数据的一个起步时代，作为一个码农，掌握大数据计算平台的使用还是必须的。Apache Spark作为近年来最流行的大数据开源项目，可以说是占据了大小互联网的生产环境，是一个“快如闪电的集群计算”工具。关于Spark的介绍我也不多说啦，可以看看官网Spark。这里需要说明的是，博主并没有阅读过Spark的源码，对Spark较多的是停留在应用层面。博主对Spark的应">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/spark-cluster.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/uncategorized/spark基础/"/>
+
+
+
+
+
+  <title>spark基础 | Lim的博客</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/nanyoullm/nanyoullm.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lim的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/uncategorized/spark基础/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="刘力铭">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/keji2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lim的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">spark基础</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-01T19:35:10+08:00">
+                2017-12-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&emsp;&emsp;我们身处于大数据的一个起步时代，作为一个码农，掌握大数据计算平台的使用还是必须的。Apache Spark作为近年来最流行的大数据开源项目，可以说是占据了大小互联网的生产环境，是一个“快如闪电的集群计算”工具。关于Spark的介绍我也不多说啦，可以看看官网<a href="https://spark.apache.org/" target="_blank" rel="noopener">Spark</a>。这里需要说明的是，博主并没有阅读过Spark的源码，对Spark较多的是停留在应用层面。博主对Spark的应用主要是在公司的大小日常项目中，目前接触过的最大数据量的项目为联通集团的数据挖掘项目。<br>&emsp;&emsp;博客的内容很多是给自己回顾所涉及的点，不是很完善。所述之处如有错误，还请及时指出。<br><a id="more"></a></p>
+<h1 id="集群样貌"><a href="#集群样貌" class="headerlink" title="集群样貌"></a>集群样貌</h1><p>&emsp;&emsp;我们看一下spark任务提交集群后，各节点的部署图<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/spark-cluster.png"><br>&emsp;&emsp;图中可以看到：</p>
+<ul>
+<li>spark集群分为Master节点和Worker节点；</li>
+<li>Master节点有Master进程，负责管理全部的Worker节点；</li>
+<li>Worker节点有Worker进程，管理本node下的executers并负责与Master节点通信；</li>
+<li>每个Worker上有多个ExecutorBackend进程，每个对应一个Executor对象，每个对象有一个线程池，线程池里的一个线程负责一个Task，一个Task是具体执行任务的一个工作单元，由用户在提交任务的时候设置资源参数executor.core定义；</li>
+<li>Driver是具体跑用户自己写的Spark程序进程，如果是YARN集群部署，那么Driver就会被调度到Worker上运行；</li>
+</ul>
+<h1 id="RDD"><a href="#RDD" class="headerlink" title="RDD"></a>RDD</h1><p>&emsp;&emsp;rdd是spark任务中用到最多的数据结构，rdd的全程是Resilient Distributed Datasets，是一个容错的、并行的数据结构，可以让用户显式地将数据存储到磁盘和内存中，是将数据分布式得存储在各台机器中，并能控制数据的分区。那么，我们可以对rdd做那些操作呢？可以分为两类</p>
+<h2 id="transform"><a href="#transform" class="headerlink" title="transform"></a>transform</h2><p>&emsp;&emsp;官方解释：Return a MappedRDD[U] by applying function f to each element.就是对每个数据进行改造和转换，从一个rdd生成一个<strong>新的</strong>rdd.<br>&emsp;&emsp;spark中，针对rdd的transform操作有：</p>
+<blockquote>
+<ul>
+<li>map</li>
+<li>filter</li>
+<li>sample</li>
+<li>groupByKey<br>…<br>等等</li>
+</ul>
+</blockquote>
+<h2 id="action"><a href="#action" class="headerlink" title="action"></a>action</h2><p>&emsp;&emsp;官方解释：有一个rdd得到一个值，比如说统计rdd里的数据总数。spark中，针对rdd的action操作有：</p>
+<blockquote>
+<ul>
+<li>count</li>
+<li>collect</li>
+<li>saveXXXX<br>… 等等</li>
+</ul>
+</blockquote>
+<h1 id="DAG"><a href="#DAG" class="headerlink" title="DAG"></a>DAG</h1><p>&emsp;&emsp;DAG是spark中的一个重要概念。我们在用spark进行对源数据进行处理并最后得到我们想要的结果的过程，实际上是一个若干tranform的变换和合并的组合，可以看成一个流程图，这个流程图被spark抽象为DAG，即Directed Acyclic Graph。在生产集群上，我们可以通过SparkUI看到每个运行任务的DAG图.  </p>
+<h2 id="Job"><a href="#Job" class="headerlink" title="Job"></a>Job</h2><blockquote>
+<p>job的官方定义：A parallel computation consisting of multiple tasks that<br>gets spawned in response to a Spark action (e.g. save, collect); you’ll see this term used in the driver’s logs.<br>&emsp;&emsp;一个action操作对应一个job，spark程序中，只有触发了action操作后，整个dag才能建立起来，如果只是一堆transform操作而没有action操作，那么spark是不会有任何数据操作的。以数字统计为例，job的逻辑执行图可如下所示：<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/Untitled%20Diagram.png"></p>
+</blockquote>
+<p>这个job通过count操作触发。</p>
+<h2 id="Stage"><a href="#Stage" class="headerlink" title="Stage"></a>Stage</h2><blockquote>
+<p>stage的官方定义：Each job gets divided into smaller sets of tasks called stages that depend on each other (similar to the map and reduce stages in MapReduce); you’ll see this term used in the driver’s logs.  </p>
+</blockquote>
+<p>&emsp;&emsp;一个job可以拆分成若干个stage，每个stage执行一些计算，产生一些中间结果。它们的目的是最终生成这个Job的计算结果。而每个Stage是一个task set，包含若干个task。Task是Spark中最小的工作单元，在一个executor上完成一个特定的事情。那么如何划分stage呢？这里我们要了解一下spark中的shuffle。  </p>
+<h3 id="shuffle"><a href="#shuffle" class="headerlink" title="shuffle"></a>shuffle</h3><blockquote>
+<p>shuffle是MapReduce框架中的一个特定的phase，介于Map phase和Reduce phase之间，当Map的输出结果要被Reduce使用时，输出结果需要按key哈希，并且分发到每一个Reducer上去，这个过程就是shuffle。由于shuffle涉及到了磁盘的读写和网络的传输，因此shuffle性能的高低直接影响到了整个程序的运行效率。</p>
+</blockquote>
+<h3 id="rdd-transform依赖关系"><a href="#rdd-transform依赖关系" class="headerlink" title="rdd transform依赖关系"></a>rdd transform依赖关系</h3><p>&emsp;&emsp;rdd在transform操作后，前面涉及到的rdd成为parent，我们可以从下图中看到前后的依赖关系：<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/rdd_dependency.png"></p>
+<p>&emsp;&emsp;前三个是完全依赖，RDD x 中的 partition 与 parent RDD 中的 partition/partitions 完全相关。最后一个是部分依赖，RDD x 中的 partition 只与 parent RDD 中的 partition 一部分数据相关，另一部分数据与 RDD x 中的其他 partition 相关。完全依赖被称为 NarrowDependency，部分依赖被称为 ShuffleDependency。最后一个会出发shuffle。<br>&emsp;&emsp;回到刚刚的问题，如何划分stage呢？从后往前推算，遇到ShuffleDependency就断开，遇到NarrowDependency就将其加入该stage。每个stage里的task数目由该stage最后一个rdd中的partition个数决定。</p>
+<p>参考资料：<a href="https://spark-internals.books.yourtion.com/index.html" target="_blank" rel="noopener">https://spark-internals.books.yourtion.com/index.html</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/spark/" rel="tag"># spark</a>
+          
+            <a href="/tags/大数据工具/" rel="tag"># 大数据工具</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/uncategorized/朴素贝叶斯方法/" rel="next" title="朴素贝叶斯方法">
+                <i class="fa fa-chevron-left"></i> 朴素贝叶斯方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/uncategorized/spark简单应用-单词统计/" rel="prev" title="spark简单应用-单词统计">
+                spark简单应用-单词统计 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/keji2.jpg"
+                alt="刘力铭" />
+            
+              <p class="site-author-name" itemprop="name">刘力铭</p>
+              <p class="site-description motion-element" itemprop="description">趣事之多 吾知甚少 学无止境 唯有努力</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/nanyoullm" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:nanyoullm@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#集群样貌"><span class="nav-number">1.</span> <span class="nav-text">集群样貌</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RDD"><span class="nav-number">2.</span> <span class="nav-text">RDD</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#transform"><span class="nav-number">2.1.</span> <span class="nav-text">transform</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#action"><span class="nav-number">2.2.</span> <span class="nav-text">action</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DAG"><span class="nav-number">3.</span> <span class="nav-text">DAG</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Job"><span class="nav-number">3.1.</span> <span class="nav-text">Job</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stage"><span class="nav-number">3.2.</span> <span class="nav-text">Stage</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#shuffle"><span class="nav-number">3.2.1.</span> <span class="nav-text">shuffle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rdd-transform依赖关系"><span class="nav-number">3.2.2.</span> <span class="nav-text">rdd transform依赖关系</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-Lim Lau"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lim的博客</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <script type="text/javascript" opacity='0.5' zIndex="-2" count="99"
+   src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>
