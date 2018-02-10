@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Lim的博客">
 <meta property="og:description" content="&amp;emsp;&amp;emsp;这里主要回顾统计学习方法的部分基本概念，主要内容总结自李航老师的《统计学习方法》，供自己和大家回顾。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-02-08T15:16:05.271Z">
+<meta property="og:updated_time" content="2018-02-10T17:05:48.031Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="统计学习方法概论">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;这里主要回顾统计学习方法的部分基本概念，主要内容总结自李航老师的《统计学习方法》，供自己和大家回顾。">
@@ -355,8 +355,8 @@
 <h3 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h3><p>&emsp;&emsp;模型指的是学习过程中，所要学习的条件<strong>概率分布</strong>或者<strong>决策函数</strong>，模型的假设空间包含苏有可能的条件概率分布或决策函数；</p>
 <h3 id="策略"><a href="#策略" class="headerlink" title="策略"></a>策略</h3><p>&emsp;&emsp;策略指的是在模型的假设空间，按照什么样的准则学习或选择最优的模型，比如在学习的过程中选择了MSE作为损失函数；  </p>
 <ul>
-<li>损失函数与风险函数<br>损失函数记为$L(Y,f(X))$，损失函数在联合分布$P(X,Y)$下，期望为<script type="math/tex">R_{exp}(f)=E_{p}[L(Y,f(X))]=\int L(y,f(x))P(x,y) {\rm d}x{\rm d}y</script><br>成为风险函数或期望损失，而学习的目标就是选择期望风险最小的模型。<br>对训练集的平均损失称为<strong>经验风险</strong>，当样本量N趋于无穷时，经验风险趋于期望风险，所以自然的想法是利用经验风险估计期望风险。</li>
-<li>经验风险最小化和结构风险最小化<br>当样本量足够大的时候，经验风险最小化可以保证有很好的学习效果；但是，当样本容量很小时，经验风险最小化会出现“过拟合”现象，这个时候就需要<strong>结构风险最小化</strong>，相当于是正则化，结构风险定义为：<script type="math/tex">R_{srm}(f)=\frac{1}{N}\sum_{i=1}^\infty L(y_{i},f(x_{i}))+\lambda J(f)</script></li>
+<li>损失函数与风险函数<br>损失函数记为$L(Y,f(X))$，损失函数在联合分布$P(X,Y)$下，期望为<script type="math/tex; mode=display">R_{exp}(f)=E_{p}[L(Y,f(X))]=\int L(y,f(x))P(x,y) {\rm d}x{\rm d}y</script>成为风险函数或期望损失，而学习的目标就是选择期望风险最小的模型。对训练集的平均损失称为<strong>经验风险</strong>，当样本量N趋于无穷时，经验风险趋于期望风险，所以自然的想法是利用经验风险估计期望风险。</li>
+<li>经验风险最小化和结构风险最小化<br>当样本量足够大的时候，经验风险最小化可以保证有很好的学习效果；但是，当样本容量很小时，经验风险最小化会出现“过拟合”现象，这个时候就需要<strong>结构风险最小化</strong>，相当于是正则化，结构风险定义为：<script type="math/tex; mode=display">R_{srm}(f)=\frac{1}{N}\sum_{i=1}^\infty L(y_{i},f(x_{i}))+\lambda J(f)</script></li>
 </ul>
 <h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><p>&emsp;&emsp;算法是指学习模型的具体计算方法，就是用什么样的计算方法求解最优模型，如梯度下降算法。</p>
 <h2 id="正则化与交叉验证"><a href="#正则化与交叉验证" class="headerlink" title="正则化与交叉验证"></a>正则化与交叉验证</h2><ul>

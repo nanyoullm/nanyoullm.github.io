@@ -86,12 +86,12 @@
 <meta property="og:site_name" content="Lim的博客">
 <meta property="og:description" content="&amp;emsp;&amp;emsp;这里使用spark一个简单的单词统计，文本来源是spark预编译包里的README.md文档，虽然这是一个很小的文件，根本不需要使用spark。但是可以对rdd的操作有一个最基本的实践。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/spark-wordcount.png">
-<meta property="og:updated_time" content="2018-02-10T11:41:27.015Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/spark-wordcount.png">
+<meta property="og:updated_time" content="2018-02-10T16:40:53.600Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="spark简单应用-单词统计">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;这里使用spark一个简单的单词统计，文本来源是spark预编译包里的README.md文档，虽然这是一个很小的文件，根本不需要使用spark。但是可以对rdd的操作有一个最基本的实践。">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/spark-wordcount.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/spark-wordcount.png">
 
 
 
@@ -453,8 +453,10 @@ Java
 (locally,3)
 出现的单词数量为： 224
 </code></pre><ul>
-<li>如package，这里统计出现了两次，我们看一下原始文件。<br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/spark-wordcount.png"><br><br></li>
-<li>原始文件出现了三次package，其中有一次出现的情况是”package.)”，我们replace了”.”，而没有处理”)”，故没有参与统计，可以做优化处理。</li>
+<li><p>如package，这里统计出现了两次，我们看一下原始文件。<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/spark-wordcount.png"></p>
+</li>
+<li><p>原始文件出现了三次package，其中有一次出现的情况是”package.)”，我们replace了”.”，而没有处理”)”，故没有参与统计，可以做优化处理。</p>
+</li>
 <li>如果我们想看下哪个单词出现频率最高，还需要对次数做一个排序。</li>
 </ul>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rdd7 = rdd6.map(x =&gt; (x._2, x._1)).sortByKey(<span class="literal">false</span>)</span><br></pre></td></tr></table></figure>
@@ -790,24 +792,7 @@ Java
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config("");
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="custom_mathjax_source">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
 
 
 
@@ -860,6 +845,43 @@ Java
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
   
 
 

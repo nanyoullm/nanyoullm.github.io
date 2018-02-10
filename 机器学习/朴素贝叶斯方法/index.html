@@ -86,12 +86,12 @@
 <meta property="og:site_name" content="Lim的博客">
 <meta property="og:description" content="&amp;emsp;&amp;emsp;朴素贝叶斯是基于贝叶斯定理和特征条件独立的分类方法，对于给定的训练集，基于特征条件独立假设，学习输入/输出的联合概率分布，然后基于此分布，对给定的$x$，利用贝叶斯定理求出后验概率最大的输出$y$。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95.png">
-<meta property="og:updated_time" content="2018-02-08T15:46:24.773Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95.png">
+<meta property="og:updated_time" content="2018-02-10T17:01:19.229Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="朴素贝叶斯方法">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;朴素贝叶斯是基于贝叶斯定理和特征条件独立的分类方法，对于给定的训练集，基于特征条件独立假设，学习输入/输出的联合概率分布，然后基于此分布，对给定的$x$，利用贝叶斯定理求出后验概率最大的输出$y$。">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95.png">
 
 
 
@@ -349,18 +349,25 @@
 <h1 id="朴素贝叶斯"><a href="#朴素贝叶斯" class="headerlink" title="朴素贝叶斯"></a>朴素贝叶斯</h1><p>&emsp;&emsp;朴素贝叶斯是基于贝叶斯定理和特征条件独立的分类方法，对于给定的训练集，基于特征条件独立假设，学习输入/输出的联合概率分布，然后基于此分布，对给定的x，利用贝叶斯定理求出后验概率最大的输出y。贝叶斯方法实现简单，学习与预测效率高，是一种常用的方法。</p>
 <h2 id="朴素贝叶斯法的学习与分类"><a href="#朴素贝叶斯法的学习与分类" class="headerlink" title="朴素贝叶斯法的学习与分类"></a>朴素贝叶斯法的学习与分类</h2><h3 id="基本方法"><a href="#基本方法" class="headerlink" title="基本方法"></a>基本方法</h3><p>&emsp;&emsp;设训练集T，通过学习联合概率分布$P(x,y)$，具体地，学习以下先验概率分布及条件概率分布。</p>
 <blockquote>
-<p>先验概率分布：<script type="math/tex">P(Y=c_{k})</script><br>条件概率分布：<script type="math/tex">P(X=x|Y=c_{k})=P(X^{(1)}=x^{(1)}, ..., X^{(n)}=x^{(n)}|Y=c_{k})</script></p>
-</blockquote>
-<p>&emsp;&emsp;又因为朴素贝叶斯假设特征之间条件独立，故上式又可以写成：<script type="math/tex">P(X=x|Y=c_{k})=\prod_{j=1}^n P(X=x^{(j)}|Y=c_{k})</script><br>朴素贝叶斯假设条件独立，这使得方法变得简单，但是会损失一定的分类准确率。<br>对于给定的输入x，计算后验概率分布$P(Y=c_{k}|X=x)$，将后验概率最大的类作为x的类输出。</p>
-<script type="math/tex; mode=display">
-P(Y=c_{k}|X=x)=\frac{P(X=x|Y=c_{k})P(Y=c_[k])}{P(X=x)}</script><script type="math/tex; mode=display">=\frac{P(X=x|Y=c_{k})P(Y=c_{k})}{\sum_{k} P(X=x|Y=c_{k})P(Y=c_{k})}</script><script type="math/tex; mode=display">=\frac{P(Y=c_{k})\prod_{j} P(X^{(j)}=x^{(j)}|Y=c_{k})P(Y=c_{k})}{\sum_{k} P(Y=c_{k}) \prod_{j} P(X^{(j)}=x^{(j)}|Y=c_{k})}</script><p>&emsp;&emsp;最后，关于y的取值，取后验概率最大的作为预测的类：<script type="math/tex">y=\arg\max_{c_{k}} P(Y=c_{k}|X=x)</script><br>同时地，后验概率最大等价于期望风险最小。</p>
+<p>先验概率分布：</p>
+<script type="math/tex; mode=display">P(Y=c_{k})</script><p>条件概率分布：</p>
+<script type="math/tex; mode=display">P(X=x|Y=c_{k})=P(X^{(1)}=x^{(1)}, ..., X^{(n)}=x^{(n)}|Y=c_{k})</script></blockquote>
+<p>&emsp;&emsp;又因为朴素贝叶斯假设特征之间条件独立，故上式又可以写成：</p>
+<script type="math/tex; mode=display">P(X=x|Y=c_{k})=\prod_{j=1}^n P(X=x^{(j)}|Y=c_{k})</script><p>朴素贝叶斯假设条件独立，这使得方法变得简单，但是会损失一定的分类准确率。对于给定的输入x，计算后验概率分布$P(Y=c_{k}|X=x)$，将后验概率最大的类作为x的类输出。</p>
+<script type="math/tex; mode=display">\begin{eqnarray}
+P(Y=c_{k}|X=x) &=& \frac{P(X=x|Y=c_{k})P(Y=c_[k])}{P(X=x)} \\
+&=& \frac{P(X=x|Y=c_{k})P(Y=c_{k})}{\sum_{k} P(X=x|Y=c_{k})P(Y=c_{k})} \\
+&=& \frac{P(Y=c_{k})\prod_{j} P(X^{(j)}=x^{(j)}|Y=c_{k})P(Y=c_{k})}{\sum_{k} P(Y=c_{k}) \prod_{j} P(X^{(j)}=x^{(j)}|Y=c_{k})}
+\end{eqnarray}</script><p>&emsp;&emsp;最后，关于y的取值，取后验概率最大的作为预测的类：</p>
+<script type="math/tex; mode=display">y=\arg\max_{c_{k}} P(Y=c_{k}|X=x)</script><p>同时地，后验概率最大等价于期望风险最小。</p>
 <h2 id="朴素贝叶斯法的参数估计"><a href="#朴素贝叶斯法的参数估计" class="headerlink" title="朴素贝叶斯法的参数估计"></a>朴素贝叶斯法的参数估计</h2><h3 id="极大似然估计"><a href="#极大似然估计" class="headerlink" title="极大似然估计"></a>极大似然估计</h3><p>&emsp;&emsp;通过提供的训练数据，先验概率$P(Y=c_{k})$的极大似然估计是</p>
 <script type="math/tex; mode=display">
-P(Y=c_{k})=\frac{\sum_{i=1}^N I(y_{i}=c_{k})}{N} ,k=1,2,...,K</script><p>&emsp;&emsp;假设第j个特征$x_{j}$可能的取值是</p>
+P(Y=c_{k})=\frac{\sum_{i=1}^N I(y_{i}=c_{k})}{N} ,k=1,2,...,K</script><p>假设第j个特征$x_{j}$可能的取值是</p>
 <script type="math/tex; mode=display">{a_{j1}, ...,a_{jS_{j}}}</script><p>那么它的条件概率的极大似然估计是：</p>
 <script type="math/tex; mode=display">
 P(X^{(j)}=a_{il}|Y=c_{k})=\frac{\sum_{i=1}^N I(x_{i}^{(j)}=a_{il},y_{i}=c_{k})}{\sum_{i=1}^N I(y_{i}=c_{k})}</script><p>其中，j表示第j个特征，l表示第j个特征的第l个取值，k表示y的第k个值。</p>
-<h3 id="学习与分类算法"><a href="#学习与分类算法" class="headerlink" title="学习与分类算法"></a>学习与分类算法</h3><p>&emsp;&emsp;我们看一下具体的算法：<br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95.png" width="600px"><br>&emsp;&emsp;具体例子可以参考《统计学习方法》的第52页例4.2</p>
+<h3 id="学习与分类算法"><a href="#学习与分类算法" class="headerlink" title="学习与分类算法"></a>学习与分类算法</h3><p>&emsp;&emsp;我们看一下具体的算法：<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95.png" width="700"></p>
+<p>&emsp;&emsp;具体例子可以参考《统计学习方法》的第52页例4.2。</p>
 
       
     </div>

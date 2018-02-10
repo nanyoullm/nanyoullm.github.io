@@ -86,19 +86,19 @@
 <meta property="og:site_name" content="Lim的博客">
 <meta property="og:description" content="&amp;emsp;&amp;emsp;决策树是一种基本的分类与回归方法。在其分类问题中，表示基于特征对实例进行分类的过程，可以认为是if-else规则的集合，也可以认为是定义在特征空间与类空间上的条件分类。其主要优点是模型具有可读性、分类速度快。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%EF%BC%A8(p).png">
-<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E5%86%B3%E7%AD%96%E6%A0%91/%E4%BF%A1%E6%81%AF%E5%A2%9E%E7%9B%8A1.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E5%86%B3%E7%AD%96%E6%A0%91/%E4%BF%A1%E6%81%AF%E5%A2%9E%E7%9B%8A2.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E5%86%B3%E7%AD%96%E6%A0%91/%E5%89%AA%E6%9E%9D.png">
-<meta property="og:image" content="https://github.com/nanyoullm/nanyoullm.github.io/blob/master/img/%E5%86%B3%E7%AD%96%E6%A0%91/cart_r.png?raw=true">
-<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E5%86%B3%E7%AD%96%E6%A0%91/cart_c1.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E5%86%B3%E7%AD%96%E6%A0%91/cart_c2.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E5%86%B3%E7%AD%96%E6%A0%91/cart_cut.png">
-<meta property="og:updated_time" content="2018-02-08T16:06:05.674Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%EF%BC%A8(p).png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E4%BF%A1%E6%81%AF%E5%A2%9E%E7%9B%8A1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E4%BF%A1%E6%81%AF%E5%A2%9E%E7%9B%8A2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E5%89%AA%E6%9E%9D.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/cart_r.png?raw=true">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/cart_c1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/cart_c2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/cart_cut.png">
+<meta property="og:updated_time" content="2018-02-10T16:55:51.998Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="决策树">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;决策树是一种基本的分类与回归方法。在其分类问题中，表示基于特征对实例进行分类的过程，可以认为是if-else规则的集合，也可以认为是定义在特征空间与类空间上的条件分类。其主要优点是模型具有可读性、分类速度快。">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%EF%BC%A8(p).png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%EF%BC%A8(p).png">
 
 
 
@@ -369,20 +369,24 @@
 <blockquote>
 <p>熵是表示随机变量不确定行的度量</p>
 </blockquote>
-<p>&emsp;&emsp;假设Ｘ是取有限个值的离散随机变量，其概率分布是：<script type="math/tex">P(X=x_{i})=p_{i}, i=1,2,...,n</script>则随机变量Ｘ的熵的定义是：<script type="math/tex">H(X)=-\sum_{i=1}^{n}p_{i}\log{p_{i}}</script><br><br>&emsp;&emsp;熵越大，表示随机变量的不确定性就越大。熵$H(p)$随概率$p$变化的曲线如下图：<br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%EF%BC%A8(p).png"><br><br>&emsp;&emsp;比如说，某个特征$X^{j}$取$\\{0,1\\}$，训练集中其中有一半取１，另一半取０，那么$P(X^{j}=0)$和$P(X^{j}=１)$都0.5，那么对应的熵$H(p)=1$，这表示提供随机变量$X^{i}$给我们带来的不确定性是最大的，自然我们也没办法根据变量$X^{i}$来进行预测。</p>
-<p>&emsp;&emsp;而条件熵$H(Y|X)$表示在已知随机变量X的条件下Y的确定性，定义为</p>
+<p>&emsp;&emsp;假设Ｘ是取有限个值的离散随机变量，其概率分布是：<script type="math/tex">P(X=x_{i})=p_{i}, i=1,2,...,n</script>则随机变量Ｘ的熵的定义是：</p>
+<script type="math/tex; mode=display">H(X)=-\sum_{i=1}^{n}p_{i}\log{p_{i}}</script><p>&emsp;&emsp;熵越大，表示随机变量的不确定性就越大。熵$H(p)$随概率$p$变化的曲线如下图：<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%EF%BC%A8(p).png"></p>
+<p>&emsp;&emsp;比如说，某个特征 $X^{j}$ 取 $\{0,1\}$ ，训练集中其中有一半取１，另一半取０，那么 $P(X^{j}=0)$ 和 $P(X^{j}=１)$ 都0.5，那么对应的熵$H(p)=1$，这表示提供随机变量$X^{i}$给我们带来的不确定性是最大的，自然我们也没办法根据变量$X^{i}$来进行预测。</p>
+<p>&emsp;&emsp;而条件熵$H(Y|X)$表示在已知随机变量X的条件下 $Y$ 的确定性，定义为</p>
 <blockquote>
-<p>X在给定的条件下Y的概率分布的熵对X的数学期望:<script type="math/tex">H(Y|X)=\sum_{i=1}^{n}P(X=x_{i})H(Y|X=x_{i})</script><br>n表示变量X所有的可取值个数</p>
+<p>X在给定的条件下Y的概率分布的熵对X的数学期望:</p>
+<script type="math/tex; mode=display">H(Y|X)=\sum_{i=1}^{n}P(X=x_{i})H(Y|X=x_{i})</script><p>n表示变量X所有的可取值个数</p>
 </blockquote>
 <p>&emsp;&emsp;当熵和条件熵的概率由极大似然估计得到时，对应称为经验熵和经验条件熵。信息增益可以定义为：</p>
 <blockquote>
 <p>特征A对于训练集的信息增益 $g(D,A)$ 可以定义为D的经验熵 $H(D)$ 与特征A给定条件下 D 的条件经验条件熵 $H(D|A)$ 之差。<script type="math/tex">g(D,A)=H(D)-H(D|A)</script>  </p>
 </blockquote>
-<p>&emsp;&emsp;信息增益大意味着 $H(D|A)$ 小，即给定特征A后，经验条件熵小，确定性大。所以信息增益大意味着<strong>具有更强的分类能力</strong>。信息增益算法如下图所示：<br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E5%86%B3%E7%AD%96%E6%A0%91/%E4%BF%A1%E6%81%AF%E5%A2%9E%E7%9B%8A1.png" width="500"><br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E5%86%B3%E7%AD%96%E6%A0%91/%E4%BF%A1%E6%81%AF%E5%A2%9E%E7%9B%8A2.png" width="500"><br><br><br>实例可以参考P62的例5.2。</p>
+<p>&emsp;&emsp;信息增益大意味着 $H(D|A)$ 小，即给定特征A后，经验条件熵小，确定性大。所以信息增益大意味着<strong>具有更强的分类能力</strong>。信息增益算法如下图所示：<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E4%BF%A1%E6%81%AF%E5%A2%9E%E7%9B%8A1.png" width="700"><br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E4%BF%A1%E6%81%AF%E5%A2%9E%E7%9B%8A2.png" width="700"></p>
+<p>实例可以参考P62的例5.2。</p>
 <h3 id="信息增益比"><a href="#信息增益比" class="headerlink" title="信息增益比"></a>信息增益比</h3><p>&emsp;&emsp;特征A对训练集的信息增益比 $g_{R}(D,A)$ 定义为其信息增益与训练集关于特征A的熵 $H_{A}(D)$ 之比： </p>
 <script type="math/tex; mode=display">
-g_{R}(D,A)=\frac{g(D,A)}{H_{A}(D)}</script><p>其中，$H_{A}(D)=-\sum_{i=1}^{n} \frac{|D_{i}|}{|D|} \log{\frac{|D_{i}|}{|D|}}$。</p>
-<h2 id="决策树的生成"><a href="#决策树的生成" class="headerlink" title="决策树的生成"></a>决策树的生成</h2><ul>
+g_{R}(D,A)=\frac{g(D,A)}{H_{A}(D)}</script><p>其中</p>
+<script type="math/tex; mode=display">H_{A}(D)=-\sum_{i=1}^{n} \frac{|D_{i}|}{|D|} \log{\frac{|D_{i}|}{|D|}}</script><h2 id="决策树的生成"><a href="#决策树的生成" class="headerlink" title="决策树的生成"></a>决策树的生成</h2><ul>
 <li>ID3树使用信息增益选择特征，当 $g(D,A)&lt;\epsilon$ 时作为叶节点，分裂时，以每一个特征可取的值作为分裂；</li>
 <li>C4.5树使用信息增益比来选择特征。</li>
 </ul>
@@ -393,21 +397,21 @@ g_{R}(D,A)=\frac{g(D,A)}{H_{A}(D)}</script><p>其中，$H_{A}(D)=-\sum_{i=1}^{n}
 C_{\alpha}(T) 
 &=& -\sum_{t=1}^{|T|}\sum_{k=1}^{K} N_{tk}\log{\frac{N_{tk}}{N_{t}}} + \alpha |T \\
 &=& C(T)+\alpha|T|
-\end{eqnarray}</script><p>$C(T)$ 表示模型对训练数据的预测误差，即模型与训练数据的拟合程度，$|T|$ 表示模型复杂度，参数 $\alpha \geq 0$ 。树的剪枝算法如下图：<br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E5%86%B3%E7%AD%96%E6%A0%91/%E5%89%AA%E6%9E%9D.png" width="500"></p>
+\end{eqnarray}</script><p>$C(T)$ 表示模型对训练数据的预测误差，即模型与训练数据的拟合程度，$|T|$ 表示模型复杂度，参数 $\alpha \geq 0$ 。树的剪枝算法如下图：<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E5%89%AA%E6%9E%9D.png" width="700"></p>
 <h2 id="CART"><a href="#CART" class="headerlink" title="CART"></a>CART</h2><p>&emsp;&emsp;CART（classification and regression tree）可能是应用最广泛的决策树方法了。CART同样由特征选择、树的生成和剪枝组成，既可以用于分类也可以用于回归。需要注意的是，CART假设决策树的二叉树，内部节点特征的取值为“是”和“否”，左枝表示“是”，右枝表示“否”。这样决策树等价于递归地二分每个特征，将输入空间划分成有限个单元，并在这些单元上确定预测的概率分布。特征选择时，回归树用平方误差最小化准则，分类树用基尼指数最小化准则。</p>
 <h3 id="回归树的生成"><a href="#回归树的生成" class="headerlink" title="回归树的生成"></a>回归树的生成</h3><p>&emsp;&emsp;对于数据集</p>
 <script type="math/tex; mode=display">D=\{(x_{1}, y_{1}),\dots,(x_{N}, y_{N})\}</script><p>回归树对应输入空间的一个划分以及在划分的单元上的输出值。假设已将输入空间划分成为M个单元$R_{1},\dots,R_{M}，并在每个单元R_{m}上有一个固定的输出值c_{m}$。那么回归树模型可以表示为：</p>
 <script type="math/tex; mode=display">f(x)=\sum_{m=1}^{M}c_{m}I(x \in R_{m})</script><p>&emsp;&emsp;当输入空间的划分确定时，可以用平方误差<script type="math/tex">\sum_{x_{i} \in R_{m}} (y_{i}-f(x_{i}))^{2}</script><br>来表示预测误差，用平方误差最小的准则求解每个单元上的最优输出值。实际上，单元$R_{m}$上的$c_{m}$的最优值$\hat{c}_{m}$是$R_{m}$上的所有输入实例$x_{i}$对应的输出$y_{i}$的均值。</p>
 <p>&emsp;&emsp;那么如何对输入空间进行划分呢？我们采用启发式的方法，选择第j个变量$x^j$和它的取值s作为切分变量和切分点，并定义两个区域： <script type="math/tex">R_{1}(j,s)=\{x|x^j \leq s\} 和 R_{2}(j,s)=\{x|x^j > s\}</script><br>然后对固定输入变量j可以找到最优切分点s，即求解：</p>
-<script type="math/tex; mode=display">\min_{j,s} \big[ \min_{c_{1}} \sum_{x \in R_{1}(j,s)} (y_{i} - c_{1})^2 + \min_{c_{2}} \sum_{x \in R_{2}(j,s)} (y_{i} - c_{2})^2 \big]</script><p>来找到固定输入变量j的最优切分点s，遍历所有的输入变量，找到最优的切分变量j，构成一个对 $(j,s)$ 。依此将输入空间划分为两个区域，重复这个过程直到满足停止条件为止。这样的回归树通常称为最小二乘回归树，算法如下图：<br><img src="https://github.com/nanyoullm/nanyoullm.github.io/blob/master/img/%E5%86%B3%E7%AD%96%E6%A0%91/cart_r.png?raw=true" width="500"></p>
+<script type="math/tex; mode=display">\min_{j,s} \big[ \min_{c_{1}} \sum_{x \in R_{1}(j,s)} (y_{i} - c_{1})^2 + \min_{c_{2}} \sum_{x \in R_{2}(j,s)} (y_{i} - c_{2})^2 \big]</script><p>来找到固定输入变量j的最优切分点s，遍历所有的输入变量，找到最优的切分变量j，构成一个对 $(j,s)$ 。依此将输入空间划分为两个区域，重复这个过程直到满足停止条件为止。这样的回归树通常称为最小二乘回归树，算法如下图：<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/cart_r.png?raw=true" width="700"></p>
 <h3 id="分类树的生成"><a href="#分类树的生成" class="headerlink" title="分类树的生成"></a>分类树的生成</h3><p>&emsp;&emsp;分类树用基尼指数选择最有特征，同时决定该特征的最优二值切分点。  </p>
 <blockquote>
 <p>基尼指数：分类问题中，假设有K个类，样本点属于第k类的概率为 $p_{k}$ ，则概率分布的基尼指数定义为： <script type="math/tex">Gini(p)=\sum_{k=1}^{K}p_{k}(1-p_{k})=1-\sum_{k=1}^{K}p_{k}^{2}</script> </p>
 </blockquote>
 <p>&emsp;&emsp;对于二分类问题，若样本点属于A类的概率是p，则概率分布的基尼指数为<script type="math/tex">Gini(p)=2p(1-p)</script>，对于给定的样本集合D，其基尼指数为：<script type="math/tex">Gini(D)=1-\sum_{k=1}^{K}(\frac{|C_{k}|}{|D|})^{2}</script>。如果样本集合D根据特征A是否取某一可能值a被划分为$D_{1}和D_{2}$两个部分，则在特征A的条件下，集合D的基尼指数定义为：</p>
-<script type="math/tex; mode=display">Gini(D,A)=\frac{|D_{1}|}{|D|}Gini(D_{1}) + \frac{|D_{2}|}{|D|}Gini(D_{2})</script><p>基尼指数表示集合D的不确定性，这一点与熵相似。<br>&emsp;&emsp;下图展示了CART分类树的生成算法：<br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E5%86%B3%E7%AD%96%E6%A0%91/cart_c1.png" width="500"><br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E5%86%B3%E7%AD%96%E6%A0%91/cart_c2.png" width="500"></p>
-<h3 id="CART剪枝"><a href="#CART剪枝" class="headerlink" title="CART剪枝"></a>CART剪枝</h3><p><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/%E5%86%B3%E7%AD%96%E6%A0%91/cart_cut.png" width="500"></p>
-<h2 id="enjoy-it"><a href="#enjoy-it" class="headerlink" title="enjoy it!"></a>enjoy it!</h2>
+<script type="math/tex; mode=display">Gini(D,A)=\frac{|D_{1}|}{|D|}Gini(D_{1}) + \frac{|D_{2}|}{|D|}Gini(D_{2})</script><p>基尼指数表示集合D的不确定性，这一点与熵相似。<br>&emsp;&emsp;下图展示了CART分类树的生成算法：<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/cart_c1.png" width="700"><br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/cart_c2.png" width="700"></p>
+<h3 id="CART剪枝"><a href="#CART剪枝" class="headerlink" title="CART剪枝"></a>CART剪枝</h3><p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/cart_cut.png" width="700"></p>
+<h1 id="enjoy-it"><a href="#enjoy-it" class="headerlink" title="enjoy it!"></a>enjoy it!</h1>
       
     </div>
     
@@ -586,7 +590,7 @@ C_{\alpha}(T)
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#决策树"><span class="nav-number">1.</span> <span class="nav-text">决策树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#决策树模型"><span class="nav-number">1.1.</span> <span class="nav-text">决策树模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#if-else规则"><span class="nav-number">1.2.</span> <span class="nav-text">if-else规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条件概率分布"><span class="nav-number">1.3.</span> <span class="nav-text">条件概率分布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#决策树的学习"><span class="nav-number">1.4.</span> <span class="nav-text">决策树的学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特征选择"><span class="nav-number">1.5.</span> <span class="nav-text">特征选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#信息增益"><span class="nav-number">1.5.1.</span> <span class="nav-text">信息增益</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信息增益比"><span class="nav-number">1.5.2.</span> <span class="nav-text">信息增益比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#决策树的生成"><span class="nav-number">1.6.</span> <span class="nav-text">决策树的生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#决策树的剪枝"><span class="nav-number">1.7.</span> <span class="nav-text">决策树的剪枝</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CART"><span class="nav-number">1.8.</span> <span class="nav-text">CART</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#回归树的生成"><span class="nav-number">1.8.1.</span> <span class="nav-text">回归树的生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类树的生成"><span class="nav-number">1.8.2.</span> <span class="nav-text">分类树的生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CART剪枝"><span class="nav-number">1.8.3.</span> <span class="nav-text">CART剪枝</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#enjoy-it"><span class="nav-number">1.9.</span> <span class="nav-text">enjoy it!</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#决策树"><span class="nav-number">1.</span> <span class="nav-text">决策树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#决策树模型"><span class="nav-number">1.1.</span> <span class="nav-text">决策树模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#if-else规则"><span class="nav-number">1.2.</span> <span class="nav-text">if-else规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条件概率分布"><span class="nav-number">1.3.</span> <span class="nav-text">条件概率分布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#决策树的学习"><span class="nav-number">1.4.</span> <span class="nav-text">决策树的学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特征选择"><span class="nav-number">1.5.</span> <span class="nav-text">特征选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#信息增益"><span class="nav-number">1.5.1.</span> <span class="nav-text">信息增益</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信息增益比"><span class="nav-number">1.5.2.</span> <span class="nav-text">信息增益比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#决策树的生成"><span class="nav-number">1.6.</span> <span class="nav-text">决策树的生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#决策树的剪枝"><span class="nav-number">1.7.</span> <span class="nav-text">决策树的剪枝</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CART"><span class="nav-number">1.8.</span> <span class="nav-text">CART</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#回归树的生成"><span class="nav-number">1.8.1.</span> <span class="nav-text">回归树的生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类树的生成"><span class="nav-number">1.8.2.</span> <span class="nav-text">分类树的生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CART剪枝"><span class="nav-number">1.8.3.</span> <span class="nav-text">CART剪枝</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#enjoy-it"><span class="nav-number">2.</span> <span class="nav-text">enjoy it!</span></a></li></ol></div>
             
 
           </div>

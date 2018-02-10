@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Lim的博客">
 <meta property="og:description" content="&amp;emsp;&amp;emsp;接触过深度学习的同学对手写数字识别的任务并不陌生。它一个入门的阶段，是每位初学深度学习的同学的基本学习任务。任务的目标是建立一个分类模型，对0-9的黑白手写数字图片进行识别。&amp;emsp;&amp;emsp;以下内容是使用CNN对训练集做特征提取，然后最后一层使用逻辑回归做预测。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-02-10T11:31:50.995Z">
+<meta property="og:updated_time" content="2018-02-10T16:45:28.012Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="手写数字识别CNN版">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;接触过深度学习的同学对手写数字识别的任务并不陌生。它一个入门的阶段，是每位初学深度学习的同学的基本学习任务。任务的目标是建立一个分类模型，对0-9的黑白手写数字图片进行识别。&amp;emsp;&amp;emsp;以下内容是使用CNN对训练集做特征提取，然后最后一层使用逻辑回归做预测。">
@@ -417,7 +417,7 @@ epoch: 5/5, step: 600/600.0, loss: 0.002221117028966546
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">'accuracy: &#123;&#125;'</span>.format(correct/total*<span class="number">100</span>))</span><br></pre></td></tr></table></figure>
 <pre><code>accuracy: 98.89
 </code></pre><p><em>so easy, 妈妈再也不用担心我不会用深度学习了</em></p>
-
+<h1 id="enjoy-it"><a href="#enjoy-it" class="headerlink" title="enjoy it!"></a>enjoy it!</h1>
       
     </div>
     
@@ -596,7 +596,7 @@ epoch: 5/5, step: 600/600.0, loss: 0.002221117028966546
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#代码"><span class="nav-number">1.</span> <span class="nav-text">代码</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#代码"><span class="nav-number">1.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#enjoy-it"><span class="nav-number">2.</span> <span class="nav-text">enjoy it!</span></a></li></ol></div>
             
 
           </div>
@@ -739,24 +739,7 @@ epoch: 5/5, step: 600/600.0, loss: 0.002221117028966546
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config("");
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="custom_mathjax_source">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
 
 
 
@@ -809,6 +792,43 @@ epoch: 5/5, step: 600/600.0, loss: 0.002221117028966546
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
   
 
 

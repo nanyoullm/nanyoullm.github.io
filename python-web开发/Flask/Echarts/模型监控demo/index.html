@@ -88,7 +88,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://github.com/nanyoullm/simple-model-monitor/blob/master/img/monitor1.gif?raw=true">
 <meta property="og:image" content="https://github.com/nanyoullm/simple-model-monitor/blob/master/img/monitor2.gif?raw=true">
-<meta property="og:updated_time" content="2018-02-10T12:08:34.095Z">
+<meta property="og:updated_time" content="2018-02-10T16:20:45.755Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="模型监控demo">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;一个模型上线后，在实际生产中需要监控这个模型的稳定性的，一旦模型的产出出现异常，一点点的偏差就会带来极大的风险损失。&amp;emsp;&amp;emsp;以金融风险评分为例，我们需要定期按照新观察期的数据，去更新每个用户的信用评分。变量的分布的分析是必要的，通过多账期评分总体的分布对比。比如  计算一些指标， 可以评价这个模型是否收到了当前业务的影响？ 在一定周期内是否可以保持稳定？ P">
@@ -375,18 +375,21 @@
 <li>PSI是多少？</li>
 <li>申请了金融产品的客户的分数是否满足排序性？</li>
 <li>整体KS是多少？等等…<a id="more"></a>
-<h1 id="simple-model-monitor"><a href="#simple-model-monitor" class="headerlink" title="simple model monitor"></a>simple model monitor</h1>简易的监控定期更新的用户信用分及特征分布界面。</li>
+</li>
 </ul>
-<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>以一个金融领域的用户信用分为例，我们需要定期按照新观察期的数据，去更新每个用户的信用评分。<br>更新之后的评分和各变量的分布的分析是必要的，通过多账期评分总体的分布对比，计算一些指标，<br>可以评价这个模型是否收到了当前业务的影响？在一定周期内是否可以保持稳定？PSI是多少？<br>申请了金融产品的客户的分数是否满足排序性？整体KS是多少？等等…  </p>
+<h1 id="simple-model-monitor"><a href="#simple-model-monitor" class="headerlink" title="simple model monitor"></a>simple model monitor</h1><p>&emsp;&emsp;简易的监控定期更新的用户信用分及特征分布界面。</p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;&emsp;以一个金融领域的用户信用分为例，我们需要定期按照新观察期的数据，去更新每个用户的信用评分。更新之后的评分和各变量的分布的分析是必要的，通过多账期评分总体的分布对比，计算一些指标，可以评价这个模型是否收到了当前业务的影响？在一定周期内是否可以保持稳定？PSI是多少？申请了金融产品的客户的分数是否满足排序性？整体KS是多少？等等…  </p>
 <blockquote>
 <p>特别说明：展示的数据为随机生成数据，库中附带生成伪数据的代码。</p>
 </blockquote>
 <h2 id="界面展示"><a href="#界面展示" class="headerlink" title="界面展示"></a>界面展示</h2><ul>
-<li><p>可选择不同的评分查看分布，下部分是特征的分布，可拖拽查看；<br><br><br><img src="https://github.com/nanyoullm/simple-model-monitor/blob/master/img/monitor1.gif?raw=true"><br><br></p>
-</li>
-<li><p>可选择不同账期的同一评分进行对比，下部分是特征的分布对比，可拖拽查看对比；<br><br><br><img src="https://github.com/nanyoullm/simple-model-monitor/blob/master/img/monitor2.gif?raw=true"><br><br></p>
-</li>
+<li>可选择不同的评分查看分布，下部分是特征的分布，可拖拽查看；</li>
 </ul>
+<p><img src="https://github.com/nanyoullm/simple-model-monitor/blob/master/img/monitor1.gif?raw=true"></p>
+<ul>
+<li>可选择不同账期的同一评分进行对比，下部分是特征的分布对比，可拖拽查看对比；</li>
+</ul>
+<p><img src="https://github.com/nanyoullm/simple-model-monitor/blob/master/img/monitor2.gif?raw=true"></p>
 <h2 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h2><p>Python + Mysql + <a href="http://docs.jinkan.org/docs/flask/quickstart.html" target="_blank" rel="noopener">Flask</a> + Ajax + <a href="http://echarts.baidu.com/index.html" target="_blank" rel="noopener">Echarts</a>  </p>
 <ul>
 <li>Flask<br>flask是一个很轻的python web框架，上手很快，很适合小型的web应用；</li>

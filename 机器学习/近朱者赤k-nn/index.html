@@ -86,13 +86,13 @@
 <meta property="og:site_name" content="Lim的博客">
 <meta property="og:description" content="&amp;emsp;&amp;emsp;k近邻（k-nearest neighbor）是一种基本的分类和回归方法。分类时，对新的实例，根据其k个最近邻的训练实例的类别，通过多数表决等方式进行预测。因此，k近邻法不具有显式的学习过程。&amp;emsp;&amp;emsp;k近邻实际上利用训练数据集对特征向量空间进行划分，并作为其分类的模型。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/k-nn%E7%AE%97%E6%B3%95.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/k-nn%E7%89%B9%E5%BE%81%E7%A9%BA%E9%97%B4.png">
-<meta property="og:updated_time" content="2018-02-08T16:08:10.393Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/k-nn%E7%AE%97%E6%B3%95.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/k-nn%E7%89%B9%E5%BE%81%E7%A9%BA%E9%97%B4.png">
+<meta property="og:updated_time" content="2018-02-10T16:50:03.262Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="近朱者赤k-nn">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;k近邻（k-nearest neighbor）是一种基本的分类和回归方法。分类时，对新的实例，根据其k个最近邻的训练实例的类别，通过多数表决等方式进行预测。因此，k近邻法不具有显式的学习过程。&amp;emsp;&amp;emsp;k近邻实际上利用训练数据集对特征向量空间进行划分，并作为其分类的模型。">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/k-nn%E7%AE%97%E6%B3%95.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/k-nn%E7%AE%97%E6%B3%95.png">
 
 
 
@@ -357,8 +357,10 @@
 </ul>
 </blockquote>
 <p>给定训练集，对于新的输入，在训练集中找到与该实例最临近的k个实例，这k个实例的多数属于某一类，则认为该实例属于这个类。</p>
-<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><p><br><br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/k-nn%E7%AE%97%E6%B3%95.png" width="600"><br><br><br>当k=1时，成为最近邻法。</p>
-<h2 id="k近邻模型"><a href="#k近邻模型" class="headerlink" title="k近邻模型"></a>k近邻模型</h2><h3 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h3><p>将特征空间划分为子空间，确定空间中的每个点所属的类。<br><br><br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/k-nn%E7%89%B9%E5%BE%81%E7%A9%BA%E9%97%B4.png" width="400"><br><br></p>
+<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/k-nn%E7%AE%97%E6%B3%95.png" width="600"></p>
+<p>当k=1时，成为最近邻法。</p>
+<h2 id="k近邻模型"><a href="#k近邻模型" class="headerlink" title="k近邻模型"></a>k近邻模型</h2><h3 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h3><p>将特征空间划分为子空间，确定空间中的每个点所属的类。</p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/k-nn%E7%89%B9%E5%BE%81%E7%A9%BA%E9%97%B4.png" width="400"></p>
 <h3 id="度量距离"><a href="#度量距离" class="headerlink" title="度量距离"></a>度量距离</h3><p>$x_{i}$与$x_{j}$的距离$L_{p}$:<script type="math/tex">L_{p}(x_{i},x_{j})=(\sum\limits_{l=1}^n |x_{i}^{(l)}-x_{j}^{(l)}|^{p})^\frac{1}{p}， p>=1</script><br>这个距离，又称为<strong>范数</strong>。  </p>
 <blockquote>
 <ul>

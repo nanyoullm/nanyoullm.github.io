@@ -86,24 +86,24 @@
 <meta property="og:site_name" content="Lim的博客">
 <meta property="og:description" content="&amp;emsp;&amp;emsp;seaborn是一个python可视化的工具，是基于 matplotlib ，能与 dataframe 数据结构有更好切合的工具。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/数据科学/可视化/用seaborn做数据可视化/output_6_1.png">
-<meta property="og:image" content="http://yoursite.com/数据科学/可视化/用seaborn做数据可视化/output_8_1.png">
-<meta property="og:image" content="http://yoursite.com/数据科学/可视化/用seaborn做数据可视化/output_10_1.png">
-<meta property="og:image" content="http://yoursite.com/数据科学/可视化/用seaborn做数据可视化/output_11_1.png">
-<meta property="og:image" content="http://yoursite.com/数据科学/可视化/用seaborn做数据可视化/output_13_1.png">
-<meta property="og:image" content="http://yoursite.com/数据科学/可视化/用seaborn做数据可视化/output_15_1.png">
-<meta property="og:image" content="http://yoursite.com/数据科学/可视化/用seaborn做数据可视化/output_17_1.png">
-<meta property="og:image" content="http://yoursite.com/数据科学/可视化/用seaborn做数据可视化/output_19_1.png">
-<meta property="og:image" content="http://yoursite.com/数据科学/可视化/用seaborn做数据可视化/output_22_0.png">
-<meta property="og:image" content="http://yoursite.com/数据科学/可视化/用seaborn做数据可视化/output_24_1.png">
-<meta property="og:image" content="http://yoursite.com/数据科学/可视化/用seaborn做数据可视化/output_27_1.png">
-<meta property="og:image" content="http://yoursite.com/数据科学/可视化/用seaborn做数据可视化/output_29_1.png">
-<meta property="og:image" content="http://yoursite.com/数据科学/可视化/用seaborn做数据可视化/output_30_1.png">
-<meta property="og:updated_time" content="2018-02-10T12:01:04.926Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_6_1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_8_1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_10_1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_11_1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_13_1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_15_1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_17_1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_19_1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_22_0.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_24_1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_27_1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_29_1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_30_1.png">
+<meta property="og:updated_time" content="2018-02-10T16:23:41.778Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用seaborn做数据可视化">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;seaborn是一个python可视化的工具，是基于 matplotlib ，能与 dataframe 数据结构有更好切合的工具。">
-<meta name="twitter:image" content="http://yoursite.com/数据科学/可视化/用seaborn做数据可视化/output_6_1.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_6_1.png">
 
 
 
@@ -476,42 +476,42 @@
 
 <h2 id="一般绘图：factorplot-和-FacetGrid"><a href="#一般绘图：factorplot-和-FacetGrid" class="headerlink" title="一般绘图：factorplot 和 FacetGrid"></a>一般绘图：factorplot 和 FacetGrid</h2><h3 id="根据2个维度变量绘图"><a href="#根据2个维度变量绘图" class="headerlink" title="根据2个维度变量绘图"></a>根据2个维度变量绘图</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 画出model_year和mpg的关系图</span></span><br><span class="line">sns.factorplot(data=df, x=<span class="string">"model_year"</span>, y=<span class="string">"mpg"</span>)</span><br></pre></td></tr></table></figure>
 <pre><code>&lt;seaborn.axisgrid.FacetGrid at 0x141170f90&gt;
-</code></pre><p><img src="output_6_1.png" alt="png"></p>
+</code></pre><p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_6_1.png" alt="png"></p>
 <h3 id="可以按照第3个维度绘制不同的关系图"><a href="#可以按照第3个维度绘制不同的关系图" class="headerlink" title="可以按照第3个维度绘制不同的关系图"></a>可以按照第3个维度绘制不同的关系图</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sns.factorplot(data=df, x=<span class="string">"model_year"</span>, y=<span class="string">"mpg"</span>, col=<span class="string">"origin"</span>)</span><br></pre></td></tr></table></figure>
 <pre><code>&lt;seaborn.axisgrid.FacetGrid at 0x1411827d0&gt;
-</code></pre><p><img src="output_8_1.png" alt="png"></p>
+</code></pre><p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_8_1.png" alt="png"></p>
 <h3 id="可以从折线图切成柱状图"><a href="#可以从折线图切成柱状图" class="headerlink" title="可以从折线图切成柱状图"></a>可以从折线图切成柱状图</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sns.factorplot(<span class="string">"cylinders"</span>, data=df, col=<span class="string">"origin"</span>, kind=<span class="string">'bar'</span>)</span><br></pre></td></tr></table></figure>
 <pre><code>&lt;seaborn.axisgrid.FacetGrid at 0x13eff0810&gt;
-</code></pre><p><img src="output_10_1.png" alt="png"></p>
+</code></pre><p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_10_1.png" alt="png"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">g = sns.FacetGrid(df, col=<span class="string">"origin"</span>)</span><br><span class="line">g.map(sns.distplot, <span class="string">"mpg"</span>)</span><br></pre></td></tr></table></figure>
 <pre><code>&lt;seaborn.axisgrid.FacetGrid at 0x13e964b90&gt;
-</code></pre><p><img src="output_11_1.png" alt="png"></p>
+</code></pre><p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_11_1.png" alt="png"></p>
 <h3 id="散点图"><a href="#散点图" class="headerlink" title="散点图"></a>散点图</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">g = sns.FacetGrid(df, col=<span class="string">"origin"</span>)</span><br><span class="line">g.map(plt.scatter, <span class="string">"horsepower"</span>, <span class="string">"mpg"</span>)</span><br></pre></td></tr></table></figure>
 <pre><code>&lt;seaborn.axisgrid.FacetGrid at 0x138cd2f90&gt;
-</code></pre><p><img src="output_13_1.png" alt="png"></p>
+</code></pre><p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_13_1.png" alt="png"></p>
 <h3 id="绘图的同时还做回归"><a href="#绘图的同时还做回归" class="headerlink" title="绘图的同时还做回归"></a>绘图的同时还做回归</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">g = sns.FacetGrid(df, col=<span class="string">"origin"</span>)</span><br><span class="line">g.map(sns.regplot, <span class="string">"horsepower"</span>, <span class="string">"mpg"</span>)</span><br><span class="line">plt.xlim(<span class="number">0</span>, <span class="number">250</span>)</span><br><span class="line">plt.ylim(<span class="number">0</span>, <span class="number">60</span>)</span><br></pre></td></tr></table></figure>
 <pre><code>(0, 60)
-</code></pre><p><img src="output_15_1.png" alt="png"></p>
+</code></pre><p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_15_1.png" alt="png"></p>
 <h3 id="kde等高线图"><a href="#kde等高线图" class="headerlink" title="kde等高线图"></a>kde等高线图</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">df[<span class="string">'tons'</span>] = (df.weight/<span class="number">2000</span>).astype(int)</span><br><span class="line">g = sns.FacetGrid(df, col=<span class="string">"origin"</span>, row=<span class="string">"tons"</span>)</span><br><span class="line">g.map(sns.kdeplot, <span class="string">"horsepower"</span>, <span class="string">"mpg"</span>)</span><br><span class="line">plt.xlim(<span class="number">0</span>, <span class="number">250</span>)</span><br><span class="line">plt.ylim(<span class="number">0</span>, <span class="number">60</span>)</span><br></pre></td></tr></table></figure>
 <pre><code>(0, 60)
-</code></pre><p><img src="output_17_1.png" alt="png"></p>
+</code></pre><p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_17_1.png" alt="png"></p>
 <h3 id="按照2个维度展开画图"><a href="#按照2个维度展开画图" class="headerlink" title="按照2个维度展开画图"></a>按照2个维度展开画图</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">g = sns.FacetGrid(df, col=<span class="string">"origin"</span>, row=<span class="string">"tons"</span>)</span><br><span class="line">g.map(plt.hist, <span class="string">"mpg"</span>, bins=np.linspace(<span class="number">0</span>, <span class="number">50</span>, <span class="number">11</span>))</span><br></pre></td></tr></table></figure>
 <pre><code>&lt;seaborn.axisgrid.FacetGrid at 0x131e0f610&gt;
-</code></pre><p><img src="output_19_1.png" alt="png"></p>
+</code></pre><p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_19_1.png" alt="png"></p>
 <h2 id="pairplot-and-PairGrid"><a href="#pairplot-and-PairGrid" class="headerlink" title="pairplot and PairGrid"></a>pairplot and PairGrid</h2><h3 id="多个维度两两组合绘图"><a href="#多个维度两两组合绘图" class="headerlink" title="多个维度两两组合绘图"></a>多个维度两两组合绘图</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">g = sns.pairplot(df[[<span class="string">"mpg"</span>, <span class="string">"horsepower"</span>, <span class="string">"weight"</span>, <span class="string">"origin"</span>]], hue=<span class="string">"origin"</span>, diag_kind=<span class="string">"hist"</span>)</span><br><span class="line"><span class="keyword">for</span> ax <span class="keyword">in</span> g.axes.flat:</span><br><span class="line">    plt.setp(ax.get_xticklabels(), rotation=<span class="number">45</span>)</span><br></pre></td></tr></table></figure>
-<p><img src="output_22_0.png" alt="png"></p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_22_0.png" alt="png"></p>
 <h3 id="组合绘图的时候顺便回归一下"><a href="#组合绘图的时候顺便回归一下" class="headerlink" title="组合绘图的时候顺便回归一下"></a>组合绘图的时候顺便回归一下</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">g = sns.PairGrid(df[[<span class="string">"mpg"</span>, <span class="string">"horsepower"</span>, <span class="string">"weight"</span>, <span class="string">"origin"</span>]], hue=<span class="string">"origin"</span>)</span><br><span class="line">g.map_upper(sns.regplot)</span><br><span class="line">g.map_lower(sns.residplot)</span><br><span class="line">g.map_diag(plt.hist)</span><br><span class="line"><span class="keyword">for</span> ax <span class="keyword">in</span> g.axes.flat:</span><br><span class="line">    plt.setp(ax.get_xticklabels(), rotation=<span class="number">45</span>)</span><br><span class="line">g.add_legend()</span><br><span class="line">g.set(alpha=<span class="number">0.5</span>)</span><br></pre></td></tr></table></figure>
 <pre><code>&lt;seaborn.axisgrid.PairGrid at 0x13eac5790&gt;
-</code></pre><p><img src="output_24_1.png" alt="png"></p>
+</code></pre><p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_24_1.png" alt="png"></p>
 <h2 id="jointplot-and-JointGrid"><a href="#jointplot-and-JointGrid" class="headerlink" title="jointplot and JointGrid"></a>jointplot and JointGrid</h2><h3 id="联合绘图-kde等高"><a href="#联合绘图-kde等高" class="headerlink" title="联合绘图(kde等高)"></a>联合绘图(kde等高)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sns.jointplot(<span class="string">"mpg"</span>, <span class="string">"horsepower"</span>, data=df, kind=<span class="string">'kde'</span>)</span><br></pre></td></tr></table></figure>
 <pre><code>&lt;seaborn.axisgrid.JointGrid at 0x1393a5d10&gt;
-</code></pre><p><img src="output_27_1.png" alt="png"></p>
+</code></pre><p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_27_1.png" alt="png"></p>
 <h3 id="联合绘图-加回归"><a href="#联合绘图-加回归" class="headerlink" title="联合绘图(加回归)"></a>联合绘图(加回归)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sns.jointplot(<span class="string">"horsepower"</span>, <span class="string">"mpg"</span>, data=df, kind=<span class="string">"reg"</span>)</span><br></pre></td></tr></table></figure>
 <pre><code>&lt;seaborn.axisgrid.JointGrid at 0x141b640d0&gt;
-</code></pre><p><img src="output_29_1.png" alt="png"></p>
+</code></pre><p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_29_1.png" alt="png"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">g = sns.JointGrid(x=<span class="string">"horsepower"</span>, y=<span class="string">"mpg"</span>, data=df)</span><br><span class="line">g.plot_joint(sns.regplot, order=<span class="number">2</span>)</span><br><span class="line">g.plot_marginals(sns.distplot)</span><br></pre></td></tr></table></figure>
 <pre><code>&lt;seaborn.axisgrid.JointGrid at 0x141cd8690&gt;
-</code></pre><p><img src="output_30_1.png" alt="png"></p>
+</code></pre><p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/seaborn/output_30_1.png" alt="png"></p>
 <h1 id="enjoy-it"><a href="#enjoy-it" class="headerlink" title="enjoy it!"></a>enjoy it!</h1>
       
     </div>

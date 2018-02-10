@@ -86,17 +86,17 @@
 <meta property="og:site_name" content="Lim的博客">
 <meta property="og:description" content="&amp;emsp;&amp;emsp;我们知道，人类思考的时候并不是从一片空白的大脑开始的（不像只有7秒记忆的鱼），而是会参考之前的经验和阅历。就像我们看悬疑片的时候，大脑会回溯之前的种种细节；阅读文章的时候，会基于对先前的理解来对文章主旨做出判断。  而这恰恰是传统的神经网络做不到的。地转轮回的RNN循环神经网络的出现解决了这个问题，它能记忆前时序的信息，其类似CNN的共享参数机制也是极大简化了网络的复杂性。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/rnn.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/rnn.png">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/42741-d6749df8fb93b0b0.png?imageMogr2/auto-orient/">
-<meta property="og:image" content="http://yoursite.com/深度学习/pyTorch/RNN与LSTM/output_6_0.png">
-<meta property="og:image" content="http://yoursite.com/深度学习/pyTorch/RNN与LSTM/output_14_0.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/lstm1.png">
-<meta property="og:image" content="http://yoursite.com/深度学习/pyTorch/RNN与LSTM/output_21_0.png">
-<meta property="og:updated_time" content="2018-02-10T11:53:25.424Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/rnn/output_6_0.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/rnn/output_14_0.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/lstm1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/rnn/output_21_0.png">
+<meta property="og:updated_time" content="2018-02-10T16:35:31.408Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RNN与LSTM">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;我们知道，人类思考的时候并不是从一片空白的大脑开始的（不像只有7秒记忆的鱼），而是会参考之前的经验和阅历。就像我们看悬疑片的时候，大脑会回溯之前的种种细节；阅读文章的时候，会基于对先前的理解来对文章主旨做出判断。  而这恰恰是传统的神经网络做不到的。地转轮回的RNN循环神经网络的出现解决了这个问题，它能记忆前时序的信息，其类似CNN的共享参数机制也是极大简化了网络的复杂性。">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/rnn.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/rnn.png">
 
 
 
@@ -363,9 +363,14 @@
       
         <p>&emsp;&emsp;我们知道，人类思考的时候并不是从一片空白的大脑开始的（不像只有7秒记忆的鱼），而是会参考之前的经验和阅历。就像我们看悬疑片的时候，大脑会回溯之前的种种细节；阅读文章的时候，会基于对先前的理解来对文章主旨做出判断。  而这恰恰是传统的神经网络做不到的。地转轮回的RNN循环神经网络的出现解决了这个问题，它能记忆前时序的信息，其类似CNN的共享参数机制也是极大简化了网络的复杂性。由RNN进化的LSTM和GRU单元更是展现了神通广大的本领。<br><a id="more"></a></p>
 <h1 id="RNN-amp-LSTM-及其实践"><a href="#RNN-amp-LSTM-及其实践" class="headerlink" title="RNN &amp; LSTM 及其实践"></a>RNN &amp; LSTM 及其实践</h1><ul>
-<li>ok，我们来看一下rnn的结构<br><br><br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/rnn.png" width="150" height="200" alt="rnn"><br><br></li>
-<li><p>t时刻的输入$x_{t}$进入神经网络A后，一方面会输出一个结果$h_{t}$，同时会输出一个状态传递到下一次的循环中，作为下一次循环的自产的输入。在这个循环的过程中，A里的参数都是共享的。那么，把rnn的循环过程展开后是什么样子的呢？如下图所示：<br><br><br><img src="https://upload-images.jianshu.io/upload_images/42741-d6749df8fb93b0b0.png?imageMogr2/auto-orient/" alt="rnn-flatten"><br><br></p>
-</li>
+<li>ok，我们来看一下rnn的结构</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/rnn.png" width="150" height="200" alt="rnn"></p>
+<ul>
+<li>t时刻的输入$x_{t}$进入神经网络A后，一方面会输出一个结果$h_{t}$，同时会输出一个状态传递到下一次的循环中，作为下一次循环的自产的输入。在这个循环的过程中，A里的参数都是共享的。那么，把rnn的循环过程展开后是什么样子的呢？如下图所示：</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/42741-d6749df8fb93b0b0.png?imageMogr2/auto-orient/" alt="rnn-flatten"></p>
+<ul>
 <li><p>这个结构使得它对时序性的变量有着先天性的优势，在语音识别等领域取得了一定成功。但是这个结构也存在一定的缺陷，我们来看看，以下文字摘自<a href="https://www.jianshu.com/p/9dc9f41f0b29" target="_blank" rel="noopener">lstm简介</a></p>
 <blockquote>
 <p>假设我们试着去预测“I grew up in France… I speak fluent French”最后的词。当前的信息建议下一个词可能是一种语言的名字，但是如果我们需要弄清楚是什么语言，我们是需要先前提到的离当前位置很远的 France 的上下文的。这说明相关信息和当前预测位置之间的间隔就肯定变得相当的大。<br>不幸的是，在这个间隔不断增大时，RNN 会丧失学习到连接如此远的信息的能力。</p>
@@ -383,7 +388,7 @@
 <li>总步长数为100，每一步的长度为$\frac{2\pi}{100}$</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">steps = np.linspace(<span class="number">0</span>, np.pi * <span class="number">2</span>, <span class="number">100</span>, dtype=np.float32)</span><br><span class="line"></span><br><span class="line">x_np = np.sin(steps)</span><br><span class="line">y_np = np.cos(steps)</span><br><span class="line">plt.plot(steps, x_np, <span class="string">'r-'</span>, label=<span class="string">'input(sin)'</span>)</span><br><span class="line">plt.plot(steps, y_np, <span class="string">'b-'</span>, label=<span class="string">'output(cos)'</span>)</span><br><span class="line">plt.legend(loc=<span class="string">'best'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p><img src="output_6_0.png" alt="png"></p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/rnn/output_6_0.png" alt="png"></p>
 <ul>
 <li>ok，现在我们来构建一下rnn网络</li>
 <li>注意，这是一个 <strong><em>sequence2sequence</em></strong> 回归的预测，rnn的每一次循环的输出结果都是我们需要拿出来和y值计算loss的，我们可以通过forward函数里看到。</li>
@@ -397,12 +402,15 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">plt.figure(<span class="number">1</span>, figsize=(<span class="number">12</span>, <span class="number">5</span>))</span><br><span class="line">plt.ion()</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> step <span class="keyword">in</span> range(<span class="number">60</span>):</span><br><span class="line">    start, end = step * np.pi, (step+<span class="number">1</span>)*np.pi</span><br><span class="line">    steps = np.linspace(start, end, time_step, dtype=np.float32)</span><br><span class="line">    x_np = np.sin(steps)</span><br><span class="line">    y_np = np.cos(steps)</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    x = Variable(torch.from_numpy(x_np[np.newaxis, :, np.newaxis])).cuda()</span><br><span class="line">    y = Variable(torch.from_numpy(y_np[np.newaxis, :, np.newaxis])).cuda()</span><br><span class="line">    </span><br><span class="line">    prediction, h_state = rnn(x, h_state)</span><br><span class="line">    h_state = Variable(h_state.data)</span><br><span class="line">    </span><br><span class="line">    loss = criterion(prediction, y)</span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line">    </span><br><span class="line">    plt.plot(steps, y_np.flatten(), <span class="string">'r-'</span>)</span><br><span class="line">    plt.plot(steps, prediction.cpu().data.numpy().flatten(), <span class="string">'b-'</span>)</span><br><span class="line">    plt.draw()</span><br><span class="line">    plt.pause(<span class="number">0.05</span>)</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">plt.ioff()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p><img src="output_14_0.png" alt="png"></p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/rnn/output_14_0.png" alt="png"></p>
 <ul>
 <li><p>上图中，红色的曲线为用于训练数据，蓝色的曲线是预测数据，可以明显看到预测的数据有“断崖”的情况。</p>
 </li>
-<li><p>上面说到，RNN在处理<strong><em>长期依赖</em></strong>问题上是具有一定的缺陷，而lstm可以解决这个问题，我们看一下lstm的初貌：<br><br><br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/lstm1.png" alt="lstm"><br><br></p>
+<li><p>上面说到，RNN在处理<strong><em>长期依赖</em></strong>问题上是具有一定的缺陷，而lstm可以解决这个问题，我们看一下lstm的初貌：</p>
 </li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/lstm1.png" alt="lstm"></p>
+<ul>
 <li>相比与rnn中A（我们可以称之为cell或unit）内部的简单网络结构，lstm的内部结构较为复杂，同时增加了一个关键的<strong><em>细胞状态</em></strong></li>
 <li>cell内部的结构由四个门构成：<ol>
 <li>input_gate</li>
@@ -420,7 +428,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">rnn = LSTM().cuda()</span><br><span class="line">optimizer = torch.optim.Adam(rnn.parameters(), lr=learning_rate)</span><br><span class="line">criterion = nn.MSELoss()</span><br><span class="line"><span class="comment"># 设定h_state 和 c_state的初始值</span></span><br><span class="line">h = Variable(torch.zeros(<span class="number">1</span>, <span class="number">1</span>, <span class="number">32</span>).cuda())</span><br><span class="line">c = Variable(torch.zeros(<span class="number">1</span>, <span class="number">1</span>, <span class="number">32</span>).cuda())</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> step <span class="keyword">in</span> range(<span class="number">60</span>):</span><br><span class="line">    start, end = step * np.pi, (step + <span class="number">1</span>) * np.pi</span><br><span class="line">    steps = np.linspace(start, end, time_step, dtype=np.float32)</span><br><span class="line">    x_np = np.sin(steps)</span><br><span class="line">    y_np = np.cos(steps)</span><br><span class="line"></span><br><span class="line">    x = Variable(torch.from_numpy(x_np[np.newaxis, :, np.newaxis])).cuda()</span><br><span class="line">    y = Variable(torch.from_numpy(y_np[np.newaxis, :, np.newaxis])).cuda()</span><br><span class="line"></span><br><span class="line">    prediction, (h, c) = rnn(x, h, c)</span><br><span class="line">    h = Variable(h.data)</span><br><span class="line">    c = Variable(c.data)</span><br><span class="line"></span><br><span class="line">    loss = criterion(prediction, y)</span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line"></span><br><span class="line">    plt.plot(steps, y_np.flatten(), <span class="string">'r-'</span>)</span><br><span class="line">    plt.plot(steps, prediction.cpu().data.numpy().flatten(), <span class="string">'b-'</span>)</span><br><span class="line">    plt.draw()</span><br><span class="line">    plt.pause(<span class="number">0.05</span>)</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">plt.ioff()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p><img src="output_21_0.png" alt="png"></p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/rnn/output_21_0.png" alt="png"></p>
 <ul>
 <li>同样，红色的是训练数据，蓝色的是预测数据；</li>
 <li>可以看出来lstm的预测结果在形状上没有单纯rnn的断崖情况，而且随着训练数据的增加趋于稳定。</li>
@@ -747,24 +755,7 @@
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config("");
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="custom_mathjax_source">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
 
 
 
@@ -817,6 +808,43 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
   
 
 

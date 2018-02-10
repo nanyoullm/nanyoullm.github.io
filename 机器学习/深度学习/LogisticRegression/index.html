@@ -86,12 +86,12 @@
 <meta property="og:site_name" content="Lim的博客">
 <meta property="og:description" content="&amp;emsp;&amp;emsp;logistic regression逻辑回归算法可以说是机器学习中十分常见和实用性极强的算法了。因为其参数的可解释性，逻辑回归在工业界中受到青睐。&amp;emsp;&amp;emsp;比如，在金融征信相关的模型中，我们需要明确解释某个变量在变化时，其最终信用的变化趋势。下面我们叫做业务可解释性。我们来回顾一下LR算法吧。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/机器学习/深度学习/LogisticRegression/output_10_0.png">
-<meta property="og:updated_time" content="2018-02-10T11:57:54.972Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/lr/output_10_0.png">
+<meta property="og:updated_time" content="2018-02-10T16:32:33.463Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LogisticRegression">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;logistic regression逻辑回归算法可以说是机器学习中十分常见和实用性极强的算法了。因为其参数的可解释性，逻辑回归在工业界中受到青睐。&amp;emsp;&amp;emsp;比如，在金融征信相关的模型中，我们需要明确解释某个变量在变化时，其最终信用的变化趋势。下面我们叫做业务可解释性。我们来回顾一下LR算法吧。">
-<meta name="twitter:image" content="http://yoursite.com/机器学习/深度学习/LogisticRegression/output_10_0.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/lr/output_10_0.png">
 
 
 
@@ -364,10 +364,12 @@
 <li>目标（损失）函数</li>
 <li>梯度下降</li>
 </ul>
-<h2 id="Sigmoid函数"><a href="#Sigmoid函数" class="headerlink" title="Sigmoid函数"></a>Sigmoid函数</h2><p>&emsp;&emsp;假设模型参数为 $\{\alpha_{0},alpha_{1},…,alpha_{n}\}$ ,其中 $\alpha_{0}$ 为截距。可以用以下公式来表示y=1事件的概率：<script type="math/tex">P(y=1)=\frac{exp(\alpha_{0}+\alpha_{1}x_{1}+...+\alpha_{n}x_{n})}{1+exp(\alpha_{0}+\alpha_{1}x_{1}+...+\alpha_{n}x_{n})}</script></p>
-<p>转换上式形式，并令 $z=\alpha_{0}+\alpha_{1}x_{1}+…+\alpha_{n}x_{n}$，则可以转换成sigmoid函数格式：<script type="math/tex">sigmoid=\frac{1}{1+exp(-z)}</script><br>它表示y=1事件的概率p。再对其进行简单的转换就可以得到：<script type="math/tex">\ln{\frac{p}{1-p}}=z</script><br>公式 $\frac{p}{1-p}$称为比率，表示y=1的概率与y=0概率的比值。LR算法可以看成是用<strong>比率的对数作为因变量的线性回归模型</strong>。<br>&emsp;&emsp;sigmoid函数可以得到一个概况预测值，另外其数学性质良好，是任意阶可导的凸函数，对于许多优化方法都是可使用的。在传统的神经网络中，sigmoid也曾作为神经元激活函数使用。</p>
-<h2 id="似然估计与损失函数"><a href="#似然估计与损失函数" class="headerlink" title="似然估计与损失函数"></a>似然估计与损失函数</h2><p>&emsp;&emsp;根据sigmoid函数，假设y=1时预测概率为: <script type="math/tex">P(y=1|x)=h_{\alpha}(x)=\frac{1}{1+exp(-\alpha^{T}x)}</script> 假设y服从伯努利分布，则 y=0时概率为: <script type="math/tex">P(y=0|x)=1-h_{\alpha}(x)</script><br>我们可以合并为： <script type="math/tex">P(y|x)=h_{\alpha}(x)^{y}(1-h_{\alpha}(x))^{1-y}</script></p>
-<p>&emsp;&emsp;根据上式我们就可以构造出该分布的似然函数，然后运用最大似然估计思想来求解其参数，我们根据上式写出其极大似然函数：</p>
+<h2 id="Sigmoid函数"><a href="#Sigmoid函数" class="headerlink" title="Sigmoid函数"></a>Sigmoid函数</h2><p>&emsp;&emsp;假设模型参数为 $\{\alpha_{0},\alpha_{1},…,\alpha_{n}\}$ ,其中 $\alpha_{0}$ 为截距。可以用以下公式来表示y=1事件的概率：</p>
+<script type="math/tex; mode=display">P(y=1)=\frac{exp(\alpha_{0}+\alpha_{1}x_{1}+...+\alpha_{n}x_{n})}{1+exp(\alpha_{0}+\alpha_{1}x_{1}+...+\alpha_{n}x_{n})}</script><p>&emsp;&emsp;转换上式形式，并令 $z=\alpha_{0}+\alpha_{1}x_{1}+…+\alpha_{n}x_{n}$，则可以转换成sigmoid函数格式：<script type="math/tex">sigmoid=\frac{1}{1+exp(-z)}</script><br>它表示y=1事件的概率 $p$ 。再对其进行简单的转换就可以得到：</p>
+<script type="math/tex; mode=display">\ln{\frac{p}{1-p}}=z</script><p>公式 $\frac{p}{1-p}$称为比率，表示y=1的概率与y=0概率的比值。LR算法可以看成是用<strong>比率的对数作为因变量的线性回归模型</strong>。<br>&emsp;&emsp;sigmoid函数可以得到一个概况预测值，另外其数学性质良好，是任意阶可导的凸函数，对于许多优化方法都是可使用的。在传统的神经网络中，sigmoid也曾作为神经元激活函数使用。</p>
+<h2 id="似然估计与损失函数"><a href="#似然估计与损失函数" class="headerlink" title="似然估计与损失函数"></a>似然估计与损失函数</h2><p>&emsp;&emsp;根据sigmoid函数，假设y=1时预测概率为: </p>
+<script type="math/tex; mode=display">P(y=1|x)=h_{\alpha}(x)=\frac{1}{1+exp(-\alpha^{T}x)}</script><p>假设y服从伯努利分布，则 y=0时概率为: <script type="math/tex">P(y=0|x)=1-h_{\alpha}(x)</script><br>我们可以合并为： </p>
+<script type="math/tex; mode=display">P(y|x)=h_{\alpha}(x)^{y}(1-h_{\alpha}(x))^{1-y}</script><p>&emsp;&emsp;根据上式我们就可以构造出该分布的似然函数，然后运用最大似然估计思想来求解其参数，我们根据上式写出其极大似然函数：</p>
 <script type="math/tex; mode=display">\begin{eqnarray}
 L(\alpha) &=& \prod_{i=1}^{m}p(y^{i}|x^{i};\theta) \\
 &=& \prod_{i=1}^{m}h_{\alpha}(x^{i})^{y^{i}}(1-h_{\alpha}(x^{i}))^{1-y^{i}}
@@ -391,7 +393,7 @@ J(\alpha) = \log{L(\alpha)} + reg = \sum_{i=1}^{m} y^{i} \log {h_{\alpha}(x^{i})
 <li>随便看一个数字的样子</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">digits = datasets.load_digits()</span><br><span class="line">data = digits.data</span><br><span class="line">target = digits.target</span><br><span class="line"></span><br><span class="line">plt.imshow(digits.images[<span class="number">0</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p><img src="output_10_0.png" alt="png"></p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/lr/output_10_0.png" alt="png"></p>
 <p>数据预处理：</p>
 <ul>
 <li>选取出数字0和数字1样本；</li>
@@ -743,24 +745,7 @@ correct: 94, accuracy: 0.8703703703703703
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config("");
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="custom_mathjax_source">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
 
 
 
@@ -813,6 +798,43 @@ correct: 94, accuracy: 0.8703703703703703
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
   
 
 

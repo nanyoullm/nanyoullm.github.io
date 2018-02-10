@@ -86,14 +86,14 @@
 <meta property="og:site_name" content="Lim的博客">
 <meta property="og:description" content="&amp;emsp;&amp;emsp;我们身处于大数据的一个起步时代，作为一个码农，掌握大数据计算平台的使用还是必须的。Apache Spark作为近年来最流行的大数据开源项目，可以说是占据了大小互联网的生产环境，是一个“快如闪电的集群计算”工具。关于Spark的介绍我也不多说啦，可以看看官网Spark。这里需要说明的是，博主并没有阅读过Spark的源码，对Spark较多的是停留在应用层面。博主对Spark的应">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/spark-cluster.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/Untitled%20Diagram.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/rdd_dependency.png">
-<meta property="og:updated_time" content="2018-02-10T11:40:07.817Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/spark-cluster.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/Untitled%20Diagram.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/rdd_dependency.png">
+<meta property="og:updated_time" content="2018-02-10T16:43:26.645Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="spark基础">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;我们身处于大数据的一个起步时代，作为一个码农，掌握大数据计算平台的使用还是必须的。Apache Spark作为近年来最流行的大数据开源项目，可以说是占据了大小互联网的生产环境，是一个“快如闪电的集群计算”工具。关于Spark的介绍我也不多说啦，可以看看官网Spark。这里需要说明的是，博主并没有阅读过Spark的源码，对Spark较多的是停留在应用层面。博主对Spark的应">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/spark-cluster.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/spark-cluster.png">
 
 
 
@@ -359,7 +359,7 @@
 
       
         <p>&emsp;&emsp;我们身处于大数据的一个起步时代，作为一个码农，掌握大数据计算平台的使用还是必须的。Apache Spark作为近年来最流行的大数据开源项目，可以说是占据了大小互联网的生产环境，是一个“快如闪电的集群计算”工具。关于Spark的介绍我也不多说啦，可以看看官网<a href="https://spark.apache.org/" target="_blank" rel="noopener">Spark</a>。这里需要说明的是，博主并没有阅读过Spark的源码，对Spark较多的是停留在应用层面。博主对Spark的应用主要是在公司的大小日常项目中，目前接触过的最大数据量的项目为联通集团的数据挖掘项目。<br>&emsp;&emsp;博客的内容很多是给自己回顾所涉及的点，不是很完善。所述之处如有错误，还请及时指出。<br><a id="more"></a></p>
-<h1 id="集群样貌"><a href="#集群样貌" class="headerlink" title="集群样貌"></a>集群样貌</h1><p>我们看一下spark任务提交集群后，各节点的部署图<br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/spark-cluster.png"><br>图中可以看到：</p>
+<h1 id="集群样貌"><a href="#集群样貌" class="headerlink" title="集群样貌"></a>集群样貌</h1><p>&emsp;&emsp;我们看一下spark任务提交集群后，各节点的部署图<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/spark-cluster.png"><br>&emsp;&emsp;图中可以看到：</p>
 <ul>
 <li>spark集群分为Master节点和Worker节点；</li>
 <li>Master节点有Master进程，负责管理全部的Worker节点；</li>
@@ -367,8 +367,8 @@
 <li>每个Worker上有多个ExecutorBackend进程，每个对应一个Executor对象，每个对象有一个线程池，线程池里的一个线程负责一个Task，一个Task是具体执行任务的一个工作单元，由用户在提交任务的时候设置资源参数executor.core定义；</li>
 <li>Driver是具体跑用户自己写的Spark程序进程，如果是YARN集群部署，那么Driver就会被调度到Worker上运行；</li>
 </ul>
-<h1 id="RDD"><a href="#RDD" class="headerlink" title="RDD"></a>RDD</h1><p>rdd是spark任务中用到最多的数据结构，rdd的全程是Resilient Distributed Datasets，是一个容错的、并行的数据结构，可以让用户显式地将数据存储到磁盘和内存中，是将数据分布式得存储在各台机器中，并能控制数据的分区。<br>那么，我们可以对rdd做那些操作呢？可以分为两类</p>
-<h2 id="transform"><a href="#transform" class="headerlink" title="transform"></a>transform</h2><p>官方解释：Return a MappedRDD[U] by applying function f to each element.<br>就是对每个数据进行改造和转换，从一个rdd生成一个<strong>新的</strong>rdd.<br>spark中，针对rdd的transform操作有：</p>
+<h1 id="RDD"><a href="#RDD" class="headerlink" title="RDD"></a>RDD</h1><p>&emsp;&emsp;rdd是spark任务中用到最多的数据结构，rdd的全程是Resilient Distributed Datasets，是一个容错的、并行的数据结构，可以让用户显式地将数据存储到磁盘和内存中，是将数据分布式得存储在各台机器中，并能控制数据的分区。那么，我们可以对rdd做那些操作呢？可以分为两类</p>
+<h2 id="transform"><a href="#transform" class="headerlink" title="transform"></a>transform</h2><p>&emsp;&emsp;官方解释：Return a MappedRDD[U] by applying function f to each element.就是对每个数据进行改造和转换，从一个rdd生成一个<strong>新的</strong>rdd.<br>&emsp;&emsp;spark中，针对rdd的transform操作有：</p>
 <blockquote>
 <ul>
 <li>map</li>
@@ -377,7 +377,7 @@
 <li>groupByKey<br>…<br>等等</li>
 </ul>
 </blockquote>
-<h2 id="action"><a href="#action" class="headerlink" title="action"></a>action</h2><p>官方解释：有一个rdd得到一个值，比如说统计rdd里的数据总数.<br>spark中，针对rdd的action操作有：</p>
+<h2 id="action"><a href="#action" class="headerlink" title="action"></a>action</h2><p>&emsp;&emsp;官方解释：有一个rdd得到一个值，比如说统计rdd里的数据总数。spark中，针对rdd的action操作有：</p>
 <blockquote>
 <ul>
 <li>count</li>
@@ -385,20 +385,20 @@
 <li>saveXXXX<br>… 等等</li>
 </ul>
 </blockquote>
-<h1 id="DAG"><a href="#DAG" class="headerlink" title="DAG"></a>DAG</h1><p>DAG是spark中的一个重要概念。我们在用spark进行对源数据进行处理并最后得到我们想要的结果的过程，实际上是一个若干tranform的变换和合并的组合，可以看成一个流程图，这个流程图被spark抽象为DAG，即Directed Acyclic Graph。<br>在生产集群上，我们可以通过SparkUI看到每个运行任务的DAG图.  </p>
+<h1 id="DAG"><a href="#DAG" class="headerlink" title="DAG"></a>DAG</h1><p>&emsp;&emsp;DAG是spark中的一个重要概念。我们在用spark进行对源数据进行处理并最后得到我们想要的结果的过程，实际上是一个若干tranform的变换和合并的组合，可以看成一个流程图，这个流程图被spark抽象为DAG，即Directed Acyclic Graph。在生产集群上，我们可以通过SparkUI看到每个运行任务的DAG图.  </p>
 <h2 id="Job"><a href="#Job" class="headerlink" title="Job"></a>Job</h2><blockquote>
-<p>job的官方定义：A parallel computation consisting of multiple tasks that<br>gets spawned in response to a Spark action (e.g. save, collect); you’ll see this term used in the driver’s logs.   </p>
+<p>job的官方定义：A parallel computation consisting of multiple tasks that<br>gets spawned in response to a Spark action (e.g. save, collect); you’ll see this term used in the driver’s logs.<br>&emsp;&emsp;一个action操作对应一个job，spark程序中，只有触发了action操作后，整个dag才能建立起来，如果只是一堆transform操作而没有action操作，那么spark是不会有任何数据操作的。以数字统计为例，job的逻辑执行图可如下所示：<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/Untitled%20Diagram.png"></p>
 </blockquote>
-<p>一个action操作对应一个job，spark程序中，只有触发了action操作后，整个dag才能建立起来，如果只是一堆transform操作而没有action操作，那么spark是不会有任何数据操作的。<br>以数字统计为例，job的逻辑执行图可如下所示：<br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/Untitled%20Diagram.png"><br><br><br>这个job通过count操作触发。</p>
+<p>这个job通过count操作触发。</p>
 <h2 id="Stage"><a href="#Stage" class="headerlink" title="Stage"></a>Stage</h2><blockquote>
 <p>stage的官方定义：Each job gets divided into smaller sets of tasks called stages that depend on each other (similar to the map and reduce stages in MapReduce); you’ll see this term used in the driver’s logs.  </p>
 </blockquote>
-<p>一个job可以拆分成若干个stage，每个stage执行一些计算，产生一些中间结果。它们的目的是最终生成这个Job的计算结果。而每个Stage是一个task set，包含若干个task。Task是Spark中最小的工作单元，在一个executor上完成一个特定的事情。<br>那么如何划分stage呢？这里我们要了解一下spark中的shuffle。  </p>
+<p>&emsp;&emsp;一个job可以拆分成若干个stage，每个stage执行一些计算，产生一些中间结果。它们的目的是最终生成这个Job的计算结果。而每个Stage是一个task set，包含若干个task。Task是Spark中最小的工作单元，在一个executor上完成一个特定的事情。那么如何划分stage呢？这里我们要了解一下spark中的shuffle。  </p>
 <h3 id="shuffle"><a href="#shuffle" class="headerlink" title="shuffle"></a>shuffle</h3><blockquote>
 <p>shuffle是MapReduce框架中的一个特定的phase，介于Map phase和Reduce phase之间，当Map的输出结果要被Reduce使用时，输出结果需要按key哈希，并且分发到每一个Reducer上去，这个过程就是shuffle。由于shuffle涉及到了磁盘的读写和网络的传输，因此shuffle性能的高低直接影响到了整个程序的运行效率。</p>
 </blockquote>
-<h3 id="rdd-transform依赖关系"><a href="#rdd-transform依赖关系" class="headerlink" title="rdd transform依赖关系"></a>rdd transform依赖关系</h3><p>rdd在transform操作后，前面涉及到的rdd成为parent，我们可以从下图中看到前后的依赖关系：<br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/rdd_dependency.png"><br><br><br>前三个是完全依赖，RDD x 中的 partition 与 parent RDD 中的 partition/partitions 完全相关。最后一个是部分依赖，RDD x 中的 partition 只与 parent RDD 中的 partition 一部分数据相关，另一部分数据与 RDD x 中的其他 partition 相关。完全依赖被称为 NarrowDependency，部分依赖被称为 ShuffleDependency。最后一个会出发shuffle。</p>
-<p>回到刚刚的问题，如何划分stage呢？从后往前推算，遇到ShuffleDependency就断开，遇到NarrowDependency就将其加入该stage。每个stage里的task数目由该stage最后一个rdd中的partition个数决定。</p>
+<h3 id="rdd-transform依赖关系"><a href="#rdd-transform依赖关系" class="headerlink" title="rdd transform依赖关系"></a>rdd transform依赖关系</h3><p>&emsp;&emsp;rdd在transform操作后，前面涉及到的rdd成为parent，我们可以从下图中看到前后的依赖关系：<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/rdd_dependency.png"></p>
+<p>&emsp;&emsp;前三个是完全依赖，RDD x 中的 partition 与 parent RDD 中的 partition/partitions 完全相关。最后一个是部分依赖，RDD x 中的 partition 只与 parent RDD 中的 partition 一部分数据相关，另一部分数据与 RDD x 中的其他 partition 相关。完全依赖被称为 NarrowDependency，部分依赖被称为 ShuffleDependency。最后一个会出发shuffle。<br>&emsp;&emsp;回到刚刚的问题，如何划分stage呢？从后往前推算，遇到ShuffleDependency就断开，遇到NarrowDependency就将其加入该stage。每个stage里的task数目由该stage最后一个rdd中的partition个数决定。</p>
 <p>参考资料：<a href="https://spark-internals.books.yourtion.com/index.html" target="_blank" rel="noopener">https://spark-internals.books.yourtion.com/index.html</a></p>
 
       
@@ -722,24 +722,7 @@
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config("");
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="custom_mathjax_source">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
 
 
 
@@ -792,6 +775,43 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
   
 
 

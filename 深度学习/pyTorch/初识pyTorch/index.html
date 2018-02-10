@@ -86,13 +86,13 @@
 <meta property="og:site_name" content="Lim的博客">
 <meta property="og:description" content="&amp;emsp;&amp;emsp;PyTorch 由 Adam Paszke、Sam Gross 与 Soumith Chintala 等人牵头开发，其成员来自 Facebook FAIR 和其他多家实验室。它是一种 Python 优先的深度学习框架，在今年 1 月被开源，提供了两种高层面的功能：使用强大的 GPU 加速的 Tensor 计算（类似 numpy）构建于基于 tape 的 autograd 系">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://github.com/nanyoullm/nanyoullm.github.io/blob/master/img/backpro.png?raw=true">
-<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/variable.png">
-<meta property="og:updated_time" content="2018-02-08T16:15:28.843Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/backpro.png?raw=true">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/variable.png">
+<meta property="og:updated_time" content="2018-02-10T16:49:16.826Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初识pyTorch">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;PyTorch 由 Adam Paszke、Sam Gross 与 Soumith Chintala 等人牵头开发，其成员来自 Facebook FAIR 和其他多家实验室。它是一种 Python 优先的深度学习框架，在今年 1 月被开源，提供了两种高层面的功能：使用强大的 GPU 加速的 Tensor 计算（类似 numpy）构建于基于 tape 的 autograd 系">
-<meta name="twitter:image" content="https://github.com/nanyoullm/nanyoullm.github.io/blob/master/img/backpro.png?raw=true">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/backpro.png?raw=true">
 
 
 
@@ -369,7 +369,7 @@
 <ul>
 <li>我们看一下反向传播的计算步骤，图片截自课程<a href="http://deeplearning.stanford.edu/wiki/index.php/%E5%8F%8D%E5%90%91%E4%BC%A0%E5%AF%BC%E7%AE%97%E6%B3%95" target="_blank" rel="noopener">UFLDL</a></li>
 </ul>
-<p><img src="https://github.com/nanyoullm/nanyoullm.github.io/blob/master/img/backpro.png?raw=true" alt="反向传播计算步骤"><br><br\></br\></p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/backpro.png?raw=true" alt="反向传播计算步骤"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">    <span class="comment"># torch.mm（a, b）矩阵点乘操作</span></span><br><span class="line">    h = x.mm(w1)</span><br><span class="line">    <span class="comment"># 实现relu，及取 x 和 0 之间的大值</span></span><br><span class="line">    h_relu = h.clamp(min=<span class="number">0</span>)</span><br><span class="line">    y_pred = h_relu.mm(w2)</span><br><span class="line">    <span class="comment"># 计算loss</span></span><br><span class="line">    loss = (y_pred - y).pow(<span class="number">2</span>).sum()</span><br><span class="line">    <span class="keyword">if</span> i % <span class="number">10</span> == <span class="number">0</span>:</span><br><span class="line">        print(<span class="string">'step: &#123;&#125;, loss: &#123;&#125;'</span>.format(i, loss))</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 计算梯度，激活层的函数为relu</span></span><br><span class="line">    grad_y_pred = <span class="number">2.0</span> * (y_pred - y)</span><br><span class="line">    grad_w2 = h_relu.t().mm(grad_y_pred)</span><br><span class="line">    grad_h_relu = grad_y_pred.mm(w2.t())</span><br><span class="line">    grad_h = grad_h_relu.clone()</span><br><span class="line">    grad_h[h &lt; <span class="number">0</span>] = <span class="number">0</span></span><br><span class="line">    grad_w1 = x.t().mm(grad_h)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 权重更新</span></span><br><span class="line">    w1 = w1 - learning_rate * grad_w1</span><br><span class="line">    w2 = w2 - learning_rate * grad_w2</span><br></pre></td></tr></table></figure>
 <pre><code>step: 0, loss: 30453627.075980008
 step: 10, loss: 96118006.45569089
@@ -387,7 +387,7 @@ step: 90, loss: 3612.269671562068
 <h3 id="2-自动求导"><a href="#2-自动求导" class="headerlink" title="2.自动求导"></a>2.自动求导</h3><ul>
 <li>pyTorch有一个重要的对象，就是Variable，将Tensor转化为Variable后，pyTorch可以根据我们自定义的公式或者网络结构，实现自动梯度求导；</li>
 </ul>
-<p><br\><br><img src="https://raw.githubusercontent.com/nanyoullm/nanyoullm.github.io/master/img/variable.png" alt="variable"><br><br\></br\></br\></p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/variable.png" alt="variable"></p>
 <ul>
 <li>上图是Variable的重要属性。对于一个Variable对象，.data可以获得原始的tensor对象;当计算梯度后，该变量的梯度可以累计到，grad；</li>
 <li>我们先感受一下这个强大的功能，<strong>很真实</strong>；</li>
@@ -480,7 +480,7 @@ step: 90, loss: 4075.057373046875
 </code></pre><h3 id="自定义autograd函数"><a href="#自定义autograd函数" class="headerlink" title="自定义autograd函数"></a>自定义autograd函数</h3><ul>
 <li>pytorch里，用户可以自定义autograd函数，可以参考<a href="http://pytorch.org/tutorials/beginner/pytorch_with_examples.html#pytorch-defining-new-autograd-functions" target="_blank" rel="noopener">autograd</a></li>
 </ul>
-<h2 id="enjoy-it"><a href="#enjoy-it" class="headerlink" title="enjoy it"></a>enjoy it</h2>
+<h2 id="enjoy-it"><a href="#enjoy-it" class="headerlink" title="enjoy it!"></a>enjoy it!</h2>
       
     </div>
     
@@ -659,7 +659,7 @@ step: 90, loss: 4075.057373046875
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Tensors"><span class="nav-number">1.</span> <span class="nav-text">Tensors</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-实现一个简单的神经网络反向传播"><span class="nav-number">1.1.</span> <span class="nav-text">1.实现一个简单的神经网络反向传播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-自动求导"><span class="nav-number">1.2.</span> <span class="nav-text">2.自动求导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tensor-VS-Numpy"><span class="nav-number">1.3.</span> <span class="nav-text">Tensor VS Numpy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义autograd函数"><span class="nav-number">1.4.</span> <span class="nav-text">自定义autograd函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#enjoy-it"><span class="nav-number">2.</span> <span class="nav-text">enjoy it</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Tensors"><span class="nav-number">1.</span> <span class="nav-text">Tensors</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-实现一个简单的神经网络反向传播"><span class="nav-number">1.1.</span> <span class="nav-text">1.实现一个简单的神经网络反向传播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-自动求导"><span class="nav-number">1.2.</span> <span class="nav-text">2.自动求导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tensor-VS-Numpy"><span class="nav-number">1.3.</span> <span class="nav-text">Tensor VS Numpy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义autograd函数"><span class="nav-number">1.4.</span> <span class="nav-text">自定义autograd函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#enjoy-it"><span class="nav-number">2.</span> <span class="nav-text">enjoy it!</span></a></li></ol></div>
             
 
           </div>
