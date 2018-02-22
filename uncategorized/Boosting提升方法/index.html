@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="机器学习," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="&amp;emsp;&amp;emsp;boosting提升算法是一种把若干个分类器整合为一个分类器的方法。在监督学习中，它可以很好的降低bias和variance。它将若干弱分类器组合成一个强分类器。可谓“三个臭皮匠，顶个诸葛亮”。">
+<meta name="keywords" content="机器学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Boosting提升方法">
+<meta property="og:url" content="http://yoursite.com/uncategorized/Boosting提升方法/index.html">
+<meta property="og:site_name" content="Lim的博客">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;boosting提升算法是一种把若干个分类器整合为一个分类器的方法。在监督学习中，它可以很好的降低bias和variance。它将若干弱分类器组合成一个强分类器。可谓“三个臭皮匠，顶个诸葛亮”。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/AdaBoost.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/AdaBoost2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E5%89%8D%E5%90%91%E5%88%86%E6%AD%A51.png?raw=true">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E6%8F%90%E5%8D%87%E6%A0%911.png?raw=true">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E6%8F%90%E5%8D%87%E6%A0%912.png?raw=true">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%871.png?raw=true">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%872.png?raw=true">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%873.png?raw=true">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%874.png?raw=true">
+<meta property="og:updated_time" content="2018-02-22T14:55:24.480Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Boosting提升方法">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;boosting提升算法是一种把若干个分类器整合为一个分类器的方法。在监督学习中，它可以很好的降低bias和variance。它将若干弱分类器组合成一个强分类器。可谓“三个臭皮匠，顶个诸葛亮”。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/AdaBoost.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/uncategorized/Boosting提升方法/"/>
+
+
+
+
+
+  <title>Boosting提升方法 | Lim的博客</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <!--<a href="https://github.com/nanyoullm/nanyoullm.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>-->
+
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lim的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/uncategorized/Boosting提升方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="刘力铭">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/keji2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lim的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Boosting提升方法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-13T19:54:30+08:00">
+                2017-12-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&emsp;&emsp;boosting提升算法是一种把若干个分类器整合为一个分类器的方法。在监督学习中，它可以很好的降低bias和variance。它将若干弱分类器组合成一个强分类器。可谓“三个臭皮匠，顶个诸葛亮”。<br><a id="more"></a></p>
+<h1 id="提升方法"><a href="#提升方法" class="headerlink" title="提升方法"></a>提升方法</h1><p>&emsp;&emsp;boosting提升方法是常用的统计学习方法。在分类问题中，它通过改变训练样本的权重，学习多个分类器，并将这些分类器进行线性组合，提高分类的性能。这里我们主要看一下AdaBoost，和提升树boosting tree模型，还有xgboost的内容。理解程度可能不深，如果所述之处如有错误，还请指出。</p>
+<h2 id="AdaBoost"><a href="#AdaBoost" class="headerlink" title="AdaBoost"></a>AdaBoost</h2><h3 id="基本思路"><a href="#基本思路" class="headerlink" title="基本思路"></a>基本思路</h3><p>&emsp;&emsp;提升方法的思想是，对于一个复杂的任务，多个判断进行综合后的结果，会比单个判断效果要好，就像是“三个臭皮匠定个诸葛亮”的道理。<br>&emsp;&emsp;对于分类问题来说，给定一个训练集后，求出一个较为粗糙的分类规则要比求出一个精确的分类规则要容易的多。提升方法从弱学习算法出发，反复学习，得到一系列弱分类器，然后组合这些弱分类器，构成一个强分类器。AdaBoost是改变训练数据的概率分布（训练数据的权值分布），针对不同的训练数据分布调用弱学习算法学习一系列弱分类器。</p>
+<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><p>&emsp;&emsp;假设有一个二分类的训练集：<script type="math/tex">T=\{(x_{1},y_{1}),(x_{2},y_{2}),...,(x_{N},y_{N})\}</script><br>&emsp;&emsp;其中，$y_{i} \in Y=\{-1,+1\}$<br>&emsp;&emsp;AdaBoost利用一下算法，从训练集中学习一系列弱分类器，并将这些弱分类器组合成为一个强分类器。</p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/AdaBoost.png" width="700"><br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/AdaBoost2.png" width="700"></p>
+<p>&emsp;&emsp;对算法的步骤我们进行一下简单分析：</p>
+<ul>
+<li>初始时，训练集每个样本的均分布的，训练数据的权值都是$\frac{1}{N}$；</li>
+<li>每一轮的分类误差率$e_{m}$用公式8.1计算，其中$I（true）$等于1；<br>总结一下，AdaBoost在每一轮的学习过程中，训练步骤为：</li>
+</ul>
+<ol>
+<li>使用当前权值概率分布从训练集中进行采样，学习基本分类器$G_{m}(x)$，m为第m次轮；</li>
+<li>计算基本分类器$G_{m}(x)$在采样后训练集上的分类误差率:</li>
+</ol>
+<script type="math/tex; mode=display">e_{m}=P(G_{m}(x_{i} \neq y_{i}))=\sum_{G_{m}(x_{i} \neq y_{i})} \omega_{mi}</script><p>$\omega_{mi}$表示第m轮中第i个示例的权值，$\sum_{i=1}^{N} \omega_{mi}=1$；</p>
+<ol>
+<li>计算基本分类器$G_{m}(x)$的系数$\alpha_{m}$，表示$G_{m}(x)$在最终分类器中的重要性；</li>
+<li>计算规范化因子，使得$D_{m+1}$成为一个概率分布，<script type="math/tex">Z_{m}=\sum_{m=1}^{N} \omega_{mi} \exp(-\alpha_{m}y_{i}G_{m}(x_{i}))</script><br>更新训练数据集的权值分布<script type="math/tex; mode=display">\omega_{m+1,i}=\begin{cases}\frac{\omega_{mi}}{Z_{m}}e^{-\alpha_{m}},G_{m}(x_{i})=y_{i}\\&&&&\\\frac{\omega_{mi}}{Z_{m}}e^{\alpha_{m}},G_{m}(x_{i}) \neq y_{i}\end{cases}</script>可以看到，被基本分类器误分类的样本权值得以扩大，被正确分类样本的权值得以缩小。因此，误分类的样本将在下一轮的学习中起更大的作用；</li>
+</ol>
+<p>最终分类器实现M个基本分类器的加权表决，系数$\alpha_{m}$表示基本分类器$G_{m}(x)$的重要性，需要注意的是，$\alpha_{m}$的和并不为1； <script type="math/tex">G(x)=sign(f(x))=sign(\sum_{m=1}^{M} \alpha_{m}G_{m}(x))</script><br>《统计学习方法》中提供了一个简单的例子，可以参看P140下例8.1</p>
+<h2 id="AdaBoost算法的解释"><a href="#AdaBoost算法的解释" class="headerlink" title="AdaBoost算法的解释"></a>AdaBoost算法的解释</h2><h3 id="前向分步算法"><a href="#前向分步算法" class="headerlink" title="前向分步算法"></a>前向分步算法</h3><p>&emsp;&emsp;加法模型可以用公式表示为：<script type="math/tex">f(x)=\sum_{m=1}^{M} \beta_{m}b(x;\gamma_{m})</script><br>&emsp;&emsp;其中，$b(x;\gamma_{m})$是基函数，$\gamma_{m}$为基函数参数，$\beta_{m}$为基函数系数；<br>&emsp;&emsp;给定数据集和损失函数的条件下，加法模型$f(x)$的损失函数极小化问题就变成：<script type="math/tex">\min_{\beta_{m},\gamma_{m}} \sum_{i=1}^{N} L(y_{i},\sum_{m=1}^{M}\beta_{m}b(x_{i};\gamma_{m}))</script><br>但这是一个复杂的优化问题，前项分步算法的解决思路是：从前向后，每一步值学习一个基函数及其系数，逐步逼近优化目标函数，具体的，每一步只需要优化如下损失函数：<script type="math/tex">\min_{\beta,\gamma} \sum_{i=1}^{N} L(y_{i},\beta b(x_{i};\gamma))</script><br>&emsp;&emsp;算法如下：</p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E5%89%8D%E5%90%91%E5%88%86%E6%AD%A51.png?raw=true" width="700"></p>
+<h2 id="提升树"><a href="#提升树" class="headerlink" title="提升树"></a>提升树</h2><p>&emsp;&emsp;提升树方法实际就是采用加法模型和前向分步算法。我们称以决策树为基函数的提升方法为提升树（boosting tree）。提升树模型可以表示为决策树的加法模型：<script type="math/tex">f_{M}(x)=\sum_{m=1}^{M}T(x;\Theta_{m})</script>&emsp;&emsp;其中，$T(x;\Theta_{m})$表示一决策树，$\Theta_{m}$是决策树的参数，$M$表示树的个数。</p>
+<h3 id="提升树算法"><a href="#提升树算法" class="headerlink" title="提升树算法"></a>提升树算法</h3><p>&emsp;&emsp;首先确定初始提升树$f_{0}(x)=0$，第m步的模型为：<script type="math/tex">f_{m}(x)=f_{m-1}(x)+T(x;\Theta_{m})</script><br>&emsp;&emsp;其中$f_{m-1}(x)$是当前模型，通过经验风险极小化确定下一棵决策树的参数：<script type="math/tex">\hat{\Theta}_{m}=\arg\min_{\Theta_{m}}\sum_{i=1}^{N}L\big(y_{i},f_{m-1}(x)+T(x;\Theta_{m})\big)</script><br>&emsp;&emsp;下面讨论回归问题的决策树，假设训练集$T=\{(x_{1},y_{1}),…,(x_{N},y_{N})\},x_{i} \in \gamma \subseteq R^{n}$，$\gamma$是输入空间。如果将输入空间划分为J个互不相交的区域$R_{1},R_{2},…,R_{J}$，并且在每个区域上确定输出的常量$c_{j}$，那么树可以表示为：<script type="math/tex">T(x;\Theta)=\sum_{j=1}^{J}c_{j}I(x \in R_{j})</script><br>&emsp;&emsp;参数可以看做集合$\Theta=\{(R_{1},c_{1}),…,(R_{j},c_{j})\}$表示树的区域划分和个区域上的常数。J是回归树的复杂度即叶节点的个数。</p>
+<p>&emsp;&emsp;在前向分步算法的第m步，给定当前模型$f_{m-1}(x)$，需要求解 $\hat{\Theta}_{m}$，即第m棵树的参数。<br>&emsp;&emsp;如果我们采用平方误差作为损失函数，<script type="math/tex">L(y,f(x))=(y-f(x))^{2}</script> 即 <script type="math/tex">L(y,f_{m-1}(x)+T(x;\Theta_{m}))</script> <script type="math/tex">=[y-f_{m}(x)-T(x;\Theta_{m})]^{2}</script> <script type="math/tex">=[r-T(x;\Theta_{m})]^{2}</script><br>其中$r=y-f_{m-1}(x)$，被称为提升树拟合数据的<strong>残差</strong>。回归问题的提升树算法如下：</p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E6%8F%90%E5%8D%87%E6%A0%911.png?raw=true" width="700"><br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E6%8F%90%E5%8D%87%E6%A0%912.png?raw=true" width="700"></p>
+<p>&emsp;&emsp;书中P149的例8.2很好的实现了这个算法过程。</p>
+<h3 id="梯度提升树（GBDT）"><a href="#梯度提升树（GBDT）" class="headerlink" title="梯度提升树（GBDT）"></a>梯度提升树（GBDT）</h3><p>&emsp;&emsp;提升树利用加法模型和前向分步算法实现学习的优化过程。当损失函数是平方损失函数MSE时，每一步的优化很简单。但是对于一般损失函数来说，每一步的优化就没那么容易。使用梯度提升算法可以解决这个问题，利用损失函数的负梯度在当前模型的值</p>
+<script type="math/tex; mode=display">-\bigg[\frac{\partial L(y,f(x_{i}))}{\partial f(x_{i})} \bigg ]_{f(x)=f_{m-1}(x)}</script><p>作为回归问题提升树算法中的残差近似值，拟合一个回归树，这就是<strong>梯度提升</strong>。可以看到当损失函数为$L(y,f(x))=\frac{1}{2}(y-f(x))^{2}$时，计算的负梯度结果恰好是残差值 $y-f_{m-1}(x)$<br>&emsp;&emsp;梯度提升算法过程如下：</p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%871.png?raw=true" width="700"><br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%872.png?raw=true" width="700"></p>
+<p>&emsp;&emsp;算法详解：第1步初始化，估计使损失函数极小化的常数值，它是只是有一个根节点的树；第2(a)步计算损失函数的负梯度在当前模型的值，将它作为残差的估计；第2(b)步估计回归树每个叶节点的区域，以残差近似值拟合一棵树（通常是CART）；第2(c)步利用线性搜索估计叶节点区域的值，使损失函数极小化<strong>（这里有一点容易产生疑惑的是，在2(b)拟合出决策树后，每个叶节点区域$R_{mj}$上已经有对应的取值，即归入了该区域的样本的均值，为什么还会有2(c)中求解叶节点区域的值呢？我们稍后再看）</strong>；第2(d)步更新回归树；第3步得到输出的最终模型 $\hat{f}_{(x)}$</p>
+<p>&emsp;&emsp;关于上面的疑惑，查找资料可以发现这是一个改进后的梯度提升方法（TreeBoost），先看一下原始的方法如下图：</p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%873.png?raw=true" width="700"></p>
+<p>原始方法中，在以残差近似值拟合出一棵树后，每个区域$R_{jm}$都会有个对应的取值$b_{jm}$，同时这棵树会有一个系数$\gamma_{m}$，$\gamma_{m}$的值通过2.3步的方法求解。<br>&emsp;&emsp;改进的方法如下图，取代一棵树一个系数值，对于每一棵树的每个区域$R_{jm}$都求得一个对应的系数值，系数的求解方法就是上面中文算法流程中的2(c)步骤。</p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%874.png?raw=true" width="800"></p>
+<p>截图来源：<a href="https://en.wikipedia.org/wiki/Gradient_boosting" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Gradient_boosting</a></p>
+<h2 id="XGBoost"><a href="#XGBoost" class="headerlink" title="XGBoost"></a>XGBoost</h2><p>&emsp;&emsp;xgboost是华盛顿大学陈天奇大神团队的成果，这个算法在kaggle很多比赛中都取得了很好的效果，展现出了强大的性能。xgboost可以看做是gbdt的强化版本，相对gbdt有以下几点升级:</p>
+<ul>
+<li>传统GBDT以CART作为基分类器，xgboost还支持线性分类器，这个时候xgboost相当于带L1和L2正则化项的逻辑斯蒂回归（分类问题）或者线性回归（回归问题）；</li>
+<li>传统GBDT在优化时只用到一阶导数信息，xgboost则对代价函数进行了二阶泰勒展开，同时用到了一阶和二阶导数。同时，xgboost工具支持自定义代价函数，只要函数可一阶和二阶求导；</li>
+<li>xgboost在代价函数里加入了正则项，用于控制模型的复杂度；</li>
+<li>Shrinkage（缩减），相当于学习速率（xgboost中的eta）。xgboost在进行完一次迭代后，会将叶子节点的权重乘上该系数，主要是为了削弱每棵树的影响，让后面有更大的学习空间；</li>
+<li>支持列抽样；</li>
+<li>对缺失值的处理。对于特征的值有缺失的样本，xgboost可以自动学习出它的分裂方向；</li>
+<li>支持并行;</li>
+</ul>
+<h1 id="enjoy-it"><a href="#enjoy-it" class="headerlink" title="enjoy it!"></a>enjoy it!</h1>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/uncategorized/手写数字识别CNN版/" rel="next" title="手写数字识别CNN版">
+                <i class="fa fa-chevron-left"></i> 手写数字识别CNN版
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/uncategorized/手写数字识别RNN版/" rel="prev" title="手写数字识别RNN版">
+                手写数字识别RNN版 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/keji2.jpg"
+                alt="刘力铭" />
+            
+              <p class="site-author-name" itemprop="name">刘力铭</p>
+              <p class="site-description motion-element" itemprop="description">趣事之多 吾知甚少 学无止境 唯有努力</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/nanyoullm" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:nanyoullm@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#提升方法"><span class="nav-number">1.</span> <span class="nav-text">提升方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#AdaBoost"><span class="nav-number">1.1.</span> <span class="nav-text">AdaBoost</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本思路"><span class="nav-number">1.1.1.</span> <span class="nav-text">基本思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法"><span class="nav-number">1.1.2.</span> <span class="nav-text">算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AdaBoost算法的解释"><span class="nav-number">1.2.</span> <span class="nav-text">AdaBoost算法的解释</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#前向分步算法"><span class="nav-number">1.2.1.</span> <span class="nav-text">前向分步算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提升树"><span class="nav-number">1.3.</span> <span class="nav-text">提升树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#提升树算法"><span class="nav-number">1.3.1.</span> <span class="nav-text">提升树算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#梯度提升树（GBDT）"><span class="nav-number">1.3.2.</span> <span class="nav-text">梯度提升树（GBDT）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XGBoost"><span class="nav-number">1.4.</span> <span class="nav-text">XGBoost</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#enjoy-it"><span class="nav-number">2.</span> <span class="nav-text">enjoy it!</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-Lim Lau"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lim的博客</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <script type="text/javascript" opacity="0.5" zIndex="-2" count="79" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>

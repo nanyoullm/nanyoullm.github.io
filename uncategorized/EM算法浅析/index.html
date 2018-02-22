@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="机器学习," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="&amp;emsp;&amp;emsp;今天来回顾一下EM算法。试想，当通过若干次实验获取一批硬币观测数据时，如果知道他们分别来自哪个硬币，我们就可以通过极大似然估计来求得其每个硬币分布的参数。但是，如果我们不知道他们来自哪个分布（称作隐变量）的时候，极大似然估计方法就失效了。EM（expectation maximization）算法就是针对这样有隐变量的参数估计场景。这篇博文里，我们不谈数学推理公式，通过简单">
+<meta name="keywords" content="机器学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EM算法浅析">
+<meta property="og:url" content="http://yoursite.com/uncategorized/EM算法浅析/index.html">
+<meta property="og:site_name" content="Lim的博客">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;今天来回顾一下EM算法。试想，当通过若干次实验获取一批硬币观测数据时，如果知道他们分别来自哪个硬币，我们就可以通过极大似然估计来求得其每个硬币分布的参数。但是，如果我们不知道他们来自哪个分布（称作隐变量）的时候，极大似然估计方法就失效了。EM（expectation maximization）算法就是针对这样有隐变量的参数估计场景。这篇博文里，我们不谈数学推理公式，通过简单">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/em1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/em2.png">
+<meta property="og:updated_time" content="2018-02-22T15:15:00.598Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="EM算法浅析">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;今天来回顾一下EM算法。试想，当通过若干次实验获取一批硬币观测数据时，如果知道他们分别来自哪个硬币，我们就可以通过极大似然估计来求得其每个硬币分布的参数。但是，如果我们不知道他们来自哪个分布（称作隐变量）的时候，极大似然估计方法就失效了。EM（expectation maximization）算法就是针对这样有隐变量的参数估计场景。这篇博文里，我们不谈数学推理公式，通过简单">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/em1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/uncategorized/EM算法浅析/"/>
+
+
+
+
+
+  <title>EM算法浅析 | Lim的博客</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <!--<a href="https://github.com/nanyoullm/nanyoullm.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>-->
+
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lim的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/uncategorized/EM算法浅析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="刘力铭">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/keji2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lim的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">EM算法浅析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-14T00:17:06+08:00">
+                2018-02-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&emsp;&emsp;今天来回顾一下EM算法。试想，当通过若干次实验获取一批硬币观测数据时，如果知道他们分别来自哪个硬币，我们就可以通过极大似然估计来求得其每个硬币分布的参数。但是，如果我们不知道他们来自哪个分布（称作隐变量）的时候，极大似然估计方法就失效了。EM（expectation maximization）算法就是针对这样有隐变量的参数估计场景。这篇博文里，我们不谈数学推理公式，通过简单的例子了解一下EM算法的idea。<br>&emsp;&emsp;另外，临近春节，在这里预祝大家新年快乐啦！<br><a id="more"></a></p>
+<h1 id="EM算法浅析"><a href="#EM算法浅析" class="headerlink" title="EM算法浅析"></a>EM算法浅析</h1><h2 id="EM算法回顾"><a href="#EM算法回顾" class="headerlink" title="EM算法回顾"></a>EM算法回顾</h2><p>&emsp;&emsp;EM算法(expectation maximization algorithm)是一种迭代算法，用于含有隐变量的概率模型参数的最大似然估计，或极大后验概率估计。<br>&emsp;&emsp;EM算法的每次迭代由两步组成：</p>
+<ul>
+<li>E步，求期望；</li>
+<li>M步，求极大；  </li>
+</ul>
+<p>&emsp;&emsp;概率模型有时既有观测变量，又含有隐变量或潜在变量。如果概率模型所有的变量都是观测变量，那么给定数据，就可以使用最大似然估计法，或贝叶斯法估计模型参数（最大似然和贝叶斯的区别我们稍后讲）。但是，当模型含有隐变量时，就不能简单得使用这些估计方法。EM算法就是含有隐变量的概率模型的最大似然估计方法，或极大后延概率估计方法。</p>
+<h2 id="举个栗子"><a href="#举个栗子" class="headerlink" title="举个栗子"></a>举个栗子</h2><p>&emsp;&emsp;我们先抛开数学公式，从例子入手，先对EM算法有一个直观的认识。博主认为，理解一个方法背后的idea是最重要的。<br>&emsp;&emsp;假设做一个硬币实验，我们有两个硬币，每个硬币有正面反面，其参数我们不得而知。我们假设 $\theta_{A}$ 和 $\theta_{B}$ 分别为A、B硬币的正面概率，则 $1-\theta_{A}$ 和 $\theta_{B}$ 分别为A、B硬币的反面概率。现在我们做5次实验，每次实验从A、B中选择一个，抛掷10次。</p>
+<blockquote>
+<p>忘记了什么是最大似然的同学可以在这里回想一下。<br>什么是似然，似然就是给了我们一堆的随机实验结果x，我们知道其分布，但是不知道其分布的参数 $\theta$ ,我们需要通过x来推测分布的参数 $\theta$ 。那么，我们怎么通过最大似然方法来推测出分布的参数呢？每一次实验结果我们可以写成 $P(x_{i}|\theta)$ ，即在某参数的分布下，发生这次结果的概率，每一次实验结果都是独立事件，所以多个实验就可以写成 $\prod_{i=1}^{n} P(x_{i}|\theta)$ 。这些结果是从分布中随机发生的，那么既然发生了，为什么不让出现的结果的可能性最大呢？<strong>这就是最大似然估计的核心</strong>。</p>
+</blockquote>
+<h3 id="无隐参数，最大似然估计"><a href="#无隐参数，最大似然估计" class="headerlink" title="无隐参数，最大似然估计"></a>无隐参数，最大似然估计</h3><p>&emsp;&emsp;如果我们知道5次实验中每次选择了哪个，那么我们就知道了所有的观测变量，我们就可以使用最大似然估计的方法来推测分布的参数，实验如下图所示。<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/em1.png" width="700"><br>&emsp;&emsp;我们可以知道，第1、4次中是按硬币B的分布进行实验，第2、3和5次中是按硬币A的分布进行实验的。那么，通过最大似然估计方法，我们可以计算两个分布的推测参数出 $\hat{\theta_{A}}=0.80$ 和 $\hat{\theta_{B}}=0.45$ 。</p>
+<h3 id="有隐参数z，EM"><a href="#有隐参数z，EM" class="headerlink" title="有隐参数z，EM"></a>有隐参数z，EM</h3><p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/em2.png" width="700"></p>
+<h4 id="初始版"><a href="#初始版" class="headerlink" title="初始版"></a>初始版</h4><p>&emsp;&emsp;这次，我们不知道5次实验中每次是挑选了哪枚硬币，每次实验所挑选出来的硬币我们称其为隐变量z，这是一个不完全数据的情况，我们无法通过最大似然估计来求出分布的参数。<br>&emsp;&emsp;一个可行的想法是做一下的迭代，我们先初始化分布A、B两个硬币的参数 $\hat{\theta}^{t}=(\hat{\theta}_{A}^{t},\hat{\theta}_{B}^{t})$ ，然后计算每轮投掷中，A、B各自出现的概率，并将概率大的作为本次迭代中该轮选择的硬币。以上图为例：假设初始分布为 $(\hat{\theta}_{A}^{1}=0.6,\hat{\theta}_{B}^{1}=0.5)$ ，根据第一次实验出现的观测，A硬币出现这样的概率为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p1a = pow(<span class="number">0.6</span>, <span class="number">9</span>) * pow(<span class="number">0.4</span>, <span class="number">1</span>)</span><br><span class="line">p1a</span><br></pre></td></tr></table></figure>
+<pre><code>0.004031078399999999
+</code></pre><p>B硬币出现这样的概率为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p1b = pow(<span class="number">0.5</span>, <span class="number">5</span>) * pow(<span class="number">0.5</span>, <span class="number">5</span>)</span><br><span class="line">p1b</span><br></pre></td></tr></table></figure>
+<pre><code>0.0009765625
+</code></pre><p>&emsp;&emsp;显然A出现这样的观测数据的可能性更大，所以可以把第一次实验选择的硬币暂定为A。每次实验分别按照上述方法进行计算，可以得到硬币选择预测结果，</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>试验轮次</th>
+<th style="text-align:center">A硬币</th>
+<th style="text-align:right">B硬币 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:center">0.000796</td>
+<td style="text-align:right">0.0009765 </td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:center">0.004031</td>
+<td style="text-align:right">0.0009765 </td>
+</tr>
+<tr>
+<td>3</td>
+<td style="text-align:center">0.002687</td>
+<td style="text-align:right">0.0009765 </td>
+</tr>
+<tr>
+<td>4</td>
+<td style="text-align:center">0.0005308</td>
+<td style="text-align:right">0.0009765 </td>
+</tr>
+<tr>
+<td>5</td>
+<td style="text-align:center">0.001792</td>
+<td style="text-align:right">0.0009765 </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>选择可能性最大的值，结果依次为：BAABA。相当于我们求出了本轮迭代的隐变量。接下来，通过求出的隐变量，我们利用最大似然估计方法估计出下一轮的分布参数：</p>
+<script type="math/tex; mode=display">(\hat{\theta}_{A}^{2}=24/30=0.80,\hat{\theta}_{B}^{2}=24/20=0.45)</script><p>继续迭代下去直到分布的参数不变或变动极小。<br>&emsp;&emsp;需要注意的是，这个方法并不一定能收敛到真实的分布参数，这跟初始值的设定是有关系的。<br>&emsp;&emsp;实际上，EM算法就是基于这样的思想来的。相比上面的按照观测数据直接判断某次实验的隐变量，我们可以使用更加折中的方法，EM算法计算隐参数中每个取值的概率值。我们看下上面方法的升级版。</p>
+<h4 id="升级版"><a href="#升级版" class="headerlink" title="升级版"></a>升级版</h4><p>&emsp;&emsp;上面初始版中，我们用最大似然方法确定了隐变量z，然后再迭代估计新的分布参数。也就是说，我们在每轮中，选择了可能性最大的z值，而不是所有可能的z值。我们会看一下刚刚第一次迭代中估算出隐参数的概率，</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>试验轮次</th>
+<th style="text-align:center">A硬币</th>
+<th style="text-align:right">B硬币 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:center">0.000796</td>
+<td style="text-align:right">0.0009765 </td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:center">0.004031</td>
+<td style="text-align:right">0.0009765 </td>
+</tr>
+<tr>
+<td>3</td>
+<td style="text-align:center">0.002687</td>
+<td style="text-align:right">0.0009765 </td>
+</tr>
+<tr>
+<td>4</td>
+<td style="text-align:center">0.0005308</td>
+<td style="text-align:right">0.0009765 </td>
+</tr>
+<tr>
+<td>5</td>
+<td style="text-align:center">0.001792</td>
+<td style="text-align:right">0.0009765 </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>根据上表，我们可以转换成A硬币和B硬币发生的概率，</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>试验轮次</th>
+<th style="text-align:center">A硬币</th>
+<th style="text-align:right">B硬币 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:center">0.45</td>
+<td style="text-align:right">0.55 </td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:center">0.80</td>
+<td style="text-align:right">0.20</td>
+</tr>
+<tr>
+<td>3</td>
+<td style="text-align:center">0.73</td>
+<td style="text-align:right">0.27</td>
+</tr>
+<tr>
+<td>4</td>
+<td style="text-align:center">0.35</td>
+<td style="text-align:right">0.65</td>
+</tr>
+<tr>
+<td>5</td>
+<td style="text-align:center">0.65</td>
+<td style="text-align:right">0.35</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>&emsp;&emsp;实际上，上表表示的是期望值。以第一行为例，从期望角度看，本次试验使用硬币B的概率是0.55，相比初始版本，我们按照最大似然概率，将本次试验直接估计为B硬币，这里显得更加谨慎，仅表示有0.55的概率是硬币B。所以这一步，我们是估计了隐参数z的概率分布，也就是<strong>E步</strong>。<br>&emsp;&emsp;接下来，我们根据隐参数的期望，继续使用最大似然估计的方法估计A和B分布的参数。以第一次试验为例，出现了5次正面，5次反面，对于硬币A相当于 正面为$0.45*5=2.25$，反面为$0.45*5=2.25$；对于硬币B相当于正面为$0.55*5=2.75$，反面为 $0.55*5=2.75$。五次试验的结果如下表，</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>试验轮次</th>
+<th style="text-align:center">A硬币</th>
+<th style="text-align:right">B硬币 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:center">2.25正，2.25反</td>
+<td style="text-align:right">2.75正，2.75反</td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:center">7.2正，0.8反</td>
+<td style="text-align:right">1.8正，0.2反</td>
+</tr>
+<tr>
+<td>3</td>
+<td style="text-align:center">5.9正，1.5反</td>
+<td style="text-align:right">2.1正，0.5反</td>
+</tr>
+<tr>
+<td>4</td>
+<td style="text-align:center">1.4正，2.1反</td>
+<td style="text-align:right">2.6正，3.9反</td>
+</tr>
+<tr>
+<td>5</td>
+<td style="text-align:center">4.5正，1.9反</td>
+<td style="text-align:right">2.5正，1.1反</td>
+</tr>
+<tr>
+<td>合计</td>
+<td style="text-align:center">21.3正，8.6反</td>
+<td style="text-align:right">11.7正，8.4反</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>&emsp;&emsp;接下来，根据最大似然方法可以估计本轮之后，硬币A和B的参数为$\hat{\theta}_{A}^{2}=0.71,\hat{\theta}_{B}^{2}=0.58$。这一步也就是<strong>M步</strong>。接下来，可以进行下一轮的迭代…</p>
+<h2 id="总结一下"><a href="#总结一下" class="headerlink" title="总结一下"></a>总结一下</h2><p>&emsp;&emsp;通过上面那个例子，我们可以体会到EM算法思想的精彩之处，直观得感觉到背后的idea。以上就是EM算法浅析，有机会深入学习一下背后的推理思维，与大家一起分享。</p>
+<h1 id="enjoy-it"><a href="#enjoy-it" class="headerlink" title="enjoy it!"></a>enjoy it!</h1>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/uncategorized/模型监控demo/" rel="next" title="模型监控demo">
+                <i class="fa fa-chevron-left"></i> 模型监控demo
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/keji2.jpg"
+                alt="刘力铭" />
+            
+              <p class="site-author-name" itemprop="name">刘力铭</p>
+              <p class="site-description motion-element" itemprop="description">趣事之多 吾知甚少 学无止境 唯有努力</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/nanyoullm" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:nanyoullm@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#EM算法浅析"><span class="nav-number">1.</span> <span class="nav-text">EM算法浅析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#EM算法回顾"><span class="nav-number">1.1.</span> <span class="nav-text">EM算法回顾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#举个栗子"><span class="nav-number">1.2.</span> <span class="nav-text">举个栗子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#无隐参数，最大似然估计"><span class="nav-number">1.2.1.</span> <span class="nav-text">无隐参数，最大似然估计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#有隐参数z，EM"><span class="nav-number">1.2.2.</span> <span class="nav-text">有隐参数z，EM</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#初始版"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">初始版</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#升级版"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">升级版</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结一下"><span class="nav-number">1.3.</span> <span class="nav-text">总结一下</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#enjoy-it"><span class="nav-number">2.</span> <span class="nav-text">enjoy it!</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-Lim Lau"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lim的博客</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <script type="text/javascript" opacity="0.5" zIndex="-2" count="79" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>
