@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="机器学习,深度学习," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="&amp;emsp;&amp;emsp;迁移学习（transfer learning）通俗来说，就是运用已有的知识来学习新的知识，用成语来说就是举一反三。很多场景下，直接对目标从头开始学习成本太高，这时候我们可以运用已有的知识辅助尽快得学习新知识。本文主要对迁移学习进行了介绍，提供了一些资料，最后在实战中利用迁移学习实现了图像分类。">
+<meta name="keywords" content="机器学习,深度学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="迁移学习简介与实战">
+<meta property="og:url" content="http://yoursite.com/uncategorized/迁移学习简介与实战/index.html">
+<meta property="og:site_name" content="Lim的博客">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;迁移学习（transfer learning）通俗来说，就是运用已有的知识来学习新的知识，用成语来说就是举一反三。很多场景下，直接对目标从头开始学习成本太高，这时候我们可以运用已有的知识辅助尽快得学习新知识。本文主要对迁移学习进行了介绍，提供了一些资料，最后在实战中利用迁移学习实现了图像分类。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/transfer%20learning/output_8_0.png">
+<meta property="og:updated_time" content="2018-02-27T15:16:32.245Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="迁移学习简介与实战">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;迁移学习（transfer learning）通俗来说，就是运用已有的知识来学习新的知识，用成语来说就是举一反三。很多场景下，直接对目标从头开始学习成本太高，这时候我们可以运用已有的知识辅助尽快得学习新知识。本文主要对迁移学习进行了介绍，提供了一些资料，最后在实战中利用迁移学习实现了图像分类。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/transfer%20learning/output_8_0.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/uncategorized/迁移学习简介与实战/"/>
+
+
+
+
+
+  <title>迁移学习简介与实战 | Lim的博客</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <!--<a href="https://github.com/nanyoullm/nanyoullm.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>-->
+
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lim的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/uncategorized/迁移学习简介与实战/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="刘力铭">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/keji2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lim的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">迁移学习简介与实战</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-27T23:11:41+08:00">
+                2018-02-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&emsp;&emsp;迁移学习（transfer learning）通俗来说，就是运用已有的知识来学习新的知识，用成语来说就是举一反三。很多场景下，直接对目标从头开始学习成本太高，这时候我们可以运用已有的知识辅助尽快得学习新知识。本文主要对迁移学习进行了介绍，提供了一些资料，最后在实战中利用迁移学习实现了图像分类。<br><a id="more"></a></p>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>&emsp;&emsp;迁移学习（transfer learning）通俗来说，就是运用已有的知识来学习新的知识，用成语来说就是举一反三。很多场景下，直接对目标从头开始学习成本太高，这时候我们可以运用已有的知识辅助尽快得学习新知识。<br>&emsp;&emsp;比如已经会下中国象棋，就可以类比着来学习国际象棋。又比如计算机视觉领域，我们训练一个超大的神经网络是需要耗费大量的时间，同时对硬件也有一定的要求；但是如果我们使用已经训练好的深层卷积网络，把网络参数做为初始值直接训练我们的目标数据，或者固定卷积层作为固定的特征提取器，仅重新训练最后一层用于分类的全连接层，就相当于我们在一个全局相对较优的位置来对我们的目标数据进行训练。这样不仅速度快，而且可以获得较为不错的分类效果。迁移学习实际上是很系统的一个领域，如果想要对迁移学习有一个较为完整的认识，可以阅读经典综述论文：<a href="https://pdfs.semanticscholar.org/a25f/bcbbae1e8f79c4360d26aa11a3abf1a11972.pdf" target="_blank" rel="noopener">A survey on transfer learning</a>。另外，感谢jindongwang@github的<a href="https://github.com/jindongwang/transferlearning" target="_blank" rel="noopener">博文</a>，这里非常全面得搜集了关于迁移学习的知识面，非常值得学习！</p>
+<h1 id="深度学习中的迁移学习"><a href="#深度学习中的迁移学习" class="headerlink" title="深度学习中的迁移学习"></a>深度学习中的迁移学习</h1><p>&emsp;&emsp;下面我们以迁移学习在计算机视觉领域的应用为例，介绍一下常用的操作。在实际中，面对大数据集和深度神经网络，非常少的同学会选择使用随机初始化的网络参数来训练整个卷积网络。通常，我们会使用在超大数据集如ImageNet上预训练好的卷积层网络ConvNet，然后把它作为网络初始值进行fine-tune，或者作为固定的特征提取器然后训练最后一层全连接层，来应用到我们感兴趣的任务当中。<br>&emsp;&emsp;常见的迁移学习策略有如下三种：</p>
+<ul>
+<li>A.把卷积层作为固定的特征提取器：使用一个在ImageNet上与训练好的卷积网络，移除最后一层全连接层（因为ImageNet上有1000个图片分类），然后按照实际情况重新训练最后一层；</li>
+<li>B.微调卷积层：这个方法不仅移除了最后一层全连接层进行重训练，同时把预训练的卷积层作为初始值加入到反向传播过程中进行fine-tune微调；</li>
+<li>C.预训练整个网络：可能花费2-3周在多卡GPU上训练ImageNet网络，然后将最后的checkpoints文件共享出来；</li>
+</ul>
+<p>&emsp;&emsp;那么，在实际应用场景中，我们应该如何决定使用那种策略呢？这就涉及到几个因素了，最重要的两个因素是：1.新任务的数据集的大小；新任务数据集与预训练使用的数据集的相似程度（如与ImageNet数据集内容相似，亦或非常不同如显微镜图）。以下是四种场景以及几条指导原则：</p>
+<ul>
+<li>新数据集数量较小且与原始数据集内容相似：这种情况下，微调预训练好的卷积层不是一个好的选择，因为这样容易出现过拟合现象，因为这两个数据集内容相似，我们可以直接使用预训练好的卷积提取处高级特征。因此，更为合适的方法是按照实际任务在最后一层卷积层训练一个线性分类模型如lr;</li>
+<li>新数据集数量较大且与原始数据集内容相似：相比上一个情景，这个数据集数量更大，所以我们可以微调整个卷积层参数，不用担心过拟合问题；</li>
+<li>新数据集数量较小且与原始数据集内容非常不同：一方面为数据集小，因此适合在最后一层训练一个线性分类器；另一方面因为数据集内容相差较大，这又不适合只训练最后一层分类器，这个是一个为难的情况。最好的建议是，不适用整个卷积网络，而是在卷积网络选择较浅层的一个位置作为输出，训练一个svm分类器；</li>
+<li>新数据集数量较大且与原始数据集内容非常不同：因为我们有足够的数据，这种情况就建议微调整个网络参数；</li>
+</ul>
+<h1 id="pyTorch实战"><a href="#pyTorch实战" class="headerlink" title="pyTorch实战"></a>pyTorch实战</h1><p>&emsp;&emsp;接下来我们通过实战来加深对迁移学习的了解。这里我们的目标是对一个数量较小的数据集进行分类，总共有两个类别的图片，分别是蚂蚁（ants：124张）和蜜蜂（bees：121张）。可以看到这个场景符合上述的第1种场景。实战中，我们使用预训练好的resnet18网络，对最后一层全连接层进行相应改造，然后进行训练。我们这里使用了pyTorch。<br>&emsp;&emsp;数据下载：<a href="https://download.pytorch.org/tutorial/hymenoptera_data.zip" target="_blank" rel="noopener">https://download.pytorch.org/tutorial/hymenoptera_data.zip</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> torch.optim <span class="keyword">import</span> lr_scheduler</span><br><span class="line"><span class="keyword">from</span> torch.autograd <span class="keyword">import</span> Variable</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> torchvision</span><br><span class="line"><span class="keyword">from</span> torchvision <span class="keyword">import</span> datasets, models, transforms</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> copy</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 对训练样本和验证样本图片进行预处理，包括裁剪、旋转、标准化</span></span><br><span class="line">data_transforms = &#123;</span><br><span class="line">    <span class="string">'train'</span>: transforms.Compose([</span><br><span class="line">        transforms.RandomResizedCrop(<span class="number">224</span>),</span><br><span class="line">        transforms.RandomHorizontalFlip(),</span><br><span class="line">        transforms.ToTensor(),</span><br><span class="line">        transforms.Normalize([<span class="number">0.485</span>, <span class="number">0.456</span>, <span class="number">0.406</span>],</span><br><span class="line">                             [<span class="number">0.229</span>, <span class="number">0.224</span>, <span class="number">0.225</span>])</span><br><span class="line">    ]),</span><br><span class="line">    <span class="string">'val'</span>: transforms.Compose([</span><br><span class="line">        transforms.Resize(<span class="number">256</span>),</span><br><span class="line">        transforms.RandomResizedCrop(<span class="number">224</span>),</span><br><span class="line">        transforms.ToTensor(),</span><br><span class="line">        transforms.Normalize([<span class="number">0.485</span>, <span class="number">0.456</span>, <span class="number">0.406</span>],</span><br><span class="line">                             [<span class="number">0.229</span>, <span class="number">0.224</span>, <span class="number">0.225</span>])</span><br><span class="line">    ])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>加载数据，下面路径自行修改</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">data_dir = <span class="string">'/mypar/Data/hymenoptera_data'</span></span><br><span class="line">image_datasets = &#123;x: datasets.ImageFolder(os.path.join(data_dir, x),</span><br><span class="line">                                          data_transforms[x])</span><br><span class="line">                  <span class="keyword">for</span> x <span class="keyword">in</span> [<span class="string">'train'</span>, <span class="string">'val'</span>]&#125;</span><br><span class="line">dataloaders = &#123;x: torch.utils.data.DataLoader(image_datasets[x],</span><br><span class="line">                                              batch_size=<span class="number">4</span>,</span><br><span class="line">                                              shuffle=<span class="keyword">True</span>,</span><br><span class="line">                                              num_workers=<span class="number">4</span>)</span><br><span class="line">               <span class="keyword">for</span> x <span class="keyword">in</span> [<span class="string">'train'</span>, <span class="string">'val'</span>]&#125;</span><br><span class="line"></span><br><span class="line">dataset_sizes = &#123;x: len(image_datasets[x]) <span class="keyword">for</span> x <span class="keyword">in</span> [<span class="string">'train'</span>, <span class="string">'val'</span>]&#125;</span><br><span class="line">class_names = image_datasets[<span class="string">'train'</span>].classes</span><br><span class="line"></span><br><span class="line">use_gpu = torch.cuda.is_available()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">imshow</span><span class="params">(inp, title=None)</span>:</span></span><br><span class="line">    inp = inp.numpy().transpose([<span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>])</span><br><span class="line">    mean = np.array([<span class="number">0.485</span>, <span class="number">0.456</span>, <span class="number">0.406</span>])</span><br><span class="line">    std = np.array([<span class="number">0.229</span>, <span class="number">0.224</span>, <span class="number">0.225</span>])</span><br><span class="line">    inp = std * inp + mean</span><br><span class="line">    plt.imshow(inp)</span><br><span class="line">    <span class="keyword">if</span> title <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">        plt.title(title)</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure>
+<p>看一眼数据集</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">inputs, classes = next(iter(dataloaders[<span class="string">'train'</span>]))</span><br><span class="line">out = torchvision.utils.make_grid(inputs)</span><br><span class="line">imshow(out, title=[class_names[x] <span class="keyword">for</span> x <span class="keyword">in</span> classes])</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/transfer%20learning/output_8_0.png" alt="png"></p>
+<p>训练模型，使用了scheduler对step进行控制，保存最好的模型参数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train_model</span><span class="params">(model, criterion, optimizer, scheduler,</span></span></span><br><span class="line"><span class="function"><span class="params">                num_epochs=<span class="number">25</span>)</span>:</span></span><br><span class="line">    begin = time.time()</span><br><span class="line">    best_model_wts = copy.deepcopy(model.state_dict())</span><br><span class="line">    best_acc = <span class="number">0.0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> range(num_epochs):</span><br><span class="line">        print(<span class="string">'epoch: &#123;&#125;'</span>.format(epoch))</span><br><span class="line">        print(<span class="string">'-'</span> * <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> phase <span class="keyword">in</span> [<span class="string">'train'</span>, <span class="string">'val'</span>]:</span><br><span class="line">            <span class="keyword">if</span> phase == <span class="string">'train'</span>:</span><br><span class="line">                scheduler.step()</span><br><span class="line">                model.train(<span class="keyword">True</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                model.train(<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line">            total_loss = <span class="number">0.0</span></span><br><span class="line">            correct = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> inputs, labels <span class="keyword">in</span> dataloaders[phase]:</span><br><span class="line">                <span class="keyword">if</span> use_gpu:</span><br><span class="line">                    inputs = Variable(inputs.cuda())</span><br><span class="line">                    labels = Variable(labels.cuda())</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    inputs = Variable(inputs)</span><br><span class="line">                    labels = Variable(labels)</span><br><span class="line"></span><br><span class="line">                optimizer.zero_grad()</span><br><span class="line">                outputs = model(inputs)</span><br><span class="line">                _, preds = torch.max(outputs.data, <span class="number">1</span>)</span><br><span class="line">                loss = criterion(outputs, labels)</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> phase == <span class="string">'train'</span>:</span><br><span class="line">                    loss.backward()</span><br><span class="line">                    optimizer.step()</span><br><span class="line"></span><br><span class="line">                total_loss += loss.data[<span class="number">0</span>] * inputs.size(<span class="number">0</span>)</span><br><span class="line">                correct += torch.sum(preds == labels.data)</span><br><span class="line"></span><br><span class="line">            epoch_loss = total_loss / dataset_sizes[phase]</span><br><span class="line">            epoch_acc = correct / dataset_sizes[phase]</span><br><span class="line"></span><br><span class="line">            print(<span class="string">'&#123;&#125; loss: &#123;:.4f&#125;, acc: &#123;:.4f&#125;'</span>.format(phase, epoch_loss, epoch_acc))</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> phase == <span class="string">'val'</span> <span class="keyword">and</span> epoch_acc &gt; best_acc:</span><br><span class="line">                best_acc = epoch_acc</span><br><span class="line">                best_model_wts = copy.deepcopy(model.state_dict())</span><br><span class="line"></span><br><span class="line">        print(<span class="string">''</span>)</span><br><span class="line"></span><br><span class="line">    time_elapsed = time.time() - begin</span><br><span class="line">    print(<span class="string">'Training complete in &#123;:.0f&#125;m &#123;:.0f&#125;s'</span>.format(</span><br><span class="line">        time_elapsed // <span class="number">60</span>, time_elapsed % <span class="number">60</span>))</span><br><span class="line">    print(<span class="string">'Best val Acc: &#123;:4f&#125;'</span>.format(best_acc))</span><br><span class="line"></span><br><span class="line">    model.load_state_dict(best_model_wts)</span><br><span class="line">    <span class="keyword">return</span> model</span><br></pre></td></tr></table></figure>
+<p>加载resnet18模型，并且通过设置requires_grad为False来固定中间的网络参数，同时改造最后一层全连接层，输出设置为2</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">model_conv = torchvision.models.resnet18(pretrained=<span class="keyword">True</span>)</span><br><span class="line"><span class="keyword">for</span> param <span class="keyword">in</span> model_conv.parameters():</span><br><span class="line">    param.requires_grad = <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Parameters of newly constructed modules have requires_grad=True by default</span></span><br><span class="line">num_ftrs = model_conv.fc.in_features</span><br><span class="line">model_conv.fc = nn.Linear(num_ftrs, <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> use_gpu:</span><br><span class="line">    model_conv = model_conv.cuda()</span><br><span class="line"></span><br><span class="line">criterion = nn.CrossEntropyLoss()</span><br><span class="line">optimizer_conv = optim.SGD(model_conv.fc.parameters(), lr=<span class="number">0.001</span>, momentum=<span class="number">0.9</span>)</span><br><span class="line">exp_lr_scheduler = lr_scheduler.StepLR(optimizer_conv, step_size=<span class="number">7</span>, gamma=<span class="number">0.1</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">model_conv = train_model(model_conv, criterion, optimizer_conv,</span><br><span class="line">                         exp_lr_scheduler, num_epochs=<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>epoch: 0
+----------
+train loss: 0.5931, acc: 0.6434
+val loss: 0.3232, acc: 0.8562
+
+epoch: 1
+----------
+train loss: 0.6324, acc: 0.7049
+val loss: 0.4907, acc: 0.7843
+
+epoch: 2
+----------
+train loss: 0.4494, acc: 0.8115
+val loss: 0.2656, acc: 0.8758
+
+epoch: 3
+----------
+train loss: 0.3670, acc: 0.8566
+val loss: 0.2530, acc: 0.9020
+
+epoch: 4
+----------
+train loss: 0.3793, acc: 0.8279
+val loss: 0.2208, acc: 0.9216
+
+epoch: 5
+----------
+train loss: 0.5154, acc: 0.8402
+val loss: 0.2366, acc: 0.9150
+
+epoch: 6
+----------
+train loss: 0.4312, acc: 0.8320
+val loss: 0.3153, acc: 0.8693
+
+epoch: 7
+----------
+train loss: 0.5664, acc: 0.7541
+val loss: 0.2647, acc: 0.8824
+
+epoch: 8
+----------
+train loss: 0.3585, acc: 0.8197
+val loss: 0.2251, acc: 0.9020
+
+epoch: 9
+----------
+train loss: 0.3170, acc: 0.8648
+val loss: 0.2423, acc: 0.8954
+
+Training complete in 0m 9s
+Best val Acc: 0.921569
+</code></pre><p>如果需要对整个网络进行fine-tune，那么可以参考如下代码对上面相应部分进行替换</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">model_ft = models.resnet18(pretrained=<span class="keyword">True</span>)</span><br><span class="line">num_ftrs = model_ft.fc.in_features</span><br><span class="line">model_ft.fc = nn.Linear(num_ftrs, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> use_gpu:</span><br><span class="line">    model_ft = model_ft.cuda()</span><br><span class="line"></span><br><span class="line">criterion = nn.CrossEntropyLoss()</span><br><span class="line">optimizer_ft = optim.SGD(model_ft.parameters(), lr=<span class="number">0.001</span>, momentum=<span class="number">0.9</span>)</span><br><span class="line">exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=<span class="number">7</span>, gamma=<span class="number">0.1</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="enjoy-it"><a href="#enjoy-it" class="headerlink" title="enjoy it!"></a>enjoy it!</h1><p>参考资料：<a href="http://cs231n.github.io/transfer-learning/" target="_blank" rel="noopener">http://cs231n.github.io/transfer-learning/</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+            <a href="/tags/深度学习/" rel="tag"># 深度学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/uncategorized/IV值与WOE/" rel="next" title="IV值与WOE">
+                <i class="fa fa-chevron-left"></i> IV值与WOE
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/keji2.jpg"
+                alt="刘力铭" />
+            
+              <p class="site-author-name" itemprop="name">刘力铭</p>
+              <p class="site-description motion-element" itemprop="description">趣事之多 吾知甚少 学无止境 唯有努力</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">博文</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/nanyoullm" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:nanyoullm@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#深度学习中的迁移学习"><span class="nav-number">2.</span> <span class="nav-text">深度学习中的迁移学习</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pyTorch实战"><span class="nav-number">3.</span> <span class="nav-text">pyTorch实战</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#enjoy-it"><span class="nav-number">4.</span> <span class="nav-text">enjoy it!</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-Lim Lau"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lim的博客</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <script type="text/javascript" opacity="0.5" zIndex="-2" count="79" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>
