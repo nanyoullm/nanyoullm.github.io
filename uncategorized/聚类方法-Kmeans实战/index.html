@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="机器学习," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="&amp;emsp;&amp;emsp;k-means可能是最知名的聚类算法，它是很多入门级数据科学和机器学习课程的内容。下面来回顾一下。">
+<meta name="keywords" content="机器学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="聚类方法-Kmeans实战">
+<meta property="og:url" content="http://yoursite.com/uncategorized/聚类方法-Kmeans实战/index.html">
+<meta property="og:site_name" content="Lim的博客">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;k-means可能是最知名的聚类算法，它是很多入门级数据科学和机器学习课程的内容。下面来回顾一下。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/cluster-algorithm/master/kmeans/img/kmeans_data.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/cluster-algorithm/master/kmeans/img/kmean1.gif">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/cluster-algorithm/master/kmeans/img/kmean2.gif">
+<meta property="og:updated_time" content="2018-03-03T12:47:09.135Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="聚类方法-Kmeans实战">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;k-means可能是最知名的聚类算法，它是很多入门级数据科学和机器学习课程的内容。下面来回顾一下。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/cluster-algorithm/master/kmeans/img/kmeans_data.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/uncategorized/聚类方法-Kmeans实战/"/>
+
+
+
+
+
+  <title>聚类方法-Kmeans实战 | Lim的博客</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <!--<a href="https://github.com/nanyoullm/nanyoullm.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>-->
+
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lim的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/uncategorized/聚类方法-Kmeans实战/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="刘力铭">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/keji2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lim的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">聚类方法-Kmeans实战</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-20T19:18:04+08:00">
+                2018-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&emsp;&emsp;k-means可能是最知名的聚类算法，它是很多入门级数据科学和机器学习课程的内容。下面来回顾一下。<br><a id="more"></a></p>
+<h1 id="算法步骤"><a href="#算法步骤" class="headerlink" title="算法步骤"></a>算法步骤</h1><p>&emsp;&emsp;k-means算法的原理很简单，下面来回顾一下算法步骤。</p>
+<ul>
+<li>首先，我们选择一些类/组，并随机初始化它们各自的中心点。为了算出要使用的类的数量，最好快速查看一下数据，并尝试识别不同的组。中心点是与每个数据点向量长度相同的位置，在上图中是「X」。</li>
+<li>通过计算数据点与每个组中心之间的距离来对每个点进行分类，然后将该点归类于组中心与其最接近的组中。</li>
+<li>根据这些分类点，我们利用组中所有向量的均值来重新计算组中心。</li>
+<li>重复这些步骤来进行一定数量的迭代，或者直到组中心在每次迭代后的变化不大。你也可以选择随机初始化组中心几次，然后选择看起来提供了最佳结果的运行。</li>
+</ul>
+<h1 id="优点与缺点"><a href="#优点与缺点" class="headerlink" title="优点与缺点"></a>优点与缺点</h1><p>&emsp;&emsp;K-means的优势在于速度快，因为我们真正在做的是计算点和组中心之间的距离：非常少的计算！因此它具有线性复杂度 O(n)。<br>&emsp;&emsp;另一方面，K-Means 有一些缺点。首先，你必须选择有多少组/类。这并不总是仔细的，并且理想情况下，我们希望聚类算法能够帮我们解决分多少类的问题，因为它的目的是从数据中获得一些见解。K-means 也从随机选择的聚类中心开始，所以它可能在不同的算法中产生不同的聚类结果。因此，结果可能不可重复并缺乏一致性。其他聚类方法更加一致。</p>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">%matplotlib inline</span><br></pre></td></tr></table></figure>
+<p>生成数据</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 造数据</span></span><br><span class="line">x = [<span class="number">1.0</span>, <span class="number">1.3</span>, <span class="number">1.9</span>, <span class="number">1.5</span>, <span class="number">2.4</span>, <span class="number">2.0</span>, <span class="number">2.3</span>, <span class="number">2.9</span>, <span class="number">2.5</span>, <span class="number">1.4</span>,</span><br><span class="line">     <span class="number">4.6</span>, <span class="number">3.9</span>, <span class="number">5.1</span>, <span class="number">4.7</span>, <span class="number">4.2</span>, <span class="number">5.6</span>, <span class="number">5.9</span>, <span class="number">5.3</span>, <span class="number">5.7</span>, <span class="number">5.2</span>,</span><br><span class="line">     <span class="number">7.1</span>, <span class="number">7.5</span>, <span class="number">8.9</span>, <span class="number">8.0</span>, <span class="number">7.7</span>, <span class="number">8.1</span>, <span class="number">8.5</span>, <span class="number">7.9</span>, <span class="number">8.5</span>, <span class="number">8.7</span>]</span><br><span class="line"></span><br><span class="line">y = [<span class="number">1.1</span>, <span class="number">1.4</span>, <span class="number">2.0</span>, <span class="number">1.8</span>, <span class="number">1.5</span>, <span class="number">1.4</span>, <span class="number">1.6</span>, <span class="number">2.1</span>, <span class="number">1.6</span>, <span class="number">1.8</span>,</span><br><span class="line">     <span class="number">2.6</span>, <span class="number">2.2</span>, <span class="number">2.7</span>, <span class="number">2.6</span>, <span class="number">2.3</span>, <span class="number">2.6</span>, <span class="number">2.2</span>, <span class="number">2.7</span>, <span class="number">2.9</span>, <span class="number">2.3</span>,</span><br><span class="line">     <span class="number">1.4</span>, <span class="number">1.1</span>, <span class="number">2.4</span>, <span class="number">1.7</span>, <span class="number">2.0</span>, <span class="number">1.7</span>, <span class="number">1.5</span>, <span class="number">2.1</span>, <span class="number">2.2</span>, <span class="number">2.0</span>]</span><br><span class="line">color = [<span class="string">'r'</span>, <span class="string">'b'</span>, <span class="string">'y'</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cluster_x = np.random.randint(<span class="number">0</span>, <span class="number">8</span>, <span class="number">3</span>).tolist()</span><br><span class="line">cluster_y = np.random.randint(<span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>).tolist()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fig = plt.figure(<span class="number">1</span>, figsize=(<span class="number">7</span>, <span class="number">7</span>))</span><br><span class="line">ax = fig.add_subplot(<span class="number">111</span>)</span><br><span class="line">ax.scatter(x, y)</span><br><span class="line">plt.title(<span class="string">'data'</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/cluster-algorithm/master/kmeans/img/kmeans_data.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 计算欧氏距离</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cal_distance</span><span class="params">(x1, x2, y1, y2)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> np.sqrt(pow(x1-x2, <span class="number">2</span>)+pow(y1-y2, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开始算法</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">kmeans</span><span class="params">(x, y, cluster_x, cluster_y)</span>:</span></span><br><span class="line">    new_belong_x = []</span><br><span class="line">    new_belong_y = []</span><br><span class="line">    new_center_x = []</span><br><span class="line">    new_center_y = []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(cluster_x)):</span><br><span class="line">        new_belong_x.append([])</span><br><span class="line">        new_belong_y.append([])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(x)):</span><br><span class="line">        distance = np.array([])</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(len(cluster_x)):</span><br><span class="line">            distance = np.append(distance, cal_distance(x[i], cluster_x[j], y[i], cluster_y[j]))</span><br><span class="line">        belong = np.argmin(distance)</span><br><span class="line">        new_belong_x[belong].append(x[i])</span><br><span class="line">        new_belong_y[belong].append(y[i])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(cluster_x)):</span><br><span class="line">        <span class="keyword">if</span> len(new_belong_x[i]) != <span class="number">0</span>:</span><br><span class="line">            new_center_x.append(np.array(new_belong_x[i]).mean())</span><br><span class="line">            new_center_y.append(np.array(new_belong_y[i]).mean())</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            new_center_x.append(cluster_x[i] + <span class="number">1</span>)</span><br><span class="line">            new_center_y.append(cluster_y[i] + <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> new_belong_x, new_belong_y, new_center_x, new_center_y</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">plt.ion()</span><br><span class="line">plt.draw()</span><br><span class="line">plt.pause(<span class="number">1</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">    plt.clf()</span><br><span class="line">    print(<span class="string">'epoch: &#123;&#125;'</span>.format(i))</span><br><span class="line">    new_belong_x, new_belong_y, center_x, center_y = kmeans(x, y, cluster_x, cluster_y)</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(len(new_belong_x)):</span><br><span class="line">        plt.plot(center_x[j], center_y[j], <span class="string">'&#123;&#125;x'</span>.format(color[j]), markersize=<span class="number">12</span>)</span><br><span class="line">        plt.plot(new_belong_x[j], new_belong_y[j], <span class="string">'&#123;&#125;o'</span>.format(color[j]))</span><br><span class="line">    plt.draw()</span><br><span class="line">    plt.savefig(<span class="string">'&#123;&#125;.jpg'</span>.format(i))</span><br><span class="line">    plt.pause(<span class="number">0.5</span>)</span><br><span class="line">    cluster_x = center_x</span><br><span class="line">    cluster_y = center_y</span><br><span class="line"></span><br><span class="line">plt.ioff()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;运行后，可以看到下图的聚类过程（如果jupyter notebook上无法显示，则到IDE上运行）。<br><img src="https://raw.githubusercontent.com/nanyoullm/cluster-algorithm/master/kmeans/img/kmean1.gif" width="500" alt="rnn"></p>
+<p>&emsp;&emsp;再次运行代码，由于初始点选取的随机性，可能会得到不一样的聚类结果，如下图：<br><img src="https://raw.githubusercontent.com/nanyoullm/cluster-algorithm/master/kmeans/img/kmean2.gif" width="500" alt="rnn"></p>
+<h1 id="enjoy-it"><a href="#enjoy-it" class="headerlink" title="enjoy it!"></a>enjoy it!</h1><p>参考资料：<a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2650737774&amp;idx=1&amp;sn=6aa899e9de5e8363f91cff6dfb676a9c&amp;chksm=871ac810b06d4106dd98c8c63e8ceac61caff9b3491bda5c4abd94b046c82706c03db63d056a&amp;mpshare=1&amp;scene=1&amp;srcid=0301UKqMrMC8hWibYz3CziMk&amp;pass_ticket=THnhAZqYmpchgaTyADRvMNz4k7OIbLiyc2rzxxqBL1pjzbWR66JkA%2FbLqOZXNZNA#rd" target="_blank" rel="noopener">聚类算法合集</a><br>代码：<a href="https://github.com/nanyoullm/cluster-algorithm/tree/master/kmeans" target="_blank" rel="noopener">https://github.com/nanyoullm/cluster-algorithm/tree/master/kmeans</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/uncategorized/ResNet认识与实战/" rel="next" title="ResNet认识与实战">
+                <i class="fa fa-chevron-left"></i> ResNet认识与实战
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/uncategorized/模型监控demo/" rel="prev" title="模型监控demo">
+                模型监控demo <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/keji2.jpg"
+                alt="刘力铭" />
+            
+              <p class="site-author-name" itemprop="name">刘力铭</p>
+              <p class="site-description motion-element" itemprop="description">趣事之多 吾知甚少 学无止境 唯有努力</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">博文</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/nanyoullm" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:nanyoullm@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#算法步骤"><span class="nav-number">1.</span> <span class="nav-text">算法步骤</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#优点与缺点"><span class="nav-number">2.</span> <span class="nav-text">优点与缺点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码"><span class="nav-number">3.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#enjoy-it"><span class="nav-number">4.</span> <span class="nav-text">enjoy it!</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-Lim Lau"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lim的博客</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <script type="text/javascript" opacity="0.5" zIndex="-2" count="79" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>
