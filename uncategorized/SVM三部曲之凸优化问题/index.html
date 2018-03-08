@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="机器学习,数学基石," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="&amp;emsp;&amp;emsp;今天开始写SVM，博主对SVM的理解其实也是比较浅，但是我认为SVM的推理是一道坎，对机器学习热爱的话就一定要跨过这道坎。博文内容来自我之前学习机器学习数学基石的课程，SVM部分总共分为三部曲，本文是第一部分—凸优化问题。&amp;emsp;&amp;emsp;现在是3月9日凌晨2点，今晚一回家小睡了一会醒来居然快12点了，现在精神异常亢奋，同时大脑状态还停留在3月8号，so补一句女神节快">
+<meta name="keywords" content="机器学习,数学基石">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SVM三部曲之凸优化问题">
+<meta property="og:url" content="http://yoursite.com/uncategorized/SVM三部曲之凸优化问题/index.html">
+<meta property="og:site_name" content="Lim的博客">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;今天开始写SVM，博主对SVM的理解其实也是比较浅，但是我认为SVM的推理是一道坎，对机器学习热爱的话就一定要跨过这道坎。博文内容来自我之前学习机器学习数学基石的课程，SVM部分总共分为三部曲，本文是第一部分—凸优化问题。&amp;emsp;&amp;emsp;现在是3月9日凌晨2点，今晚一回家小睡了一会醒来居然快12点了，现在精神异常亢奋，同时大脑状态还停留在3月8号，so补一句女神节快">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/%E5%87%B8%E4%BC%98%E5%8C%96/%E5%87%B8%E4%BC%98%E5%8C%961.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/%E5%87%B8%E4%BC%98%E5%8C%96/%E5%87%B8%E4%BC%98%E5%8C%962.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/%E5%87%B8%E4%BC%98%E5%8C%96/%E5%87%B8%E4%BC%98%E5%8C%963.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/%E5%87%B8%E4%BC%98%E5%8C%96/%E5%87%B8%E4%BC%98%E5%8C%967.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/%E5%87%B8%E4%BC%98%E5%8C%96/%E5%87%B8%E4%BC%98%E5%8C%964.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/%E5%87%B8%E4%BC%98%E5%8C%96/%E5%87%B8%E4%BC%98%E5%8C%966.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/%E5%87%B8%E4%BC%98%E5%8C%96/%E5%87%B8%E4%BC%98%E5%8C%965.png">
+<meta property="og:updated_time" content="2018-03-08T18:05:59.540Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SVM三部曲之凸优化问题">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;今天开始写SVM，博主对SVM的理解其实也是比较浅，但是我认为SVM的推理是一道坎，对机器学习热爱的话就一定要跨过这道坎。博文内容来自我之前学习机器学习数学基石的课程，SVM部分总共分为三部曲，本文是第一部分—凸优化问题。&amp;emsp;&amp;emsp;现在是3月9日凌晨2点，今晚一回家小睡了一会醒来居然快12点了，现在精神异常亢奋，同时大脑状态还停留在3月8号，so补一句女神节快">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/%E5%87%B8%E4%BC%98%E5%8C%96/%E5%87%B8%E4%BC%98%E5%8C%961.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/uncategorized/SVM三部曲之凸优化问题/"/>
+
+
+
+
+
+  <title>SVM三部曲之凸优化问题 | Lim的博客</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <!--<a href="https://github.com/nanyoullm/nanyoullm.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>-->
+
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lim的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/uncategorized/SVM三部曲之凸优化问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="刘力铭">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/keji2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lim的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SVM三部曲之凸优化问题</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-09T01:56:17+08:00">
+                2018-03-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&emsp;&emsp;今天开始写SVM，博主对SVM的理解其实也是比较浅，但是我认为SVM的推理是一道坎，对机器学习热爱的话就一定要跨过这道坎。博文内容来自我之前学习机器学习数学基石的课程，SVM部分总共分为三部曲，本文是第一部分—凸优化问题。<br>&emsp;&emsp;现在是3月9日凌晨2点，今晚一回家小睡了一会醒来居然快12点了，现在精神异常亢奋，同时大脑状态还停留在3月8号，so补一句女神节快乐！<br><a id="more"></a></p>
+<blockquote>
+<p>本文是SVM三部曲中的第一篇。知识点和文章结构是学习了<a href="http://www.xiniuedu.com/" target="_blank" rel="noopener">稀牛学院</a>数学基石课程后的总结。</p>
+</blockquote>
+<p>&emsp;&emsp;直接开始进入正题吧！</p>
+<h1 id="一般优化问题"><a href="#一般优化问题" class="headerlink" title="一般优化问题"></a>一般优化问题</h1><h2 id="无约束优化问题"><a href="#无约束优化问题" class="headerlink" title="无约束优化问题"></a>无约束优化问题</h2><p>&emsp;&emsp;假设自变量为矢量，无优化优化问题的数学形式可以表达为：</p>
+<script type="math/tex; mode=display">
+\min{f(x)},x \in R^{n}</script><p>&emsp;&emsp;这时候，我们通常可以使用的揭发有：</p>
+<ul>
+<li>直接法：令梯度等于0，求得驻点，必要时求Hessaian矩阵再进一步判断；</li>
+<li>迭代法：如梯度下降法、牛顿法、拟牛顿法</li>
+</ul>
+<h2 id="一般约束优化问题"><a href="#一般约束优化问题" class="headerlink" title="一般约束优化问题"></a>一般约束优化问题</h2><p>&emsp;&emsp;约束优化问题的一般形式可以表示为：</p>
+<script type="math/tex; mode=display">
+minimize \quad f_{0}(x) \\ 
+\begin{align*} 
+subject \ to: \ & f_{i}(x) \le 0, \quad for \ i=1,2,...,m \\ 
+& h_{i}(x) = 0 \quad for \ i=1,2,...,p
+\end{align*}</script><p>其中可行域为，满足$f(x)$定义域和约束条件的$x$的集合。$f_{j}(x)=0$表明不等式约束被激活。</p>
+<p>&emsp;&emsp;举个例子，假设有以下约束优化问题：</p>
+<script type="math/tex; mode=display">
+minimize \quad f_{0}(x)=x_{1}^{2}+x_{2}^{2}-4x_{1}+4=(x_{1}-2)^{2}+x_{2}^{2} \\ 
+\begin{align*} 
+subject \ to: \ & c_{1}(x)=x_{1}-2x_{2}+6 \ge 0 \\ 
+& c_{2}(x)=-x_{1}^{2}+x_{2}-1 \ge 0 \\
+& c_{3}(x)=x_{1} \ge 0 \\
+& c_{4}(x)=x_{2} \ge 0
+\end{align*}</script><p>可行域在坐标系统中可以表示为下图：<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/%E5%87%B8%E4%BC%98%E5%8C%96/%E5%87%B8%E4%BC%98%E5%8C%961.png"></p>
+<h1 id="凸集和凸函数基础"><a href="#凸集和凸函数基础" class="headerlink" title="凸集和凸函数基础"></a>凸集和凸函数基础</h1><h2 id="仿射集和凸集"><a href="#仿射集和凸集" class="headerlink" title="仿射集和凸集"></a>仿射集和凸集</h2><ul>
+<li>仿射集：如果一个集合是$C \in R^{n}$是仿射的，则$C$中两点间的直线也在$C$中，例如<script type="math/tex; mode=display">
+x=\theta x_{1}+(1-\theta)x_{2} \in C,\theta \ in \ R</script></li>
+<li>凸集：如果一个集合是$C \in R^{n}$是凸的，则对于任意的$x,y \in C$，有<script type="math/tex; mode=display">
+\theta x + (1-\theta)y \in C, \ 0 \le \ \theta \ \le \ 1</script>下图中，第一个集合就是一个凸集，二三两个为非凸集，因为存在域内两点间直线上的点不在集合中的情形。<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/%E5%87%B8%E4%BC%98%E5%8C%96/%E5%87%B8%E4%BC%98%E5%8C%962.png"></li>
+</ul>
+<h2 id="凸集的性质"><a href="#凸集的性质" class="headerlink" title="凸集的性质"></a>凸集的性质</h2><ul>
+<li>凸集的交集市凸集</li>
+<li>凸集的并集不一定是凸集</li>
+</ul>
+<h2 id="凸函数"><a href="#凸函数" class="headerlink" title="凸函数"></a>凸函数</h2><p>&emsp;&emsp;凸函数的定义是：一个函数$f$被称为凸函数，则$f$的定义域为凸集，同时对于定义域中的任何两个点$x,y$和参数$0\le\theta\le 1$，有 $f(\theta x + (1-\theta)y)\le\theta f(x)+(1-\theta)f(y)$，如果不好理解的话，可以看下图的几何解释。<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/%E5%87%B8%E4%BC%98%E5%8C%96/%E5%87%B8%E4%BC%98%E5%8C%963.png"></p>
+<h2 id="凸函数的一阶二阶条件"><a href="#凸函数的一阶二阶条件" class="headerlink" title="凸函数的一阶二阶条件"></a>凸函数的一阶二阶条件</h2><ul>
+<li>一阶充要条件：$f(x_{1}) \ge f(x)+\triangledown^{T}f(x)(x_{1}-x)$对于所有$x_{1},x$均成立，参考下图；</li>
+<li>二阶充要条件：如果函数$f$二阶可导，则凸函数的充要条件是：$H(x) \succeq 0$；<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/%E5%87%B8%E4%BC%98%E5%8C%96/%E5%87%B8%E4%BC%98%E5%8C%967.png" width="500"></li>
+</ul>
+<h1 id="凸优化问题标准形式"><a href="#凸优化问题标准形式" class="headerlink" title="凸优化问题标准形式"></a>凸优化问题标准形式</h1><p>&emsp;&emsp;凸优化问题标准形式可以表示为：</p>
+<script type="math/tex; mode=display">
+minimize \quad f_{0}(x) \\ 
+\begin{align*} 
+subject \ to: \ & f_{i}(x) \le 0, \quad for \ i=1,2,...,m \\ 
+& h_{i}(x) = 0 \quad for \ i=1,2,...,p
+\end{align*}</script><p>&emsp;&emsp;如果有：</p>
+<ul>
+<li>目标函数$f_{0}=(x)$是凸的；</li>
+<li>不等式约束函数是凸的（注意若干个凸不等式约束的交集也是凸的）；</li>
+<li>等式约束是仿射的；<br>那么凸优化问题就是在一个凸集上极小化一个凸的目标函数；此时的最优值（目标函数在可行域上的最小值）可以表示为：<script type="math/tex; mode=display">
+f_{0}(x^{*})=p^{*}</script>其中，<script type="math/tex; mode=display">
+p^{*}=\min{\{f_{0}(x):f_{i}(x) \le 0,h_{i}(x)=0\}}</script></li>
+</ul>
+<h2 id="凸优化问题的重要结论"><a href="#凸优化问题的重要结论" class="headerlink" title="凸优化问题的重要结论"></a>凸优化问题的重要结论</h2><p>&emsp;&emsp;凸优化问题局部最优就是全局最优，特别得，对于无约束优化来说，即代表梯度等于0，迭代法始终会收敛域最优值。</p>
+<h2 id="典型的凸优化问题"><a href="#典型的凸优化问题" class="headerlink" title="典型的凸优化问题"></a>典型的凸优化问题</h2><h3 id="二次规划问题（QP问题）"><a href="#二次规划问题（QP问题）" class="headerlink" title="二次规划问题（QP问题）"></a>二次规划问题（QP问题）</h3><p>&emsp;&emsp;如果$P$是半正定的（则目标函数是凸的，这点博主也未能深究下去），二次规划问题可以表示为：</p>
+<script type="math/tex; mode=display">
+minimize \quad \frac{1}{2}x^{T}Px+c^{T}x+d \\ 
+\begin{align*} 
+subject \ to: \ & Gx \le h \\ 
+& Ax = b
+\end{align*}</script><p>其中大写字母表示矩阵，公式可以表述为，如果目标函数是凸的二次型，不等式约束条件是凸的，等式约束是仿射的，那么就是一个凸优化问题。</p>
+<h2 id="SVM预热"><a href="#SVM预热" class="headerlink" title="SVM预热"></a>SVM预热</h2><p>&emsp;&emsp;ok，以上讨论的问题如果有不懂的其实不必深究，博主也一样，我们且当作结论来看待。下面看下图形式的一个问题：<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/%E5%87%B8%E4%BC%98%E5%8C%96/%E5%87%B8%E4%BC%98%E5%8C%964.png" width="500"><br>&emsp;&emsp;实际上，上面这个问题就是SVM的优化问题，具体是怎么得来的我们在后续的博文中将介绍。我们现在考虑如何将上述问题转化成一个QP问题，就相当于转化成了一般凸优化问题。<br>对照上图目标函数，和QP问题的目标函数，我们可以假设值 </p>
+<script type="math/tex; mode=display">
+x \in R^{k} = [w \ \xi \ b]^{T}, \ X \in R^{m \times n}=[x_{1}^{T},...,x_{m}^{T}]^{T}, y \in R{m}=[y_{1}, ... , y_{m}]^{T}</script><p>&emsp;&emsp;实际问题中，m可以理解为数据量，n或k可以暂时理解为维度。然后我们对应目标式和QP问题构造$P,c,G,h$如下图，其中$diag$表示构造为对角矩阵。<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/%E5%87%B8%E4%BC%98%E5%8C%96/%E5%87%B8%E4%BC%98%E5%8C%966.png" width="500"><br>手敲Latex有点懵逼，偷下懒在纸上手动推了一下SVM目标函数对应QP问题目标函数的过程：<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/%E5%87%B8%E4%BC%98%E5%8C%96/%E5%87%B8%E4%BC%98%E5%8C%965.png"><br>约束函数的对应构造也是如此。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>&emsp;&emsp;这里主要是阐述了凸优化问题的基本概念和典型形式，同时通过了简单的推导解释了如何将SVM的优化问题转化为QP问题。</p>
+<h1 id="enjoy-it"><a href="#enjoy-it" class="headerlink" title="enjoy it!"></a>enjoy it!</h1>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+            <a href="/tags/数学基石/" rel="tag"># 数学基石</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/uncategorized/Numpy基本操作-一/" rel="next" title="Numpy基本操作(一)">
+                <i class="fa fa-chevron-left"></i> Numpy基本操作(一)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/keji2.jpg"
+                alt="刘力铭" />
+            
+              <p class="site-author-name" itemprop="name">刘力铭</p>
+              <p class="site-description motion-element" itemprop="description">趣事之多 吾知甚少 学无止境 唯有努力</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">博文</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/nanyoullm" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:nanyoullm@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一般优化问题"><span class="nav-number">1.</span> <span class="nav-text">一般优化问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#无约束优化问题"><span class="nav-number">1.1.</span> <span class="nav-text">无约束优化问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一般约束优化问题"><span class="nav-number">1.2.</span> <span class="nav-text">一般约束优化问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#凸集和凸函数基础"><span class="nav-number">2.</span> <span class="nav-text">凸集和凸函数基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#仿射集和凸集"><span class="nav-number">2.1.</span> <span class="nav-text">仿射集和凸集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#凸集的性质"><span class="nav-number">2.2.</span> <span class="nav-text">凸集的性质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#凸函数"><span class="nav-number">2.3.</span> <span class="nav-text">凸函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#凸函数的一阶二阶条件"><span class="nav-number">2.4.</span> <span class="nav-text">凸函数的一阶二阶条件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#凸优化问题标准形式"><span class="nav-number">3.</span> <span class="nav-text">凸优化问题标准形式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#凸优化问题的重要结论"><span class="nav-number">3.1.</span> <span class="nav-text">凸优化问题的重要结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#典型的凸优化问题"><span class="nav-number">3.2.</span> <span class="nav-text">典型的凸优化问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#二次规划问题（QP问题）"><span class="nav-number">3.2.1.</span> <span class="nav-text">二次规划问题（QP问题）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SVM预热"><span class="nav-number">3.3.</span> <span class="nav-text">SVM预热</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#enjoy-it"><span class="nav-number">5.</span> <span class="nav-text">enjoy it!</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-Lim Lau"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lim的博客</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <script type="text/javascript" opacity="0.5" zIndex="-2" count="79" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>
