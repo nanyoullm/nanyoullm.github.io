@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E5%87%B8%E4%BC%98%E5%8C%96%E5%AF%B9%E5%81%B62.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E5%87%B8%E4%BC%98%E5%8C%96%E5%AF%B9%E5%81%B6.png">
-<meta property="og:updated_time" content="2018-03-11T12:49:46.722Z">
+<meta property="og:updated_time" content="2018-03-11T13:00:02.651Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SVM三部曲之凸优化对偶">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;本文是SVM三部曲第二部分—凸优化对偶。对偶是一个神奇的方法，对于一般有约束优化问题，如果难以求得最优解，那么可以尝试使用对偶方法。">
@@ -358,7 +358,7 @@ L(\tilde{x},\lambda,v)=f_{0}(\tilde{x})+\sum_{i=1}^{m}\lambda_{i}f_{i}(\tilde{x}
 <script type="math/tex; mode=display">
 g(\lambda,v) \le f_{0}(x^{*})=p^{*}</script><p>&emsp;&emsp;ok，现在我们知道了对偶函数始终是小于原问题最优点的，<strong>那么我们为何不尝试去寻找对偶函数的最大值去逼近原问题的最优点呢？</strong>。就像下图：</p>
 <p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E5%87%B8%E4%BC%98%E5%8C%96%E5%AF%B9%E5%81%B62.png" width="300"></p>
-<p>&emsp;&emsp;于是拉格朗日对偶问题可以描述为：</p>
+<p>&emsp;&emsp;于是对偶问题可以描述为：</p>
 <script type="math/tex; mode=display">
 maximize \ \ g(\lambda,v) \\ 
 subject \ to: \ \lambda \ge 0</script><p>&emsp;&emsp;可以理解为凹函数在凸集上的最大化，这本质上也是一个凸优化问题（凹凸形状是映射的），这里我们发现，我们一开始的假设是一般的优化问题，那么原问题 $\min{f_{0}(x)}$ 即使不是凸优化问题，但是转换成对偶问题后，这就变成了一个凸优化问题。我们假设最优值为 $d^{*}$ ($d^{*} \le p^{*}$)，对应的极值点为 $\lambda^{*},v^{*}$。</p>
