@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="机器学习,数学基石," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="&amp;emsp;&amp;emsp;本文是SVM三部曲第二部分—凸优化对偶。对偶是一个神奇的方法，对于一般有约束优化问题，如果难以求得最优解，那么对偶将助你一臂之力。">
+<meta name="keywords" content="机器学习,数学基石">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SVM三部曲之凸优化对偶">
+<meta property="og:url" content="http://yoursite.com/uncategorized/SVM三部曲之凸优化对偶/index.html">
+<meta property="og:site_name" content="Lim的博客">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;本文是SVM三部曲第二部分—凸优化对偶。对偶是一个神奇的方法，对于一般有约束优化问题，如果难以求得最优解，那么对偶将助你一臂之力。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E5%87%B8%E4%BC%98%E5%8C%96%E5%AF%B9%E5%81%B6.png">
+<meta property="og:updated_time" content="2018-03-11T09:29:51.584Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SVM三部曲之凸优化对偶">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;本文是SVM三部曲第二部分—凸优化对偶。对偶是一个神奇的方法，对于一般有约束优化问题，如果难以求得最优解，那么对偶将助你一臂之力。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E5%87%B8%E4%BC%98%E5%8C%96%E5%AF%B9%E5%81%B6.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/uncategorized/SVM三部曲之凸优化对偶/"/>
+
+
+
+
+
+  <title>SVM三部曲之凸优化对偶 | Lim的博客</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <!--<a href="https://github.com/nanyoullm/nanyoullm.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>-->
+
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lim的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/uncategorized/SVM三部曲之凸优化对偶/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="刘力铭">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/keji2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lim的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SVM三部曲之凸优化对偶</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-11T17:08:40+08:00">
+                2018-03-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&emsp;&emsp;本文是SVM三部曲第二部分—凸优化对偶。对偶是一个神奇的方法，对于一般有约束优化问题，如果难以求得最优解，那么对偶将助你一臂之力。<br><a id="more"></a></p>
+<blockquote>
+<p>本文是SVM三部曲中的第二篇。知识点和文章结构是学习了<a href="http://www.xiniuedu.com/" target="_blank" rel="noopener">稀牛学院</a>数学基石课程后的总结。</p>
+</blockquote>
+<p>&emsp;&emsp;对偶方法是一种可以很方便求解凸优化问题的方法。对于一般优化问题如下：</p>
+<script type="math/tex; mode=display">
+minimize \quad f_{0}(x),x \in S \\ 
+\begin{align*} 
+subject \ to: \ & f_{i}(x) \le 0, \quad for \ i=1,2,...,m \\ 
+& h_{j}(x) = 0 \quad for \ j=1,2,...,p
+\end{align*}</script><p>其中可行域为$f_{i}$和$h_{j}$的可行域的交集。</p>
+<h1 id="原问题转换"><a href="#原问题转换" class="headerlink" title="原问题转换"></a>原问题转换</h1><p>&emsp;&emsp;优化问题可以使用拉格朗日函数来表示。接下来，我们通过构造拉格朗日函数将目标函数和约束合并：</p>
+<script type="math/tex; mode=display">
+L(x,\lambda,v)=f_{0}(x)+\sum_{i=1}^{m}\lambda_{i}f_{i}(x)+\sum_{j=1}^{p}v_{j}h_{j}(x)</script><p>其中，主变量为$x$，对偶变量$\lambda \ge 0, v$</p>
+<p>&emsp;&emsp;那么原始问题可以写为（原因后面我们解释）：</p>
+<script type="math/tex; mode=display">
+p^{*}=\min_{x} \big(\max_{\lambda,v} L(x,\lambda,v) \big)</script><p>其中，$p^{*}$在第一部分中提到，是原问题的最优点取值。我们先看max部分，由于是对于对偶变量的域求最大，那么max部分可以写为：</p>
+<script type="math/tex; mode=display">
+\max_{\lambda,v}L(x,\lambda,v)=f_{0}(x)+\max_{\lambda,v}\big(\sum_{i=1}^{m}\lambda_{i}f_{i}(x)+\sum_{j=1}^{p}v_{j}h_{j}(x)\big)</script><p>&emsp;&emsp;实际上就变成了对后面两项求最大。如果$x$在可行域内即 $x \in S$，那么不等式约束 $f_{i}(x) \le 0$，等式约束 $h_{j}(x)=0$，所以有后面一项最大能取到0，于是如果 $x$ 在可行域内，有：</p>
+<script type="math/tex; mode=display">
+\max_{\lambda,v}L(x,\lambda,v)=f_{0}(x)</script><p>&emsp;&emsp;如果$x$不在可行域内，那么max项为无穷。<strong>于是主问题就可以直观理解为，在可行域内寻找目标函数的极小值。我们一般的优化问题便得到了转换，接下来就基于转换后的主问题展开。</strong>这使得拉格朗日对偶函数与主问题完美融合，也就解释了刚刚为什么主问题这样写的原因。</p>
+<h1 id="对偶问题"><a href="#对偶问题" class="headerlink" title="对偶问题"></a>对偶问题</h1><p>&emsp;&emsp;接下来，是一个很关键的步骤，就是 $max$ 和 $min$ “位置互换”，也就是变成</p>
+<script type="math/tex; mode=display">
+d^{\*}=\max_{\lambda,v} \big( \min_{x}L(x,\lambda,v)\big)</script><p>那么就得到了对偶函数：</p>
+<script type="math/tex; mode=display">
+g(\lambda,v)=\min_{x \in S}L(x,\lambda,v)=\min_{x \in S}\big\{ f_0(x)+\sum_{i=1}^{m}\lambda_{i}f_{i}(x)+\sum_{i=1}^{p}v_{j}h_{j}(x) \big\}=\min_{x \in S}\big\{ f_0(x)+\lambda^{T}F+v^{T}H \big\}</script><p>&emsp;&emsp;注意到对偶空间后，$x$ 可以取到定义域的值，如果给定一个 $x$ 的情况下，$g(\lambda,v)$ 实际上是一个关于 $\lambda和v$ 的仿射函数，而仿射函数是即凸且凹的（这是结论）。在 $min$ 的情况下，变成了对仿射函数求逐点下界，总是凹的，这使得原问题非凸，因为不管原问题是否是凸问题，$f_{0}(x)$在拉格朗日对偶函数实际就是一个常数而已。那么我们就能对对偶函数求一个最大值。<br>&emsp;&emsp;接下来，我们假设 $\tilde{x}$ 是 $x$ 可行域中的一个值，那么有：</p>
+<script type="math/tex; mode=display">
+g(\lambda,v)=\min_{x \in S}L(x,\lambda,v) \le L(\tilde{x},\lambda,v)</script><p>同时，因为$\lambda和v$的取值限制，有：</p>
+<script type="math/tex; mode=display">
+L(\tilde{x},\lambda,v)=f_{0}(\tilde{x})+\sum_{i=1}^{m}\lambda_{i}f_{i}(\tilde{x})+\sum_{j=1}^{p}v_{j}h_{j}(\tilde{x}) \le f_{0}(\tilde{x})</script><p>所以，当$x$取到原问题的最优点即 $x=x^{*}$ 时，也有：</p>
+<script type="math/tex; mode=display">
+g(\lambda,v) \le f_{0}(x^{*})=p^{*}</script><p>&emsp;&emsp;ok，现在我们知道了对偶函数始终是小于原问题最优点的，<strong>那么我们为何不尝试去寻找对偶函数的最大值去逼近原问题的最优点呢？</strong><br>于是拉格朗日对偶问题可以描述为：</p>
+<script type="math/tex; mode=display">
+maximize \ \ g(\lambda,v) \\ 
+subject \ to: \ \lambda \ge 0</script><p>&emsp;&emsp;可以理解为凹函数在凸集上的最大化，这本质上也是一个凸优化问题（凹凸形状是映射的），这里我们发现，我们一开始的假设是一般的优化问题，那么原问题 $\min{f_{0}(x)}$ 即使不是凸优化问题，但是转换成对偶问题后，这就变成了一个凸优化问题。我们假设最优值为 $d^{*}$ ($d^{*} \le p^{*}$)，对应的极值点为 $\lambda^{*},v^{*}$。</p>
+<h1 id="对偶的几何解释"><a href="#对偶的几何解释" class="headerlink" title="对偶的几何解释"></a>对偶的几何解释</h1><p>&emsp;&emsp;接下来以下图为例，我们将对偶放在几何空间上进行解释。</p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E5%87%B8%E4%BC%98%E5%8C%96%E5%AF%B9%E5%81%B6.png"></p>
+<p>&emsp;&emsp;假设我们构建了一个拉格朗日函数，左图是原问题坐标系，右图是对偶问题坐标系，我们先看左图：</p>
+<ul>
+<li>$L(x,\lambda)=f_{0}(x)+\lambda f_{1}(x)$，函数对应的曲线如图中标注；</li>
+<li>约束是$f_{1} \le 0$，那么对应到<strong>原问题</strong>中 $x$ 的可行域就是图中粉色的部分， $-0.48 \le x \le 0.48$ 左右；灰色区域的边缘曲线对应为 $L$ </li>
+<li>我们可以清楚得看到，在可行域中，最小值对应于 $x=-0.48$，即图中 $p^{*}$ ；</li>
+<li>根据我们的限制， $\lambda \ge 0$，当 $\lambda=0$ 时，$L$ 的曲线即为 $f_{0}$ 的曲线，此时对偶函数 $g$ 的取值为蓝点（为什么能取到蓝点？因为粉色区域是原问题的可行域，到对偶问题后，可以取 $x$ 的定义域），参考右图坐标中的蓝点；当 $\lambda=1$ 时，$L$ 的曲线为图中灰色区域的边缘曲线，此时对偶函数 $g$ 的取值为黄点，参考右图坐标中的黄点；我们可以发现此时只有在 $\lambda=0.55$ 附近时，对偶函数 $g$ 对应的最大值 $d^{*}$ 才是最接近原问题最小值 $p^{*}$。</li>
+</ul>
+<h1 id="强弱对偶解释"><a href="#强弱对偶解释" class="headerlink" title="强弱对偶解释"></a>强弱对偶解释</h1><ul>
+<li>弱对偶：$d^{*} \le p^{*}$，无论凸或非凸问题总成立；</li>
+<li>强对偶：$d^{*} = p^{*}$；此条件通常不成立，对于凸优化问题通常成立；同时需要满足<strong>Slater条件</strong>：存在内点 $x$，使得 $f_{i}(x) &lt; 0 \ \ for \ i=1,2,…,m$ 均成立，即存在一个点是得每个不等式约束都小于0。这个我们当作结论看就ok。</li>
+</ul>
+<h1 id="从对偶问题解主问题"><a href="#从对偶问题解主问题" class="headerlink" title="从对偶问题解主问题"></a>从对偶问题解主问题</h1><p>&emsp;&emsp;假设强对偶成立，$(x^{*},\lambda^{*},v^{*})$是主对最优解，有：</p>
+<script type="math/tex; mode=display">
+\begin{align*} 
+p^{*}=f_0(x^{*}) &= d^{*}=g(\lambda^{*},v^{*}) \\
+&=\min_x\big(f_0(x)+\sum_{i=1}^{m}\lambda_{i}^{*}f_{i}(x)+\sum_{j=1}^{p}v_{j}^{*}h_{j}(x)\big) \\
+&\le f_0(x^{*})+\sum_{i=1}^{m}\lambda_{i}^{*}f_{i}(x)+\sum_{j=1}^{p}v_{j}^{*}h_{j}(x) \\
+&\le f_0(x^{*})
+\end{align*}</script><p>&emsp;&emsp;上面的式子不难理解，实际上就是前面叙述中的总结。第三行和第四行的式子中，由于条件 $\lambda \ge 0, \ f_i(x^{*}) \le 0, h_j(x^{*})=0$，故小于等于 $f_0(x^{*})$。那么我们可以发现式中得到的一个重要结果是： $f_0(x^{*}) \le f_0(x^{*})$ ！因此上式中所有的小于等于号实际上就是等号，同时意味着 $\sum_{i=1}^{m}\lambda_{i}^{*}f_{i}(x)=0$，可以改写为：</p>
+<script type="math/tex; mode=display">
+\begin{align*} 
+p^{*}=f_0(x^{*}) &= d^{*}=g(\lambda^{*},v^{*}) \\
+&=\min_x\big(f_0(x)+\sum_{i=1}^{m}\lambda_{i}^{*}f_{i}(x)+\sum_{j=1}^{p}v_{j}^{*}h_{j}(x)\big) \\
+&= f_0(x^{*})+\sum_{i=1}^{m}\lambda_{i}^{*}f_{i}(x^{*})+\sum_{j=1}^{p}v_{j}^{*}h_{j}(x^{*}) \\
+&= f_0(x^{*})
+\end{align*}</script><p>&emsp;&emsp;于是，根据新的式子，我们可以得到以下结论：</p>
+<ul>
+<li>结论一： $\lambda^{*}f_i(x^{*})=0$；</li>
+<li>结论二： $g(\lambda^{*},v^{*})=L(x^{*},\lambda^{*},v^{*})=\min_xL(x,\lambda^{*},v^{*})$，这相当于拉格朗日函数在给定 $\lambda^{*},v^{*}$ 下对 $x$ 求最小值，也就意味着对 $x$ 求梯度 $\triangledown_xL(x^{*},\lambda^{*},v^{*})=0$；</li>
+</ul>
+<p>&emsp;&emsp;博主认为这是非常恶心且精彩的结论，每一步都是由前面的铺垫而得到的。</p>
+<h1 id="KKT条件"><a href="#KKT条件" class="headerlink" title="KKT条件"></a>KKT条件</h1><p>&emsp;&emsp;ok，我们重新回顾整理一下，假设有一个凸优化问题：</p>
+<script type="math/tex; mode=display">
+minimize \quad f_{0}(x),x \in S \\ 
+\begin{align*} 
+subject \ to: \ & f_{i}(x) \le 0, \quad for \ i=1,2,...,m \\ 
+& h_{j}(x) = 0 \quad for \ j=1,2,...,p
+\end{align*}</script><p>&emsp;&emsp;我们对其构造一个拉格朗日函数：</p>
+<script type="math/tex; mode=display">
+L(x,\lambda,v)=f_{0}(x)+\sum_{i=1}^{m}\lambda_{i}f_{i}(x)+\sum_{j=1}^{p}v_{j}h_{j}(x)</script><p>&emsp;&emsp;假设 $x^{*}$ 是原问题最优解取值，$(\lambda^{*},v^{*})$ 是对偶问题最优解取值。如果凸优化问题的强对偶条件成立，那么其充要条件是：</p>
+<ul>
+<li>$f_i(x^{*}) \le 0 \ \ i=1,…,m$</li>
+<li>$h_j(x^{*}) = 0 \ \ j=1,…,p$</li>
+<li>$\lambda^{*} \ge 0 \ \ i=1,…,m$</li>
+<li>$\sum_{i=1}^{m}\lambda_{i}^{*}f_{i}(x^{*})=0$</li>
+<li>$\triangledown_xL(x,\lambda^{*},v^{*})=\triangledown f_0(x)+\sum_{i=1}^{m}\lambda_{i}^{*} \triangledown f_{i}(x)+\sum_{j=1}^{p}v_{j}^{*} \triangledown h_{j}(x)=0$</li>
+</ul>
+<p>以上五个条件称为KKT条件。</p>
+<h1 id="主对（对偶）问题回顾"><a href="#主对（对偶）问题回顾" class="headerlink" title="主对（对偶）问题回顾"></a>主对（对偶）问题回顾</h1><p>&emsp;&emsp;主问题是：</p>
+<script type="math/tex; mode=display">
+p^{*}=\min_x \big( \max_{\lambda \ge 0, v} L(x,\lambda,v)\big)</script><p>&emsp;&emsp;对偶问题是：</p>
+<script type="math/tex; mode=display">
+d^{*}=\max_{\lambda \ge 0, v} \big( \min_x L(x,\lambda,v)\big) \big)</script><p>&emsp;&emsp;强对偶成立时，$max$ 和 $min$ 互换：</p>
+<script type="math/tex; mode=display">
+\max_{\lambda \ge 0, v} \big( \min_x L(x,\lambda,v)\big) \big) = \min_x \big( \max_{\lambda \ge 0, v} L(x,\lambda,v)\big)</script><h1 id="举个栗子"><a href="#举个栗子" class="headerlink" title="举个栗子"></a>举个栗子</h1><p>&emsp;&emsp;假设我们求解下列问题，这个问题满足强对偶条件：</p>
+<script type="math/tex; mode=display">
+minimize \ {\Arrowvert x \Arrowvert}_2^2 \\ 
+s.t. \ Ax=b</script><p>&emsp;&emsp;构造拉格朗日函数：</p>
+<script type="math/tex; mode=display">
+L(x,v)=x^Tx+v^T(Ax-b)</script><p>&emsp;&emsp;对偶函数：</p>
+<script type="math/tex; mode=display">
+g(v)=\min_xL(x,v)</script><p>&emsp;&emsp;$g$ 对 $x$ 求极值，另其梯度为0，即：</p>
+<script type="math/tex; mode=display">
+\triangledown_xL(x,v)=0 \Rightarrow 2x+A^Tv=0 \Rightarrow x^{*}(v)=-\frac{1}{2}A^Tv</script><p>&emsp;&emsp;将 $x^{*}$ 代入到对偶函数中：</p>
+<script type="math/tex; mode=display">
+g(v)=L(x^{*},v)=-\frac{1}{4}v^T(AA^T)v-v^Tb</script><p>&emsp;&emsp;$g(v)$ 是一个凹函数，为什么？除去 $\frac{1}{4}$ 前的负号，这是一个QP（二次规划）问题，那么加上这个负号，就变成了凹函数，那么它就存在一个最大值：</p>
+<script type="math/tex; mode=display">
+d^{*}=\max_v -\frac{1}{4}v^T(AA^T)v-v^Tb</script><p>&emsp;&emsp;还记得我们前面说的强对偶的结论吗？既然它是一个凹函数，我们就对 $v$ 通过梯度等于0求它最大值点：</p>
+<script type="math/tex; mode=display">
+v^{*}=-2(AA^T)^{-1}b \\
+d^{*}=b^T(AA^T)^{-1}b</script><p>&emsp;&emsp;将 $v^{*}$ 带入 $x^{*}(v)$ 得：</p>
+<script type="math/tex; mode=display">
+x^{*}=A^T(AA^T)^{-1}b</script><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>&emsp;&emsp;其实这一部分将的内容可以总结为，通过对偶问题来求解原始问题。我们首先将原始问题用拉格朗日函数表示，然后将 $max$ 和 $min$ 进行对换，得到对偶问题。如果满足强对偶条件，我们就可以根据KKT条件，由拉格朗日函数对 $x$ 求梯度为0，得到对 $x$ 关于对偶变量的最优解。将结果代回对偶函数中，发现对偶函数是凹函数，于是再对对偶函数求最大值，由于强对偶，得到的结果就和原问题的最小值一致。<br>&emsp;&emsp;以上是我对凸优化对偶的一些总结，敲公式敲得有点累:joy:，但是可以加深理解。</p>
+<h1 id="enjoy-it"><a href="#enjoy-it" class="headerlink" title="enjoy it!"></a>enjoy it!</h1>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+            <a href="/tags/数学基石/" rel="tag"># 数学基石</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/uncategorized/SVM三部曲之凸优化问题/" rel="next" title="SVM三部曲之凸优化问题">
+                <i class="fa fa-chevron-left"></i> SVM三部曲之凸优化问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/keji2.jpg"
+                alt="刘力铭" />
+            
+              <p class="site-author-name" itemprop="name">刘力铭</p>
+              <p class="site-description motion-element" itemprop="description">趣事之多 吾知甚少 学无止境 唯有努力</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">博文</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/nanyoullm" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:nanyoullm@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#原问题转换"><span class="nav-number">1.</span> <span class="nav-text">原问题转换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对偶问题"><span class="nav-number">2.</span> <span class="nav-text">对偶问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对偶的几何解释"><span class="nav-number">3.</span> <span class="nav-text">对偶的几何解释</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#强弱对偶解释"><span class="nav-number">4.</span> <span class="nav-text">强弱对偶解释</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#从对偶问题解主问题"><span class="nav-number">5.</span> <span class="nav-text">从对偶问题解主问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#KKT条件"><span class="nav-number">6.</span> <span class="nav-text">KKT条件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#主对（对偶）问题回顾"><span class="nav-number">7.</span> <span class="nav-text">主对（对偶）问题回顾</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#举个栗子"><span class="nav-number">8.</span> <span class="nav-text">举个栗子</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">9.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#enjoy-it"><span class="nav-number">10.</span> <span class="nav-text">enjoy it!</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-Lim Lau"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lim的博客</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <script type="text/javascript" opacity="0.5" zIndex="-2" count="79" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>

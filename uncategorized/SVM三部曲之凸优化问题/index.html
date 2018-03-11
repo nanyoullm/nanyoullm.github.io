@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="&amp;emsp;&amp;emsp;今天开始写SVM，博主对SVM的理解其实也是比较浅，但是我认为SVM的推理是一道坎，对机器学习热爱的话就一定要跨过这道坎。博文内容来自我之前学习机器学习数学基石的课程，SVM部分总共分为三部曲，本文是第一部分—凸优化问题。&amp;emsp;&amp;emsp;现在是3月9日凌晨2点，今晚一回家小睡了一会醒来居然快12点了，现在精神异常亢奋，同时大脑状态还停留在3月8号，so补一句女神节快">
+<meta name="description" content="&amp;emsp;&amp;emsp;今天开始写SVM，博主对SVM的理解其实也是比较有限，但是我认为SVM的推理是一道坎，对机器学习热爱的话就一定要跨过这道坎。博文内容来自我之前学习机器学习数学基石的课程，SVM部分总共分为三部曲，本文是第一部分—凸优化问题。&amp;emsp;&amp;emsp;现在是3月9日凌晨2点，今晚一回家小睡了一会醒来居然快12点了，现在精神异常亢奋，同时大脑状态还停留在3月8号，so补一句女神节">
 <meta name="keywords" content="机器学习,数学基石">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SVM三部曲之凸优化问题">
 <meta property="og:url" content="http://yoursite.com/uncategorized/SVM三部曲之凸优化问题/index.html">
 <meta property="og:site_name" content="Lim的博客">
-<meta property="og:description" content="&amp;emsp;&amp;emsp;今天开始写SVM，博主对SVM的理解其实也是比较浅，但是我认为SVM的推理是一道坎，对机器学习热爱的话就一定要跨过这道坎。博文内容来自我之前学习机器学习数学基石的课程，SVM部分总共分为三部曲，本文是第一部分—凸优化问题。&amp;emsp;&amp;emsp;现在是3月9日凌晨2点，今晚一回家小睡了一会醒来居然快12点了，现在精神异常亢奋，同时大脑状态还停留在3月8号，so补一句女神节快">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;今天开始写SVM，博主对SVM的理解其实也是比较有限，但是我认为SVM的推理是一道坎，对机器学习热爱的话就一定要跨过这道坎。博文内容来自我之前学习机器学习数学基石的课程，SVM部分总共分为三部曲，本文是第一部分—凸优化问题。&amp;emsp;&amp;emsp;现在是3月9日凌晨2点，今晚一回家小睡了一会醒来居然快12点了，现在精神异常亢奋，同时大脑状态还停留在3月8号，so补一句女神节">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/%E5%87%B8%E4%BC%98%E5%8C%96/%E5%87%B8%E4%BC%98%E5%8C%961.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/%E5%87%B8%E4%BC%98%E5%8C%96/%E5%87%B8%E4%BC%98%E5%8C%962.png">
@@ -94,10 +94,10 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/%E5%87%B8%E4%BC%98%E5%8C%96/%E5%87%B8%E4%BC%98%E5%8C%964.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/%E5%87%B8%E4%BC%98%E5%8C%96/%E5%87%B8%E4%BC%98%E5%8C%966.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/%E5%87%B8%E4%BC%98%E5%8C%96/%E5%87%B8%E4%BC%98%E5%8C%965.png">
-<meta property="og:updated_time" content="2018-03-08T18:05:59.540Z">
+<meta property="og:updated_time" content="2018-03-11T09:12:36.458Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SVM三部曲之凸优化问题">
-<meta name="twitter:description" content="&amp;emsp;&amp;emsp;今天开始写SVM，博主对SVM的理解其实也是比较浅，但是我认为SVM的推理是一道坎，对机器学习热爱的话就一定要跨过这道坎。博文内容来自我之前学习机器学习数学基石的课程，SVM部分总共分为三部曲，本文是第一部分—凸优化问题。&amp;emsp;&amp;emsp;现在是3月9日凌晨2点，今晚一回家小睡了一会醒来居然快12点了，现在精神异常亢奋，同时大脑状态还停留在3月8号，so补一句女神节快">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;今天开始写SVM，博主对SVM的理解其实也是比较有限，但是我认为SVM的推理是一道坎，对机器学习热爱的话就一定要跨过这道坎。博文内容来自我之前学习机器学习数学基石的课程，SVM部分总共分为三部曲，本文是第一部分—凸优化问题。&amp;emsp;&amp;emsp;现在是3月9日凌晨2点，今晚一回家小睡了一会醒来居然快12点了，现在精神异常亢奋，同时大脑状态还停留在3月8号，so补一句女神节">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/%E5%87%B8%E4%BC%98%E5%8C%96/%E5%87%B8%E4%BC%98%E5%8C%961.png">
 
 
@@ -330,7 +330,7 @@
       
 
       
-        <p>&emsp;&emsp;今天开始写SVM，博主对SVM的理解其实也是比较浅，但是我认为SVM的推理是一道坎，对机器学习热爱的话就一定要跨过这道坎。博文内容来自我之前学习机器学习数学基石的课程，SVM部分总共分为三部曲，本文是第一部分—凸优化问题。<br>&emsp;&emsp;现在是3月9日凌晨2点，今晚一回家小睡了一会醒来居然快12点了，现在精神异常亢奋，同时大脑状态还停留在3月8号，so补一句女神节快乐！<br><a id="more"></a></p>
+        <p>&emsp;&emsp;今天开始写SVM，博主对SVM的理解其实也是比较有限，但是我认为SVM的推理是一道坎，对机器学习热爱的话就一定要跨过这道坎。博文内容来自我之前学习机器学习数学基石的课程，SVM部分总共分为三部曲，本文是第一部分—凸优化问题。<br>&emsp;&emsp;现在是3月9日凌晨2点，今晚一回家小睡了一会醒来居然快12点了，现在精神异常亢奋，同时大脑状态还停留在3月8号，so补一句女神节快乐！<br><a id="more"></a></p>
 <blockquote>
 <p>本文是SVM三部曲中的第一篇。知识点和文章结构是学习了<a href="http://www.xiniuedu.com/" target="_blank" rel="noopener">稀牛学院</a>数学基石课程后的总结。</p>
 </blockquote>
@@ -441,6 +441,10 @@ x \in R^{k} = [w \ \xi \ b]^{T}, \ X \in R^{m \times n}=[x_{1}^{T},...,x_{m}^{T}
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/uncategorized/SVM三部曲之凸优化对偶/" rel="prev" title="SVM三部曲之凸优化对偶">
+                SVM三部曲之凸优化对偶 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -520,7 +524,7 @@ x \in R^{k} = [w \ \xi \ b]^{T}, \ X \in R^{m \times n}=[x_{1}^{T},...,x_{m}^{T}
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">博文</span>
                 </a>
               </div>
