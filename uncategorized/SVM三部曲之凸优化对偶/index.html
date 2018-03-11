@@ -88,7 +88,7 @@
 <meta property="og:description" content="&amp;emsp;&amp;emsp;本文是SVM三部曲第二部分—凸优化对偶。对偶是一个神奇的方法，对于一般有约束优化问题，如果难以求得最优解，那么对偶将助你一臂之力。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E5%87%B8%E4%BC%98%E5%8C%96%E5%AF%B9%E5%81%B6.png">
-<meta property="og:updated_time" content="2018-03-11T09:29:51.584Z">
+<meta property="og:updated_time" content="2018-03-11T09:32:48.137Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SVM三部曲之凸优化对偶">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;本文是SVM三部曲第二部分—凸优化对偶。对偶是一个神奇的方法，对于一般有约束优化问题，如果难以求得最优解，那么对偶将助你一臂之力。">
@@ -347,7 +347,7 @@ p^{*}=\min_{x} \big(\max_{\lambda,v} L(x,\lambda,v) \big)</script><p>其中，$p
 \max_{\lambda,v}L(x,\lambda,v)=f_{0}(x)</script><p>&emsp;&emsp;如果$x$不在可行域内，那么max项为无穷。<strong>于是主问题就可以直观理解为，在可行域内寻找目标函数的极小值。我们一般的优化问题便得到了转换，接下来就基于转换后的主问题展开。</strong>这使得拉格朗日对偶函数与主问题完美融合，也就解释了刚刚为什么主问题这样写的原因。</p>
 <h1 id="对偶问题"><a href="#对偶问题" class="headerlink" title="对偶问题"></a>对偶问题</h1><p>&emsp;&emsp;接下来，是一个很关键的步骤，就是 $max$ 和 $min$ “位置互换”，也就是变成</p>
 <script type="math/tex; mode=display">
-d^{\*}=\max_{\lambda,v} \big( \min_{x}L(x,\lambda,v)\big)</script><p>那么就得到了对偶函数：</p>
+d^{*}=\max_{\lambda,v} \big( \min_{x}L(x,\lambda,v)\big)</script><p>那么就得到了对偶函数：</p>
 <script type="math/tex; mode=display">
 g(\lambda,v)=\min_{x \in S}L(x,\lambda,v)=\min_{x \in S}\big\{ f_0(x)+\sum_{i=1}^{m}\lambda_{i}f_{i}(x)+\sum_{i=1}^{p}v_{j}h_{j}(x) \big\}=\min_{x \in S}\big\{ f_0(x)+\lambda^{T}F+v^{T}H \big\}</script><p>&emsp;&emsp;注意到对偶空间后，$x$ 可以取到定义域的值，如果给定一个 $x$ 的情况下，$g(\lambda,v)$ 实际上是一个关于 $\lambda和v$ 的仿射函数，而仿射函数是即凸且凹的（这是结论）。在 $min$ 的情况下，变成了对仿射函数求逐点下界，总是凹的，这使得原问题非凸，因为不管原问题是否是凸问题，$f_{0}(x)$在拉格朗日对偶函数实际就是一个常数而已。那么我们就能对对偶函数求一个最大值。<br>&emsp;&emsp;接下来，我们假设 $\tilde{x}$ 是 $x$ 可行域中的一个值，那么有：</p>
 <script type="math/tex; mode=display">
@@ -433,7 +433,7 @@ d^{*}=\max_v -\frac{1}{4}v^T(AA^T)v-v^Tb</script><p>&emsp;&emsp;还记得我们�
 v^{*}=-2(AA^T)^{-1}b \\
 d^{*}=b^T(AA^T)^{-1}b</script><p>&emsp;&emsp;将 $v^{*}$ 带入 $x^{*}(v)$ 得：</p>
 <script type="math/tex; mode=display">
-x^{*}=A^T(AA^T)^{-1}b</script><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>&emsp;&emsp;其实这一部分将的内容可以总结为，通过对偶问题来求解原始问题。我们首先将原始问题用拉格朗日函数表示，然后将 $max$ 和 $min$ 进行对换，得到对偶问题。如果满足强对偶条件，我们就可以根据KKT条件，由拉格朗日函数对 $x$ 求梯度为0，得到对 $x$ 关于对偶变量的最优解。将结果代回对偶函数中，发现对偶函数是凹函数，于是再对对偶函数求最大值，由于强对偶，得到的结果就和原问题的最小值一致。<br>&emsp;&emsp;以上是我对凸优化对偶的一些总结，敲公式敲得有点累:joy:，但是可以加深理解。</p>
+x^{*}=A^T(AA^T)^{-1}b</script><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>&emsp;&emsp;其实这一部分将的内容可以总结为，通过对偶问题来求解原始问题。我们首先将原始问题用拉格朗日函数表示，然后将 $max$ 和 $min$ 进行对换，得到对偶问题。如果满足强对偶条件，我们就可以根据KKT条件，由拉格朗日函数对 $x$ 求梯度为0，得到对 $x$ 关于对偶变量的最优解。将结果代回对偶函数中，发现对偶函数是凹函数，于是再对对偶函数求最大值，由于强对偶，得到的结果就和原问题的最小值一致。<br>&emsp;&emsp;以上是我对凸优化对偶的一些总结，敲公式敲得有点累，但是可以加深理解。</p>
 <h1 id="enjoy-it"><a href="#enjoy-it" class="headerlink" title="enjoy it!"></a>enjoy it!</h1>
       
     </div>
