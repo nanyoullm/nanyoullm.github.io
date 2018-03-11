@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E5%87%B8%E4%BC%98%E5%8C%96%E5%AF%B9%E5%81%B62.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E5%87%B8%E4%BC%98%E5%8C%96%E5%AF%B9%E5%81%B6.png">
-<meta property="og:updated_time" content="2018-03-11T12:06:34.476Z">
+<meta property="og:updated_time" content="2018-03-11T12:49:46.722Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SVM三部曲之凸优化对偶">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;本文是SVM三部曲第二部分—凸优化对偶。对偶是一个神奇的方法，对于一般有约束优化问题，如果难以求得最优解，那么可以尝试使用对偶方法。">
@@ -341,9 +341,9 @@ subject \ to: \ & f_{i}(x) \le 0, \quad for \ i=1,2,...,m \\
 L(x,\lambda,v)=f_{0}(x)+\sum_{i=1}^{m}\lambda_{i}f_{i}(x)+\sum_{j=1}^{p}v_{j}h_{j}(x)</script><p>其中，主变量为 $x$，对偶变量 $\lambda \ge 0, v$</p>
 <p>&emsp;&emsp;那么原始问题可以写为（原因后面我们解释）：</p>
 <script type="math/tex; mode=display">
-p^{*}=\min_{x} \big(\max_{\lambda,v} L(x,\lambda,v) \big)</script><p>其中，$p^{*}$ 在第一部分中提到，是原问题的最优点取值。我们先看 $max$ 部分，由于是对于对偶变量的域求最大，那么 $max$ 部分可以写为：</p>
+p^{*}=\min_{x} \big(\max_{\lambda,v} L(x,\lambda,v) \big)</script><p>其中，$p^{*}$ 在第一部分中提到，是原问题的最优点取值。我们先看 $max$ 部分，由于是对对偶变量的域求最大，那么 $max$ 部分可以写为：</p>
 <script type="math/tex; mode=display">
-\max_{\lambda,v}L(x,\lambda,v)=f_{0}(x)+\max_{\lambda,v}\big(\sum_{i=1}^{m}\lambda_{i}f_{i}(x)+\sum_{j=1}^{p}v_{j}h_{j}(x)\big)</script><p>&emsp;&emsp;实际上就变成了对后面两项求最大。如果$x$在可行域内即 $x \in S$，那么不等式约束 $f_{i}(x) \le 0$，等式约束 $h_{j}(x)=0$，所以有后面一项最大能取到0，于是如果 $x$ 在可行域内，有：</p>
+\max_{\lambda,v}L(x,\lambda,v)=f_{0}(x)+\max_{\lambda,v}\big(\sum_{i=1}^{m}\lambda_{i}f_{i}(x)+\sum_{j=1}^{p}v_{j}h_{j}(x)\big)</script><p>&emsp;&emsp;实际上就变成了对后面两项求最大。如果$x$在可行域内即 $x \in D$，那么不等式约束 $f_{i}(x) \le 0$，等式约束 $h_{j}(x)=0$，所以有后面一项最大能取到0，于是如果 $x$ 在可行域内，有：</p>
 <script type="math/tex; mode=display">
 \max_{\lambda,v}L(x,\lambda,v)=f_{0}(x)</script><p>&emsp;&emsp;如果 $x$ 不在可行域内，那么 $max$ 项为无穷。<strong>于是主问题就可以直观理解为，在可行域内寻找目标函数的极小值。我们一般的优化问题便得到了转换，接下来就基于转换后的主问题展开。</strong>这使得拉格朗日对偶函数与主问题完美融合，也就解释了刚刚为什么主问题这样写的原因。</p>
 <h1 id="对偶问题"><a href="#对偶问题" class="headerlink" title="对偶问题"></a>对偶问题</h1><p>&emsp;&emsp;接下来，是一个很关键的步骤，就是 $max$ 和 $min$ “位置互换”，也就是变成</p>
@@ -868,7 +868,7 @@ x^{*}=A^T(AA^T)^{-1}b</script><h1 id="总结"><a href="#总结" class="headerlin
   
 
 
-  <script type="text/javascript" opacity="0.5" zIndex="-2" count="79" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+  <script type="text/javascript" opacity="0.5" zIndex="-2" count="50" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config("");
 </script>
