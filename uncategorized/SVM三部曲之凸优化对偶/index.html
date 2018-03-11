@@ -87,12 +87,13 @@
 <meta property="og:site_name" content="Lim的博客">
 <meta property="og:description" content="&amp;emsp;&amp;emsp;本文是SVM三部曲第二部分—凸优化对偶。对偶是一个神奇的方法，对于一般有约束优化问题，如果难以求得最优解，那么对偶将助你一臂之力。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E5%87%B8%E4%BC%98%E5%8C%96%E5%AF%B9%E5%81%B62.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E5%87%B8%E4%BC%98%E5%8C%96%E5%AF%B9%E5%81%B6.png">
-<meta property="og:updated_time" content="2018-03-11T09:32:48.137Z">
+<meta property="og:updated_time" content="2018-03-11T12:04:51.725Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SVM三部曲之凸优化对偶">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;本文是SVM三部曲第二部分—凸优化对偶。对偶是一个神奇的方法，对于一般有约束优化问题，如果难以求得最优解，那么对偶将助你一臂之力。">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E5%87%B8%E4%BC%98%E5%8C%96%E5%AF%B9%E5%81%B6.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E5%87%B8%E4%BC%98%E5%8C%96%E5%AF%B9%E5%81%B62.png">
 
 
 
@@ -334,28 +335,30 @@ minimize \quad f_{0}(x),x \in S \\
 \begin{align*} 
 subject \ to: \ & f_{i}(x) \le 0, \quad for \ i=1,2,...,m \\ 
 & h_{j}(x) = 0 \quad for \ j=1,2,...,p
-\end{align*}</script><p>其中可行域为$f_{i}$和$h_{j}$的可行域的交集。</p>
+\end{align*}</script><p>其中可行域为 $f_{i}$ 和 $h_{j}$ 的可行域的交集。</p>
 <h1 id="原问题转换"><a href="#原问题转换" class="headerlink" title="原问题转换"></a>原问题转换</h1><p>&emsp;&emsp;优化问题可以使用拉格朗日函数来表示。接下来，我们通过构造拉格朗日函数将目标函数和约束合并：</p>
 <script type="math/tex; mode=display">
-L(x,\lambda,v)=f_{0}(x)+\sum_{i=1}^{m}\lambda_{i}f_{i}(x)+\sum_{j=1}^{p}v_{j}h_{j}(x)</script><p>其中，主变量为$x$，对偶变量$\lambda \ge 0, v$</p>
+L(x,\lambda,v)=f_{0}(x)+\sum_{i=1}^{m}\lambda_{i}f_{i}(x)+\sum_{j=1}^{p}v_{j}h_{j}(x)</script><p>其中，主变量为 $x$，对偶变量 $\lambda \ge 0, v$</p>
 <p>&emsp;&emsp;那么原始问题可以写为（原因后面我们解释）：</p>
 <script type="math/tex; mode=display">
-p^{*}=\min_{x} \big(\max_{\lambda,v} L(x,\lambda,v) \big)</script><p>其中，$p^{*}$在第一部分中提到，是原问题的最优点取值。我们先看max部分，由于是对于对偶变量的域求最大，那么max部分可以写为：</p>
+p^{*}=\min_{x} \big(\max_{\lambda,v} L(x,\lambda,v) \big)</script><p>其中，$p^{*}$ 在第一部分中提到，是原问题的最优点取值。我们先看 $max$ 部分，由于是对于对偶变量的域求最大，那么 $max$ 部分可以写为：</p>
 <script type="math/tex; mode=display">
 \max_{\lambda,v}L(x,\lambda,v)=f_{0}(x)+\max_{\lambda,v}\big(\sum_{i=1}^{m}\lambda_{i}f_{i}(x)+\sum_{j=1}^{p}v_{j}h_{j}(x)\big)</script><p>&emsp;&emsp;实际上就变成了对后面两项求最大。如果$x$在可行域内即 $x \in S$，那么不等式约束 $f_{i}(x) \le 0$，等式约束 $h_{j}(x)=0$，所以有后面一项最大能取到0，于是如果 $x$ 在可行域内，有：</p>
 <script type="math/tex; mode=display">
-\max_{\lambda,v}L(x,\lambda,v)=f_{0}(x)</script><p>&emsp;&emsp;如果$x$不在可行域内，那么max项为无穷。<strong>于是主问题就可以直观理解为，在可行域内寻找目标函数的极小值。我们一般的优化问题便得到了转换，接下来就基于转换后的主问题展开。</strong>这使得拉格朗日对偶函数与主问题完美融合，也就解释了刚刚为什么主问题这样写的原因。</p>
+\max_{\lambda,v}L(x,\lambda,v)=f_{0}(x)</script><p>&emsp;&emsp;如果 $x$ 不在可行域内，那么 $max$ 项为无穷。<strong>于是主问题就可以直观理解为，在可行域内寻找目标函数的极小值。我们一般的优化问题便得到了转换，接下来就基于转换后的主问题展开。</strong>这使得拉格朗日对偶函数与主问题完美融合，也就解释了刚刚为什么主问题这样写的原因。</p>
 <h1 id="对偶问题"><a href="#对偶问题" class="headerlink" title="对偶问题"></a>对偶问题</h1><p>&emsp;&emsp;接下来，是一个很关键的步骤，就是 $max$ 和 $min$ “位置互换”，也就是变成</p>
 <script type="math/tex; mode=display">
 d^{*}=\max_{\lambda,v} \big( \min_{x}L(x,\lambda,v)\big)</script><p>那么就得到了对偶函数：</p>
 <script type="math/tex; mode=display">
-g(\lambda,v)=\min_{x \in S}L(x,\lambda,v)=\min_{x \in S}\big\{ f_0(x)+\sum_{i=1}^{m}\lambda_{i}f_{i}(x)+\sum_{i=1}^{p}v_{j}h_{j}(x) \big\}=\min_{x \in S}\big\{ f_0(x)+\lambda^{T}F+v^{T}H \big\}</script><p>&emsp;&emsp;注意到对偶空间后，$x$ 可以取到定义域的值，如果给定一个 $x$ 的情况下，$g(\lambda,v)$ 实际上是一个关于 $\lambda和v$ 的仿射函数，而仿射函数是即凸且凹的（这是结论）。在 $min$ 的情况下，变成了对仿射函数求逐点下界，总是凹的，这使得原问题非凸，因为不管原问题是否是凸问题，$f_{0}(x)$在拉格朗日对偶函数实际就是一个常数而已。那么我们就能对对偶函数求一个最大值。<br>&emsp;&emsp;接下来，我们假设 $\tilde{x}$ 是 $x$ 可行域中的一个值，那么有：</p>
+g(\lambda,v)=\min_{x \in S}L(x,\lambda,v)=\min_{x \in S}\big\{ f_0(x)+\sum_{i=1}^{m}\lambda_{i}f_{i}(x)+\sum_{i=1}^{p}v_{j}h_{j}(x) \big\}=\min_{x \in S}\big\{ f_0(x)+\lambda^{T}F+v^{T}H \big\}</script><p>&emsp;&emsp;注意到对偶空间后，$x$ 可以取到定义域的值，如果给定一个 $x$ 的情况下，$g(\lambda,v)$ 实际上是一个关于 $\lambda和v$ 的仿射函数，而仿射函数是即凸且凹的（这是结论）。在 $min$ 的情况下，变成了对仿射函数求逐点下界，总是凹的，这使得原问题非凸，因为不管原问题是否是凸问题，$f_{0}(x)$ 在拉格朗日对偶函数实际就是一个常数而已。那么我们就能对对偶函数求一个最大值。<br>&emsp;&emsp;接下来，我们假设 $\tilde{x}$ 是 $x$ 可行域中的一个值，那么有：</p>
 <script type="math/tex; mode=display">
-g(\lambda,v)=\min_{x \in S}L(x,\lambda,v) \le L(\tilde{x},\lambda,v)</script><p>同时，因为$\lambda和v$的取值限制，有：</p>
+g(\lambda,v)=\min_{x \in S}L(x,\lambda,v) \le L(\tilde{x},\lambda,v)</script><p>同时，因为 $\lambda和v$ 的取值限制，有：</p>
 <script type="math/tex; mode=display">
 L(\tilde{x},\lambda,v)=f_{0}(\tilde{x})+\sum_{i=1}^{m}\lambda_{i}f_{i}(\tilde{x})+\sum_{j=1}^{p}v_{j}h_{j}(\tilde{x}) \le f_{0}(\tilde{x})</script><p>所以，当$x$取到原问题的最优点即 $x=x^{*}$ 时，也有：</p>
 <script type="math/tex; mode=display">
-g(\lambda,v) \le f_{0}(x^{*})=p^{*}</script><p>&emsp;&emsp;ok，现在我们知道了对偶函数始终是小于原问题最优点的，<strong>那么我们为何不尝试去寻找对偶函数的最大值去逼近原问题的最优点呢？</strong><br>于是拉格朗日对偶问题可以描述为：</p>
+g(\lambda,v) \le f_{0}(x^{*})=p^{*}</script><p>&emsp;&emsp;ok，现在我们知道了对偶函数始终是小于原问题最优点的，<strong>那么我们为何不尝试去寻找对偶函数的最大值去逼近原问题的最优点呢？</strong>。就像下图：</p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E5%87%B8%E4%BC%98%E5%8C%96%E5%AF%B9%E5%81%B62.png" width="300"></p>
+<p>&emsp;&emsp;于是拉格朗日对偶问题可以描述为：</p>
 <script type="math/tex; mode=display">
 maximize \ \ g(\lambda,v) \\ 
 subject \ to: \ \lambda \ge 0</script><p>&emsp;&emsp;可以理解为凹函数在凸集上的最大化，这本质上也是一个凸优化问题（凹凸形状是映射的），这里我们发现，我们一开始的假设是一般的优化问题，那么原问题 $\min{f_{0}(x)}$ 即使不是凸优化问题，但是转换成对偶问题后，这就变成了一个凸优化问题。我们假设最优值为 $d^{*}$ ($d^{*} \le p^{*}$)，对应的极值点为 $\lambda^{*},v^{*}$。</p>
@@ -369,10 +372,10 @@ subject \ to: \ \lambda \ge 0</script><p>&emsp;&emsp;可以理解为凹函数在
 <li>根据我们的限制， $\lambda \ge 0$，当 $\lambda=0$ 时，$L$ 的曲线即为 $f_{0}$ 的曲线，此时对偶函数 $g$ 的取值为蓝点（为什么能取到蓝点？因为粉色区域是原问题的可行域，到对偶问题后，可以取 $x$ 的定义域），参考右图坐标中的蓝点；当 $\lambda=1$ 时，$L$ 的曲线为图中灰色区域的边缘曲线，此时对偶函数 $g$ 的取值为黄点，参考右图坐标中的黄点；我们可以发现此时只有在 $\lambda=0.55$ 附近时，对偶函数 $g$ 对应的最大值 $d^{*}$ 才是最接近原问题最小值 $p^{*}$。</li>
 </ul>
 <h1 id="强弱对偶解释"><a href="#强弱对偶解释" class="headerlink" title="强弱对偶解释"></a>强弱对偶解释</h1><ul>
-<li>弱对偶：$d^{*} \le p^{*}$，无论凸或非凸问题总成立；</li>
-<li>强对偶：$d^{*} = p^{*}$；此条件通常不成立，对于凸优化问题通常成立；同时需要满足<strong>Slater条件</strong>：存在内点 $x$，使得 $f_{i}(x) &lt; 0 \ \ for \ i=1,2,…,m$ 均成立，即存在一个点是得每个不等式约束都小于0。这个我们当作结论看就ok。</li>
+<li>弱对偶： $d^{*} \le p^{*}$，无论凸或非凸问题总成立；</li>
+<li>强对偶： $d^{*} = p^{*}$；此条件通常不成立，对于凸优化问题通常成立；同时需要满足<strong>Slater条件</strong>：存在内点 $x$，使得 $f_{i}(x) &lt; 0 \ \ for \ i=1,2,…,m$ 均成立，即存在一个点是得每个不等式约束都小于0。这个我们当作结论看就ok。</li>
 </ul>
-<h1 id="从对偶问题解主问题"><a href="#从对偶问题解主问题" class="headerlink" title="从对偶问题解主问题"></a>从对偶问题解主问题</h1><p>&emsp;&emsp;假设强对偶成立，$(x^{*},\lambda^{*},v^{*})$是主对最优解，有：</p>
+<h1 id="从对偶问题解主问题"><a href="#从对偶问题解主问题" class="headerlink" title="从对偶问题解主问题"></a>从对偶问题解主问题</h1><p>&emsp;&emsp;假设强对偶成立， $(x^{*},\lambda^{*},v^{*})$ 是主对最优解，有：</p>
 <script type="math/tex; mode=display">
 \begin{align*} 
 p^{*}=f_0(x^{*}) &= d^{*}=g(\lambda^{*},v^{*}) \\
