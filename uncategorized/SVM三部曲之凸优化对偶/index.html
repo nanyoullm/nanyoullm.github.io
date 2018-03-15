@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E5%87%B8%E4%BC%98%E5%8C%96%E5%AF%B9%E5%81%B62.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E5%87%B8%E4%BC%98%E5%8C%96%E5%AF%B9%E5%81%B6.png">
-<meta property="og:updated_time" content="2018-03-11T13:00:02.651Z">
+<meta property="og:updated_time" content="2018-03-11T13:04:06.626Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SVM三部曲之凸优化对偶">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;本文是SVM三部曲第二部分—凸优化对偶。对偶是一个神奇的方法，对于一般有约束优化问题，如果难以求得最优解，那么可以尝试使用对偶方法。">
@@ -367,7 +367,7 @@ subject \ to: \ \lambda \ge 0</script><p>&emsp;&emsp;可以理解为凹函数在
 <p>&emsp;&emsp;假设我们构建了一个拉格朗日函数，左图是原问题坐标系，右图是对偶问题坐标系，我们先看左图：</p>
 <ul>
 <li>$L(x,\lambda)=f_{0}(x)+\lambda f_{1}(x)$，函数对应的曲线如图中标注；</li>
-<li>约束是$f_{1} \le 0$，那么对应到<strong>原问题</strong>中 $x$ 的可行域就是图中粉色的部分， $-0.48 \le x \le 0.48$ 左右；灰色区域的边缘曲线对应为 $L$ </li>
+<li>约束是 $f_{1} \le 0$，那么对应到<strong>原问题</strong>中 $x$ 的可行域就是图中粉色的部分， $-0.48 \le x \le 0.48$ 左右；灰色区域的边缘曲线对应为 $L$ </li>
 <li>我们可以清楚得看到，在可行域中，最小值对应于 $x=-0.48$，即图中 $p^{*}$ ；</li>
 <li>根据我们的限制， $\lambda \ge 0$，当 $\lambda=0$ 时，$L$ 的曲线即为 $f_{0}$ 的曲线，此时对偶函数 $g$ 的取值为蓝点（为什么能取到蓝点？因为粉色区域是原问题的可行域，到对偶问题后，可以取 $x$ 的定义域），参考右图坐标中的蓝点；当 $\lambda=1$ 时，$L$ 的曲线为图中灰色区域的边缘曲线，此时对偶函数 $g$ 的取值为黄点，参考右图坐标中的黄点；我们可以发现此时只有在 $\lambda=0.55$ 附近时，对偶函数 $g$ 对应的最大值 $d^{*}$ 才是最接近原问题最小值 $p^{*}$。</li>
 </ul>
@@ -380,7 +380,7 @@ subject \ to: \ \lambda \ge 0</script><p>&emsp;&emsp;可以理解为凹函数在
 \begin{align*} 
 p^{*}=f_0(x^{*}) &= d^{*}=g(\lambda^{*},v^{*}) \\
 &=\min_x\big(f_0(x)+\sum_{i=1}^{m}\lambda_{i}^{*}f_{i}(x)+\sum_{j=1}^{p}v_{j}^{*}h_{j}(x)\big) \\
-&\le f_0(x^{*})+\sum_{i=1}^{m}\lambda_{i}^{*}f_{i}(x)+\sum_{j=1}^{p}v_{j}^{*}h_{j}(x) \\
+&\le f_0(x^{*})+\sum_{i=1}^{m}\lambda_{i}^{*}f_{i}(x^{*})+\sum_{j=1}^{p}v_{j}^{*}h_{j}(x^{*}) \\
 &\le f_0(x^{*})
 \end{align*}</script><p>&emsp;&emsp;上面的式子不难理解，实际上就是前面叙述中的总结。第三行和第四行的式子中，由于条件 $\lambda \ge 0, \ f_i(x^{*}) \le 0, h_j(x^{*})=0$，故小于等于 $f_0(x^{*})$。那么我们可以发现式中得到的一个重要结果是： $f_0(x^{*}) \le f_0(x^{*})$ ！因此上式中所有的小于等于号实际上就是等号，同时意味着 $\sum_{i=1}^{m}\lambda_{i}^{*}f_{i}(x)=0$，可以改写为：</p>
 <script type="math/tex; mode=display">
@@ -503,6 +503,10 @@ x^{*}=A^T(AA^T)^{-1}b</script><h1 id="总结"><a href="#总结" class="headerlin
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/uncategorized/SVM三部曲之SVM终极推导/" rel="prev" title="SVM三部曲之SVM终极推导">
+                SVM三部曲之SVM终极推导 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -582,7 +586,7 @@ x^{*}=A^T(AA^T)^{-1}b</script><h1 id="总结"><a href="#总结" class="headerlin
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">29</span>
                   <span class="site-state-item-name">博文</span>
                 </a>
               </div>

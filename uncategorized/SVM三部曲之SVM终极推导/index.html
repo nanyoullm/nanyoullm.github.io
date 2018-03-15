@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="机器学习,数学基石," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="&amp;emsp;&amp;emsp;本文是SVM三部曲最后一部分—SVM终极推导。讲解了SVM的思想，目标方程的简化以及使用对偶方法进行求解。">
+<meta name="keywords" content="机器学习,数学基石">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SVM三部曲之SVM终极推导">
+<meta property="og:url" content="http://yoursite.com/uncategorized/SVM三部曲之SVM终极推导/index.html">
+<meta property="og:site_name" content="Lim的博客">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;本文是SVM三部曲最后一部分—SVM终极推导。讲解了SVM的思想，目标方程的简化以及使用对偶方法进行求解。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/svm2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/svm1.png">
+<meta property="og:updated_time" content="2018-03-15T15:21:17.333Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SVM三部曲之SVM终极推导">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;本文是SVM三部曲最后一部分—SVM终极推导。讲解了SVM的思想，目标方程的简化以及使用对偶方法进行求解。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/svm2.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/uncategorized/SVM三部曲之SVM终极推导/"/>
+
+
+
+
+
+  <title>SVM三部曲之SVM终极推导 | Lim的博客</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <!--<a href="https://github.com/nanyoullm/nanyoullm.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>-->
+
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lim的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/uncategorized/SVM三部曲之SVM终极推导/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="刘力铭">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/keji2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lim的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SVM三部曲之SVM终极推导</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-15T23:09:15+08:00">
+                2018-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&emsp;&emsp;本文是SVM三部曲最后一部分—SVM终极推导。讲解了SVM的思想，目标方程的简化以及使用对偶方法进行求解。<br><a id="more"></a></p>
+<blockquote>
+<p>本文是SVM三部曲中的最后一篇。知识点和文章结构是学习了<a href="http://www.xiniuedu.com/" target="_blank" rel="noopener">稀牛学院</a>数学基石课程后的总结。</p>
+</blockquote>
+<p><a href="">SVM三部曲之凸优化问题</a></p>
+<h1 id="线性分类器和最优线性分类器"><a href="#线性分类器和最优线性分类器" class="headerlink" title="线性分类器和最优线性分类器"></a>线性分类器和最优线性分类器</h1><p>假设一个线性可分的二分类情况，我们总能在空间中找到一个边界 $w^{T}x+b=0$ 来切分。最简单的方法就是感知机算法，相关可以参考博文<a href="https://nanyoullm.github.io/uncategorized/%E6%84%9F%E7%9F%A5%E6%9C%BA/" target="_blank" rel="noopener">感知机算法</a>。<br>事实上，这样的超平面有无数多个，那么，哪一个是最优的呢？SVM了解一下。</p>
+<h1 id="点到超平面的距离"><a href="#点到超平面的距离" class="headerlink" title="点到超平面的距离"></a>点到超平面的距离</h1><p>假设有超平面：</p>
+<script type="math/tex; mode=display">
+H=\{w^{T}x+b=0\}</script><p>那么空间中任意一点 $p$ 到平面的距离可以表示为：</p>
+<script type="math/tex; mode=display">
+r = \frac{\mid w^{T}p+b \mid}{ \parallel w \parallel_{2}}</script><p>这个大家应该都比较熟悉吧，博主记得高中的时候好像就学过这个公式。这里我们来推导一下吧，请忽略我规（潦）整（草）的字体：</p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/svm2.png" width="400"></p>
+<p>求解的方式有很多，可以百度参考解法汇总：<a href="https://www.zhihu.com/question/37199042" target="_blank" rel="noopener">https://www.zhihu.com/question/37199042</a></p>
+<h1 id="SVM目标函数"><a href="#SVM目标函数" class="headerlink" title="SVM目标函数"></a>SVM目标函数</h1><p>点集到分类面的最小距离可以表示为：</p>
+<script type="math/tex; mode=display">
+M=\min_{i} r_{i} = \min_{i} \frac{\mid w^{T}x_{i}+b \mid}{ \parallel w \parallel_{2}}</script><p>我们把点集到分类面最小的距离称之为几何间隔，也就是 margin。接下来我们引出SVM的目标函数：</p>
+<script type="math/tex; mode=display">
+\max_{w,b} M = \max_{w,b} \Big\{ \min_{i} \frac{\mid w^{T}x_{i}+b \mid}{ \parallel w \parallel_{2}} \Big\}</script><p>也就是 <strong>间隔最大化</strong> 。试想，如果我们让最接近分类面的样本点的距离最大化，不就可以尽可能把样本点都分开了么？就是这么简单暴力的思想。</p>
+<p>然而，对于这样一个明确的优化问题，直接求解是十分困难的。接下来，我们尝试简化一下目标函数。</p>
+<h1 id="简化目标函数"><a href="#简化目标函数" class="headerlink" title="简化目标函数"></a>简化目标函数</h1><p>首先，我们从绝对值项入手，将 $\mid w^{T}x_{i}+b \mid$ 项改写为：</p>
+<script type="math/tex; mode=display">
+y_{i}(w^{T}x_{i}+b)</script><p>这转换大家体会一下是不是这样的？和感知机算法的小技巧神似，于是目标函数相应变为：</p>
+<script type="math/tex; mode=display">
+\max_{w,b} M = \max_{w,b} \Big\{ \frac{1}{\parallel w \parallel_{2}} \min_{i} y_{i}(w^{T}x_{i}+b) \Big\}</script><p>接下来，使用另一个小技巧。我们试想一下，一条直线的 $w$ 和 $b$ 如果同时乘上一个系数 $k$ 后，仍然是等同的，即 $w^{T}+b=0$ 与 $kw^{T}+kb=0$ 是等同的。应用到目标函数后，将 $w$ 和 $b$ 如果同时乘上一个系数 $k$ ，进行一个scale，其距离并不发生变化：</p>
+<script type="math/tex; mode=display">
+\frac{\mid kw^{T}x+kb \mid}{ \parallel kw \parallel_{2}}=\frac{\mid w^{T}x+b \mid}{ \parallel w \parallel_{2}}</script><p>因此，通过修改 $k$，我们可以设计距离最近的一个点，使得：</p>
+<script type="math/tex; mode=display">
+y_{i}(w^{*T}x_{i}+b^{*})=1</script><p>其中 $w^{*}=kw,\ b^{*}=kb$ 。<br>既然最近的点满足 $y_{i}(w^{*T}x_{i}+b^{*})=1$ ，那么所有的点能满足下式：</p>
+<script type="math/tex; mode=display">
+y_{i}(w^{*T}x_{i}+b^{*}) \ge 1, \ i=1,...,N</script><p>ok，我们再回过头看一下目标函数，里面的 $\min_{i} y_{i}(w^{T}x_{i}+b)$ 是不是就等于 1 了嗯？ $\min$ 这项就这样被我们干掉了，牛逼的地方来了。<br>最后，我们把 $\frac{1}{\parallel w \parallel_{2}}$ 倒过来再加上平方（为什么要平方，因为 $\parallel w \parallel_{2}$ 是有开根号的，而我们在优化的时候通常不喜欢这个东西，所以干脆加个平方，加之前是最小化一个正数，加之后也是最小化一个正数，没毛病），那么目标优化问题就最终简化完成，<strong>SVM基本型</strong>：</p>
+<script type="math/tex; mode=display">
+\min \frac{1}{2} \parallel w \parallel_{2}^{2} \\
+s.t. \ y_{i}(w^{T}x_{i}+b) -1 \ge 0, \ i=1,...,N</script><p>我们来看一下几何解释：</p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/svm1.png" width="350"></p>
+<p>图中的分界线为 $w^{T}x+b=0$ ,根据我们的scale后，图中穿过距离分界线<strong>最近</strong>的红点的平行线可以认为是 $w^{T}x+b=1$，穿过距离分界线<strong>最近</strong>的蓝点的平行线可以认为是 $w^{T}x+b=-1$，原因是在scale后，有 $y_{i}(w^{*T}x_{i}+b^{*})=1$ 。图中的里分界线最近的一个红点和两个蓝点就被我们称为<strong>支撑向量</strong>。而支撑向量到分界线的距离是：</p>
+<script type="math/tex; mode=display">
+margin=\frac{\mid w^{T}x+b \mid}{ \parallel w \parallel_{2}}=\frac{1}{ \parallel w \parallel_{2}}</script><p>我们希望margin最大，也就是希望margin的倒数的平方 $\parallel w \parallel_{2}^{2}$ 最小，这样和目标函数统一了。</p>
+<h1 id="SVM求解"><a href="#SVM求解" class="headerlink" title="SVM求解"></a>SVM求解</h1><p>上面说到，经过我们的简化，SVM的目标函数变成了：</p>
+<script type="math/tex; mode=display">
+\min \frac{1}{2} \parallel w \parallel_{2}^{2} \\
+s.t. 1 - \ y_{i}(w^{T}x_{i}+b) \le 0, \ i=1,...,N</script><p>是不是感觉很眼熟，我们在<a href="https://nanyoullm.github.io/uncategorized/SVM%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E5%87%B8%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98/" target="_blank" rel="noopener">《SVM三部曲之凸优化问题》</a>结尾中提到过类似的问题。这实际上是一个QP二次规划问题，QP问题还有印象不？ $\frac{1}{2} \parallel w \parallel_{2}^{2}$ 我们可以写成形式 $\frac{1}{2} w^{T}Iw$，而 $I$ 是一个正定矩阵，同时不等式约束是凸的，于是我们的目标就变成了一个凸优化问题。</p>
+<h1 id="SVM对偶问题"><a href="#SVM对偶问题" class="headerlink" title="SVM对偶问题"></a>SVM对偶问题</h1><p>ok，我们已经知道SVM的目标问题是一个凸优化问题了，显然约束条件也满足 slater 条件，那么SVM问题强对偶成立，同时 KKT 条件成立。于是我们可以将主问题转换成对偶问题来求解。<br>构建拉格朗日函数：</p>
+<script type="math/tex; mode=display">
+L(w,b,\lambda)=\frac{1}{2} \parallel w \parallel_{2}^{2} + \sum_{i=1}^{N} \lambda_{i}(1-y_{i}(w^{T}x_{i}+b)) \\
+\lambda_{i} \ge 0,\ i=1,...,N</script><p>主问题是：</p>
+<script type="math/tex; mode=display">
+p^{*}=\min_{w,b} \big(\max_{\lambda}L(w,b,\lambda)\big)</script><p>对偶问题是：</p>
+<script type="math/tex; mode=display">
+d^{*}=\max_{\lambda} \big(\min_{w,b}L(w,b,\lambda)\big) \\
+g(\lambda)=\min_{w,b}L(w,b,\lambda)</script><p>对于 $\min$ 部分，我们对 $w,b$ 分别求偏导并令其为 $0$，并求得：</p>
+<script type="math/tex; mode=display">
+w=\sum_{i=1}^{N}\lambda_{i}y_{i}x_{i}, \quad 0=\sum_{i=1}^{N}\lambda_{i}y_{i}</script><p>将结果代入对偶问题中有：</p>
+<script type="math/tex; mode=display">
+\begin{align*} 
+\max_{\lambda}g(\lambda) &= \max_{\lambda}\big( \frac{1}{2} \parallel w \parallel_{2}^{2} + \sum_{i=1}^{N} \lambda_{i}(1-y_{i}(w^{T}x_{i}+b))\big) \\
+&=\max_{\lambda}\big( -\frac{1}{2}\sum_{i=1}^{N}\sum_{j=1}^{N}\lambda_{i}\lambda_{j}y_{i}y_{j}x_{i}^{T}x_{j} + \sum_{i=1}^{N}\lambda_{i} - \sum_{i=1}^{N}\lambda_{i}y_{i}(w^{T}x_{i}+b) \big) \\
+&=\max_{\lambda}\big(-\frac{1}{2}\sum_{i=1}^{N}\sum_{j=1}^{N}\lambda_{i}\lambda_{j}y_{i}y_{j}x_{i}^{T}x_{j} + \sum_{i=1}^{N}\lambda_{i}\big)
+\end{align*} \\
+s.t. \ \sum_{i=1}^{N}\lambda_{i}y_{i}=0, \ \lambda_{i} \ge 0, \ i=1,...,N</script><p>因为SVM是满足强对偶，我们能够解出最优解 $\lambda^{*}$，根据 KKT 充要条件有：</p>
+<ul>
+<li>$1-y_{i}(w^{*T}x_{i}+b^{*}) \le 0$</li>
+<li>$\lambda_{i}^{*} \ge 0$</li>
+<li>$\lambda_{i}^{*}(1-y_{i}(w^{*T}x_{i}+b^{*}))=0 $</li>
+<li>$w^{*}=\sum_{i=1}^{N}\lambda^{*}_{i}y_{i}x_{i}, \quad 0=\sum_{i=1}^{N}\lambda^{*}_{i}y_{i}$</li>
+</ul>
+<p>到这里，我们就解出了参数 $w^{*}$ ，我们看一下 KTT 结论带来的一些理解：</p>
+<ul>
+<li>如果 $\lambda^{*}_{j}=0$，就相当于对 $w^{*}$ 毫无贡献；</li>
+<li>如果 $\lambda^{*}_{j}&gt;0$，则 $y_{i}(w^{*T}x_{i}+b^{*}=1$，为支撑向量；</li>
+<li>此时，将 $w^{*}$ 带入到 $y_{i}(w^{*T}x_{i}+b^{*}=1$，可以解出 $b^{*}=y_{j}-(\sum_{i=1}^{N}\lambda^{*}y_{i})(x^{T}_{i}x_{j})$</li>
+</ul>
+<p>此时 $\lambda^{*}$ 是一个稀疏的解，大于零的对应支撑向量，等于零的对应非支撑向量。</p>
+<h1 id="SVM最终步骤"><a href="#SVM最终步骤" class="headerlink" title="SVM最终步骤"></a>SVM最终步骤</h1><p>上面说到，如果我们解出了 $\lambda^{<em>}$，我们就能解出 $w^{</em>},b^{*}$。那么最优的分类超平面为：</p>
+<script type="math/tex; mode=display">
+w^{*T}x+b^{*}=0 \\
+\sum_{i=1}^{N}\lambda^{*}y_{i}x_{i}x+b^{*}=0</script><p>决策函数就为：</p>
+<script type="math/tex; mode=display">
+f(x)=sign\big(\sum_{i=1}^{N}\lambda^{*}y_{i}x_{i}x+b^{*}\big)</script><p>可以看到，最终的分类超平面仅由 $\lambda^{*}&gt;0$，也就是支撑向量起到了作用。</p>
+<h1 id="SMO求解-lambda"><a href="#SMO求解-lambda" class="headerlink" title="SMO求解 $\lambda^{*}$"></a>SMO求解 $\lambda^{*}$</h1><p>求解下列无约束优化问题：</p>
+<script type="math/tex; mode=display">
+\max_{\lambda}W(\lambda_{1},...,\lambda_{m})</script><p>可以使用SMO算法求解到 $\lambda^{*}$，这里博主没有深入研究下去了，感兴趣的同学可以了解一下啦。</p>
+<h1 id="SVM软间隔"><a href="#SVM软间隔" class="headerlink" title="SVM软间隔"></a>SVM软间隔</h1><p>上面讨论的是数据线性可分的情况，但是实际中，往往会有噪声点使得数据集并不是线性可分的。这是SVM目标函数可以加上一个惩罚项：</p>
+<script type="math/tex; mode=display">
+\min \frac{1}{2} \parallel w \parallel_{2}^{2}+C\sum_{i=1}^{N}\xi_{i} \\
+s.t. \ y_{i}(w^{T}x_{i}+b) \ge 1-\xi_{i}, \ i=1,...,N; \ \xi_{i} \ge 0</script><p>后续到对偶问题过程中，也对 $\xi$ 求偏导为0，然后同样带入 $g(\lambda)$ 进行求解。</p>
+<h1 id="kernel核函数"><a href="#kernel核函数" class="headerlink" title="kernel核函数"></a>kernel核函数</h1><p>关于核函数，其实和SVM是两个领域，比较直观的理解可以参考知乎上的这条帖子：<a href="https://www.zhihu.com/question/24627666" target="_blank" rel="noopener">https://www.zhihu.com/question/24627666</a><br>当数据线性不可分的时候，我们可以借助核函数将原输入空间映射到线性可分的空间来。对于核函数，博主会找个时间另外开个博文来进行学习。</p>
+<h1 id="enjoy-it"><a href="#enjoy-it" class="headerlink" title="enjoy it!"></a>enjoy it!</h1>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="刘力铭 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+            <a href="/tags/数学基石/" rel="tag"># 数学基石</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/uncategorized/SVM三部曲之凸优化对偶/" rel="next" title="SVM三部曲之凸优化对偶">
+                <i class="fa fa-chevron-left"></i> SVM三部曲之凸优化对偶
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/keji2.jpg"
+                alt="刘力铭" />
+            
+              <p class="site-author-name" itemprop="name">刘力铭</p>
+              <p class="site-description motion-element" itemprop="description">趣事之多 吾知甚少 学无止境 唯有努力</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">博文</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/nanyoullm" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:nanyoullm@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线性分类器和最优线性分类器"><span class="nav-number">1.</span> <span class="nav-text">线性分类器和最优线性分类器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#点到超平面的距离"><span class="nav-number">2.</span> <span class="nav-text">点到超平面的距离</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SVM目标函数"><span class="nav-number">3.</span> <span class="nav-text">SVM目标函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#简化目标函数"><span class="nav-number">4.</span> <span class="nav-text">简化目标函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SVM求解"><span class="nav-number">5.</span> <span class="nav-text">SVM求解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SVM对偶问题"><span class="nav-number">6.</span> <span class="nav-text">SVM对偶问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SVM最终步骤"><span class="nav-number">7.</span> <span class="nav-text">SVM最终步骤</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SMO求解-lambda"><span class="nav-number">8.</span> <span class="nav-text">SMO求解 $\lambda^{*}$</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SVM软间隔"><span class="nav-number">9.</span> <span class="nav-text">SVM软间隔</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#kernel核函数"><span class="nav-number">10.</span> <span class="nav-text">kernel核函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#enjoy-it"><span class="nav-number">11.</span> <span class="nav-text">enjoy it!</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-Lim Lau"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lim的博客</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <script type="text/javascript" opacity="0.5" zIndex="-2" count="50" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>
