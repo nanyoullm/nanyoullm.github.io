@@ -96,7 +96,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%872.png?raw=true">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%873.png?raw=true">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E6%A2%AF%E5%BA%A6%E6%8F%90%E5%8D%874.png?raw=true">
-<meta property="og:updated_time" content="2018-03-25T04:48:24.490Z">
+<meta property="og:updated_time" content="2018-03-25T04:49:59.927Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Boosting提升方法">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;boosting提升算法是一种把若干个分类器整合为一个分类器的方法。在监督学习中，它可以很好的降低bias和variance。它将若干弱分类器组合成一个强分类器。可谓“三个臭皮匠，顶个诸葛亮”。">
@@ -356,13 +356,14 @@
 <p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/%E5%89%8D%E5%90%91%E5%88%86%E6%AD%A51.png?raw=true" width="500"></p>
 <h2 id="提升树"><a href="#提升树" class="headerlink" title="提升树"></a>提升树</h2><p>&emsp;&emsp;提升树方法实际就是采用加法模型和前向分步算法。我们称以决策树为基函数的提升方法为提升树（boosting tree）。提升树模型可以表示为决策树的加法模型：</p>
 <script type="math/tex; mode=display">
-f_{M}(x)=\sum_{m=1}^{M}T(x;\Theta_{m})</script><p>&emsp;&emsp;其中，$T(x;\Theta_{m})$表示一决策树，$\Theta_{m}$是决策树的参数，$M$表示树的个数。</p>
+f_{M}(x)=\sum_{m=1}^{M}T(x;\Theta_{m})</script><p>&emsp;&emsp;其中，$T(x;\Theta_{m})$ 表示一决策树，$\Theta_{m}$ 是决策树的参数，$M$ 表示树的个数。</p>
 <h3 id="提升树算法"><a href="#提升树算法" class="headerlink" title="提升树算法"></a>提升树算法</h3><p>&emsp;&emsp;首先确定初始提升树 $f_{0}(x)=0$ ，第m步的模型为：</p>
 <script type="math/tex; mode=display">
 f_{m}(x)=f_{m-1}(x)+T(x;\Theta_{m})</script><p>&emsp;&emsp;其中 $f_{m-1}(x)$ 是当前模型，通过经验风险极小化确定下一棵决策树的参数：</p>
 <script type="math/tex; mode=display">
-\hat{\Theta}_{m}=\arg\min_{\Theta_{m}}\sum_{i=1}^{N}L\big(y_{i},f_{m-1}(x)+T(x;\Theta_{m})\big)</script><p>&emsp;&emsp;下面讨论回归问题的决策树，假设训练集$T=\{(x_{1},y_{1}),…,(x_{N},y_{N})\},x_{i} \in \gamma \subseteq R^{n}$，$\gamma$是输入空间。如果将输入空间划分为J个互不相交的区域$R_{1},R_{2},…,R_{J}$，并且在每个区域上确定输出的常量$c_{j}$，那么树可以表示为：<script type="math/tex">T(x;\Theta)=\sum_{j=1}^{J}c_{j}I(x \in R_{j})</script><br>&emsp;&emsp;参数可以看做集合 $\Theta=\{(R_{1},c_{1}),…,(R_{j},c_{j})\}$ 表示树的区域划分和个区域上的常数。J是回归树的复杂度即叶节点的个数。</p>
-<p>&emsp;&emsp;在前向分步算法的第m步，给定当前模型$f_{m-1}(x)$，需要求解 $\hat{\Theta}_{m}$，即第m棵树的参数。<br>&emsp;&emsp;如果我们采用平方误差作为损失函数：</p>
+\hat{\Theta}_{m}=\arg\min_{\Theta_{m}}\sum_{i=1}^{N}L\big(y_{i},f_{m-1}(x)+T(x;\Theta_{m})\big)</script><p>&emsp;&emsp;下面讨论回归问题的决策树，假设训练集$T=\{(x_{1},y_{1}),…,(x_{N},y_{N})\},x_{i} \in \gamma \subseteq R^{n}$，$\gamma$是输入空间。如果将输入空间划分为J个互不相交的区域$R_{1},R_{2},…,R_{J}$，并且在每个区域上确定输出的常量$c_{j}$，那么树可以表示为：</p>
+<script type="math/tex; mode=display">
+T(x;\Theta)=\sum_{j=1}^{J}c_{j}I(x \in R_{j})</script><p>&emsp;&emsp;参数可以看做集合 $\Theta=\{(R_{1},c_{1}),…,(R_{j},c_{j})\}$ 表示树的区域划分和个区域上的常数。J是回归树的复杂度即叶节点的个数。<br>&emsp;&emsp;在前向分步算法的第m步，给定当前模型$f_{m-1}(x)$，需要求解 $\hat{\Theta}_{m}$，即第m棵树的参数。<br>&emsp;&emsp;如果我们采用平方误差作为损失函数：</p>
 <script type="math/tex; mode=display">
 L(y,f(x))=(y-f(x))^{2}</script><p>即 </p>
 <script type="math/tex; mode=display">
