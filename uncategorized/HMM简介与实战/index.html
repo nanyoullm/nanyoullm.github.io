@@ -91,7 +91,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/hmm/forward1.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/hmm/forward2.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/hmm/backward.png">
-<meta property="og:updated_time" content="2018-04-08T15:07:14.464Z">
+<meta property="og:updated_time" content="2018-04-08T15:45:28.052Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HMM简介与实战">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;有差不多3个星期没有更新博客了，清明假期回了趟江西也是把我堵怕了。不过这段时间也抽空回顾了下隐马尔可夫（HMM），同时动手写了下算法，今天总算是整理地差不多了。&amp;emsp;&amp;emsp;隐马尔可夫（HMM）模型描是一个关于时序的概率模型，描述由一个隐藏的马尔可夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生观测随机序列的过程。下面来回顾一下吧！">
@@ -329,7 +329,7 @@
       
         <p>&emsp;&emsp;有差不多3个星期没有更新博客了，清明假期回了趟江西也是把我堵怕了。不过这段时间也抽空回顾了下隐马尔可夫（HMM），同时动手写了下算法，今天总算是整理地差不多了。<br>&emsp;&emsp;隐马尔可夫（HMM）模型描是一个关于时序的概率模型，描述由一个隐藏的马尔可夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生观测随机序列的过程。下面来回顾一下吧！<br><a id="more"></a></p>
 <p>&emsp;&emsp;隐马尔可夫（hidden Markov model）模型描是一个关于时序的概率模型，描述由一个隐藏的马尔可夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生观测随机序列的过程。在写这篇博客的过程中，知乎上的相关问题提供了很多通俗易懂的讲解。可以参考<a href="https://www.zhihu.com/question/20962240" target="_blank" rel="noopener">知乎</a>。<br>&emsp;&emsp;这里，我们先从一个直观的例子入手，了解一下隐马尔可夫的过程；然后从概念上进行一些解释；最后写代码进行实现。</p>
-<h1 id="先举个栗子"><a href="#先举个栗子" class="headerlink" title="先举个栗子"></a>先举个栗子</h1><p>&emsp;&emsp;作为一个吃鸡玩家，就围绕吃鸡举个栗子吧。我们利用地图副本的天气状况（状态变量）、第一局随机到地图天气的概率（初始状态概率）和我们的最后取得的成绩（观测变量）构建一个HMM。<br>&emsp;&emsp;在这个模型中，假设地图天气状况3种，分别是晴天、黄昏和雨天（实际中已取消）。我们开始玩第一局的时候随机到每种天气的概率为（0.4,0.4,0.2），而接下来每局比赛的天气转换概率如图所示，比如这局是晴天，那么下局是晴天、黄昏、雨天的概率分别为0.5、0.3和0.2。而由于天气的不同，我们吃鸡队的游戏竞技状态也会有所变化，我们取得的成绩也就不一样。</p>
+<h1 id="先举个栗子"><a href="#先举个栗子" class="headerlink" title="先举个栗子"></a>先举个栗子</h1><p>&emsp;&emsp;作为一个吃鸡玩家，就围绕吃鸡举个栗子吧。我们利用地图副本的天气状况（状态变量）、第一局随机到地图天气的概率（初始状态概率）和我们的最后取得的成绩（观测变量）构建一个HMM。<br>&emsp;&emsp;在这个模型中，假设地图天气状况3种，分别是晴天、黄昏和雨天（实际中已取消）。我们开始玩第一局的时候随机到每种天气的概率为（0.5,0.3,0.2），而接下来每局比赛的天气转换概率如图所示，比如这局是晴天，那么下局是晴天、黄昏、雨天的概率分别为0.5、0.3和0.2。而由于天气的不同，我们吃鸡队的游戏竞技状态也会有所变化，我们取得的成绩也就不一样。</p>
 <p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/hmm/show_state.png" width="400"></p>
 <p>&emsp;&emsp;比如，我们比较擅长晴天，打进前10、10-20和20以后的概率分别为0.6、0.3、0.1；黄昏天由于光线原因，打进前10、10-20和20以后的概率分别为0.3、0.5、0.2；而雨天由于视野和雨点噪声影响，打进前10、10-20和20以后的概率分别为0.2、0.5、0.3。<br>&emsp;&emsp;根据上面的信息，我们其实可以得到HMM的一些基本要素，初始状态分布 $\pi$ 、状态转移分布 $A$、观测概率分布 $B$。<br>&emsp;&emsp;3位朋友听说了我和队友今天在吃鸡，分别提出3个问题：</p>
 <ul>
