@@ -95,7 +95,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/cart_c1.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/cart_c2.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/cart_cut.png">
-<meta property="og:updated_time" content="2018-02-22T14:58:32.540Z">
+<meta property="og:updated_time" content="2018-03-25T06:49:44.521Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="决策树">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;决策树是一种基本的分类与回归方法。在其分类问题中，表示基于特征对实例进行分类的过程，可以认为是if-else规则的集合，也可以认为是定义在特征空间与类空间上的条件分类。其主要优点是模型具有可读性、分类速度快。">
@@ -380,7 +380,9 @@ C_{\alpha}(T)
 <h2 id="CART"><a href="#CART" class="headerlink" title="CART"></a>CART</h2><p>&emsp;&emsp;CART（classification and regression tree）可能是应用最广泛的决策树方法了。CART同样由特征选择、树的生成和剪枝组成，既可以用于分类也可以用于回归。需要注意的是，CART假设决策树的二叉树，内部节点特征的取值为“是”和“否”，左枝表示“是”，右枝表示“否”。这样决策树等价于递归地二分每个特征，将输入空间划分成有限个单元，并在这些单元上确定预测的概率分布。特征选择时，回归树用平方误差最小化准则，分类树用基尼指数最小化准则。</p>
 <h3 id="回归树的生成"><a href="#回归树的生成" class="headerlink" title="回归树的生成"></a>回归树的生成</h3><p>&emsp;&emsp;对于数据集</p>
 <script type="math/tex; mode=display">D=\{(x_{1}, y_{1}),\dots,(x_{N}, y_{N})\}</script><p>回归树对应输入空间的一个划分以及在划分的单元上的输出值。假设已将输入空间划分成为M个单元$R_{1},\dots,R_{M}，并在每个单元R_{m}上有一个固定的输出值c_{m}$。那么回归树模型可以表示为：</p>
-<script type="math/tex; mode=display">f(x)=\sum_{m=1}^{M}c_{m}I(x \in R_{m})</script><p>&emsp;&emsp;当输入空间的划分确定时，可以用平方误差<script type="math/tex">\sum_{x_{i} \in R_{m}} (y_{i}-f(x_{i}))^{2}</script><br>来表示预测误差，用平方误差最小的准则求解每个单元上的最优输出值。实际上，单元$R_{m}$上的$c_{m}$的最优值$\hat{c}_{m}$是$R_{m}$上的所有输入实例$x_{i}$对应的输出$y_{i}$的均值。</p>
+<script type="math/tex; mode=display">f(x)=\sum_{m=1}^{M}c_{m}I(x \in R_{m})</script><p>&emsp;&emsp;当输入空间的划分确定时，可以用平方误差</p>
+<script type="math/tex; mode=display">
+\sum_{x_{i} \in R_{m}} (y_{i}-f(x_{i}))^{2}</script><p>来表示预测误差，用平方误差最小的准则求解每个单元上的最优输出值。实际上，单元$R_{m}$上的$c_{m}$的最优值$\hat{c}_{m}$是$R_{m}$上的所有输入实例$x_{i}$对应的输出$y_{i}$的均值。</p>
 <p>&emsp;&emsp;那么如何对输入空间进行划分呢？我们采用启发式的方法，选择第j个变量$x^j$和它的取值s作为切分变量和切分点，并定义两个区域： <script type="math/tex">R_{1}(j,s)=\{x|x^j \leq s\} 和 R_{2}(j,s)=\{x|x^j > s\}</script><br>然后对固定输入变量j可以找到最优切分点s，即求解：</p>
 <script type="math/tex; mode=display">\min_{j,s} \big[ \min_{c_{1}} \sum_{x \in R_{1}(j,s)} (y_{i} - c_{1})^2 + \min_{c_{2}} \sum_{x \in R_{2}(j,s)} (y_{i} - c_{2})^2 \big]</script><p>来找到固定输入变量j的最优切分点s，遍历所有的输入变量，找到最优的切分变量j，构成一个对 $(j,s)$ 。依此将输入空间划分为两个区域，重复这个过程直到满足停止条件为止。这样的回归树通常称为最小二乘回归树，算法如下图：<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/cart_r.png?raw=true" width="700"></p>
 <h3 id="分类树的生成"><a href="#分类树的生成" class="headerlink" title="分类树的生成"></a>分类树的生成</h3><p>&emsp;&emsp;分类树用基尼指数选择最有特征，同时决定该特征的最优二值切分点。  </p>
@@ -537,7 +539,7 @@ C_{\alpha}(T)
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">博文</span>
                 </a>
               </div>

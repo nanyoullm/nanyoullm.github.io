@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="机器学习," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="&amp;emsp;&amp;emsp;有差不多3个星期没有更新博客了，清明假期回了趟江西也是把我堵怕了。不过这段时间也抽空回顾了下隐马尔可夫（HMM），同时动手写了下算法，今天总算是整理地差不多了。&amp;emsp;&amp;emsp;隐马尔可夫（HMM）模型描是一个关于时序的概率模型，描述由一个隐藏的马尔可夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生观测随机序列的过程。下面来回顾一下吧！">
+<meta name="keywords" content="机器学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HMM简介与实战">
+<meta property="og:url" content="http://yoursite.com/uncategorized/HMM简介与实战/index.html">
+<meta property="og:site_name" content="Lim的博客">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;有差不多3个星期没有更新博客了，清明假期回了趟江西也是把我堵怕了。不过这段时间也抽空回顾了下隐马尔可夫（HMM），同时动手写了下算法，今天总算是整理地差不多了。&amp;emsp;&amp;emsp;隐马尔可夫（HMM）模型描是一个关于时序的概率模型，描述由一个隐藏的马尔可夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生观测随机序列的过程。下面来回顾一下吧！">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/hmm/show_state.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/hmm/forward1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/hmm/forward2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/hmm/backward.png">
+<meta property="og:updated_time" content="2018-04-08T15:07:14.464Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HMM简介与实战">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;有差不多3个星期没有更新博客了，清明假期回了趟江西也是把我堵怕了。不过这段时间也抽空回顾了下隐马尔可夫（HMM），同时动手写了下算法，今天总算是整理地差不多了。&amp;emsp;&amp;emsp;隐马尔可夫（HMM）模型描是一个关于时序的概率模型，描述由一个隐藏的马尔可夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生观测随机序列的过程。下面来回顾一下吧！">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/hmm/show_state.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/uncategorized/HMM简介与实战/"/>
+
+
+
+
+
+  <title>HMM简介与实战 | Lim的博客</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <!--<a href="https://github.com/nanyoullm/nanyoullm.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>-->
+
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lim的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/uncategorized/HMM简介与实战/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="刘力铭">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/keji2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lim的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">HMM简介与实战</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-08T22:42:32+08:00">
+                2018-04-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&emsp;&emsp;有差不多3个星期没有更新博客了，清明假期回了趟江西也是把我堵怕了。不过这段时间也抽空回顾了下隐马尔可夫（HMM），同时动手写了下算法，今天总算是整理地差不多了。<br>&emsp;&emsp;隐马尔可夫（HMM）模型描是一个关于时序的概率模型，描述由一个隐藏的马尔可夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生观测随机序列的过程。下面来回顾一下吧！<br><a id="more"></a></p>
+<p>&emsp;&emsp;隐马尔可夫（hidden Markov model）模型描是一个关于时序的概率模型，描述由一个隐藏的马尔可夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生观测随机序列的过程。在写这篇博客的过程中，知乎上的相关问题提供了很多通俗易懂的讲解。可以参考<a href="https://www.zhihu.com/question/20962240" target="_blank" rel="noopener">知乎</a>。<br>&emsp;&emsp;这里，我们先从一个直观的例子入手，了解一下隐马尔可夫的过程；然后从概念上进行一些解释；最后写代码进行实现。</p>
+<h1 id="先举个栗子"><a href="#先举个栗子" class="headerlink" title="先举个栗子"></a>先举个栗子</h1><p>&emsp;&emsp;作为一个吃鸡玩家，就围绕吃鸡举个栗子吧。我们利用地图副本的天气状况（状态变量）、第一局随机到地图天气的概率（初始状态概率）和我们的最后取得的成绩（观测变量）构建一个HMM。<br>&emsp;&emsp;在这个模型中，假设地图天气状况3种，分别是晴天、黄昏和雨天（实际中已取消）。我们开始玩第一局的时候随机到每种天气的概率为（0.4,0.4,0.2），而接下来每局比赛的天气转换概率如图所示，比如这局是晴天，那么下局是晴天、黄昏、雨天的概率分别为0.5、0.3和0.2。而由于天气的不同，我们吃鸡队的游戏竞技状态也会有所变化，我们取得的成绩也就不一样。</p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/hmm/show_state.png" width="400"></p>
+<p>&emsp;&emsp;比如，我们比较擅长晴天，打进前10、10-20和20以后的概率分别为0.6、0.3、0.1；黄昏天由于光线原因，打进前10、10-20和20以后的概率分别为0.3、0.5、0.2；而雨天由于视野和雨点噪声影响，打进前10、10-20和20以后的概率分别为0.2、0.5、0.3。<br>&emsp;&emsp;根据上面的信息，我们其实可以得到HMM的一些基本要素，初始状态分布 $\pi$ 、状态转移分布 $A$、观测概率分布 $B$。<br>&emsp;&emsp;3位朋友听说了我和队友今天在吃鸡，分别提出3个问题：</p>
+<ul>
+<li>1.朋友A已知了HMM模型的参数，了解到我们连续5局的成绩分别是：（5,10,23,15,1），他希望计算出我们打出这个成绩的概率是多少；</li>
+<li>2.朋友B只知道我们连续5局的成绩，他希望估计出HMM模型的三个参数 $(\pi,A,B)$;</li>
+<li>3.朋友C已知了HMM模型的参数和我们连续5局的成绩，她希望能猜测出这5局的地图天气分别是什么；</li>
+</ul>
+<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><p>&emsp;&emsp;HMM模型由初始状态概率向量 $\pi$ 、状态转移矩阵 $A$、观测概率矩阵 $B$ 组成。$\pi$ 和 $A$ 决定了状态序列，$B$ 决定了观测序列，这三个参数称为HMM的三要素。<br>&emsp;&emsp;可以看出来，HMM做了两个基本假设：</p>
+<ul>
+<li>1.齐次马尔可夫性假设：隐藏的马尔可夫链在任意时刻 $t$ 的状态只依赖于前一时刻的状态，与其他时刻的状态及观测无关；</li>
+<li>2.观测独立行假设：即任意时刻的观测只依赖与该时刻的马尔可夫链的状态，与其他观测及状态无关；</li>
+</ul>
+<p>&emsp;&emsp;HMM模型的三个基本问题是：</p>
+<ul>
+<li>1.概率计算问题：给定模型 $(\pi,A,B)$ 和观测序列 $(o_{1},o_{2},…,o_{T})$，计算在这个模型参数下得到该序列的概率；即吃鸡例子中该出这个成绩的概率是多少？</li>
+<li>2.学习问题：已知出现的观测序列 $O=(o_{1},o_{2},…,o_{T})$，估计模型参数 $\lambda=(\pi,A,B)$，使得在该模型下观测序列的概率 $P(O|\lambda)$ 最大。不知道大家有没有发现，这其实就是一个可以运用<a href="https://nanyoullm.github.io/uncategorized/EM%E7%AE%97%E6%B3%95%E6%B5%85%E6%9E%90/" target="_blank" rel="noopener">EM算法</a>解决的场景;即吃鸡例子中希望估计的模型参数；</li>
+<li>3.预测问题：也成为解码问题，已知模型参数 $\lambda=(\pi,A,B)$ 和观测序列 $O=(o_{1},o_{2},…,o_{T})$，求对给定观测序列条件概率 $P(O|\lambda)$ 最大的状态序列 $I=（i_{1},i_{2},…,i_{T}）$，就是说给定观测序列，求最有可能对应的状态序列；即吃鸡例子中预测处5局的天气分别是什么。</li>
+</ul>
+<h1 id="问题解法"><a href="#问题解法" class="headerlink" title="问题解法"></a>问题解法</h1><h2 id="概率计算问题"><a href="#概率计算问题" class="headerlink" title="概率计算问题"></a>概率计算问题</h2><p>&emsp;&emsp;对于这个问题，依照齐次马尔可夫性假设，我们可以按照实际观测罗列出所有的状态路径，然后求各个状态与观测序列的联合概率，最后对所有可能的状态序列求和，得到条件概率 $P(O|\lambda)$。但是我们可以想想到的是，当状态维度、时序长度增大时，这个方法的计算量是很大的，有 $O(NT^{N})$ 阶，是不可行的。下面简单介绍下实际可行的前向-后向算法。</p>
+<p>&emsp;&emsp;首先讲前向算法</p>
+<blockquote>
+<p>给定HMM的 $\lambda$，定义到时刻t部分的观测序列为 $o_{1},o_{2},…,o_{t}$ 且状态为 $q_{i}$ 的概率为前向概率，记作 $\alpha_{t}(i)=P(o_{1},…,o_{t},i_{t}=q_{i} \ | \ \lambda) $。</p>
+</blockquote>
+<p>&emsp;&emsp;现在我们知道5局的成绩是（5,10,23,15,1），先计算第1局获得前10成绩的概率，如果是晴天，根据条件概率则 </p>
+<script type="math/tex; mode=display">
+P(前10，晴天)=P(第1局晴天)×P(前10 \ | \ 晴天)=0.4×0.6=0.24</script><p>&emsp;&emsp;如果是黄昏，则 </p>
+<script type="math/tex; mode=display">
+P(前10，黄昏)=P(第1局黄昏)×P(前10 \ | \ 黄昏)=0.4×0.3=0.12</script><p>&emsp;&emsp;如果是雨天，则 </p>
+<script type="math/tex; mode=display">
+P(前10，雨天)=P(第1局雨天)×P(前10 \ | \ 雨天)=0.2×0.2=0.04</script><p>&emsp;&emsp;接下来计算第2局时获得前10的概率，首先如果第2局是晴天，那么：</p>
+<script type="math/tex; mode=display">
+P(第1局前10，第2局前10，第2局晴天)= \\
+\big(P(第1局前10，第1局晴天)×P(第2局晴天 \ | \ 第1局晴天) + \\
+P(第1局前10，第1局黄昏)×P(第2局晴天 \ | \ 第1局黄昏) + \\ 
+P(第1局前10，第1局雨天)×P(第2局晴天 \ | \ 第1局雨天)\big) \\
+×P(第2局前10 \ | \ 第2局晴天) \\ 
+=(0.24×0.5+0.12×0.6+0.04×0.6)×0.6=0.1296</script><p>&emsp;&emsp;如果第2局是黄昏，那么：</p>
+<script type="math/tex; mode=display">
+P(第1局前10，第2局前10，第2局黄昏)= \\ 
+\big(P(第1局前10，第1局晴天)×P(第2局黄昏 \ | \ 第1局晴天) + \\ 
+P(第1局前10，第1局黄昏)×P(第2局黄昏 \ | \ 第1局黄昏) + \\ 
+P(第1局前10，第1局雨天)×P(第2局黄昏 \ | \ 第1局雨天)\big) \\ × P(第2局前10 \ | \ 第2局黄昏) \\ =(0.24×0.3+0.12×0.2+0.04×0.3)×0.3=0.0324</script><p>&emsp;&emsp;同样如果第2局是雨天，那么：</p>
+<script type="math/tex; mode=display">
+P(第1局前10，第2局前10，第2局雨天)= \\ 
+\big(P(第1局前10，第1局晴天)×P(第2局雨天 \ | \ 第1局晴天) + \\ 
+P(第1局前10，第1局黄昏)×P(第2局雨天 \ | \ 第1局黄昏) + \\ 
+P(第1局前10，第1局雨天)×P(第2局雨天 \ | \ 第1局雨天)\big) \\ 
+×P(第2局前10 \ | \ 第2局雨天) \\ 
+=(0.24×0.2+0.12×0.2+0.04×0.1)*0.2=0.0152</script><p>&emsp;&emsp;如此下去可以继续计算第3局的情况。可以看出，前向算法计算了每个时间点，每个状态的发生观测序列的概率，在观测时序长度增大时，复杂度会大大降低。前向算法的公式可以参见《统计学习方法》中的P175。算法过程如下图：</p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/hmm/forward1.png" width="600"><br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/hmm/forward2.png" width="600"></p>
+<p>&emsp;&emsp;与前向算法不同，后向算法则是倒退着，从最后一个状态开始慢慢往后推。</p>
+<blockquote>
+<p>给定HMM的 $\lambda$，定义在时刻 $t$ 状态为 $q_{i}$ 的条件下，从 $t+1$ 到 $T$ 部分的观测序列为 $o_{t+1},…,o_{T}$ 的概率为后向概率，记作 $\beta_{t}(i)=P(o_{t+1},…,o_{T} \ | \ i_{t}=q_{i},\lambda)$</p>
+</blockquote>
+<p>&emsp;&emsp;假设观测序列长为 $T$，后向算法为 $\beta_{T}(i)=1$，这是因为 $T$ 后没有观测值了。那么在第4局游戏中天气为黄昏的状态下，第5局前10的后向概率可以计算为：</p>
+<script type="math/tex; mode=display">
+\beta_{4}(黄昏)=P(第5局晴天 \ | \ 第4局黄昏)×P(前10 \ | \ 第5局晴天)×1+P(第5局黄昏 \ | \ 第4局黄昏)×P(前10 \ | \ 第5局黄昏)×1 \\ 
++P(第5局雨天 \ | \ 第4局黄昏)×P(前10 \ | \ 第5局雨天)×1 \\ 
+=0.6×0.6+0.2×0.3+0.2×0.2=0.46</script><p>&emsp;&emsp;后向算法的公式可以参见《统计学习方法》中的P178。算法过程如下图：</p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/hmm/backward.png" width="600"></p>
+<p>&emsp;&emsp;利用前向概率和后向概率的定义，可以将观测序列概率 $P(O|\lambda)$ 统一写为：</p>
+<script type="math/tex; mode=display">
+P(O|\lambda)=\sum_{i=1}^{N}\sum_{j=1}^{N}\alpha_{t}(i)a_{ij}b_{j}(o_{t+1})\beta_{i+1}(j) \ i=1,2,...,T-1</script><h2 id="参数学习问题"><a href="#参数学习问题" class="headerlink" title="参数学习问题"></a>参数学习问题</h2><p>&emsp;&emsp;对HMM模型的参数学习问题本质上是一个存在隐变量的参数估计问题，可以用非监督学习算法Baum-Welch算法（也就是EM算法）来做。具体的过程博主并未实际推导，求得的结果参数可以参考《统计学习方法中》的10.3.3章节的三个式子。</p>
+<h2 id="预测问题"><a href="#预测问题" class="headerlink" title="预测问题"></a>预测问题</h2><p>&emsp;&emsp;HMM可以使用维特比算法来进行状态预测。维特比算法实际是用动态规划解HMM模型预测问题，即用动态规划求概率最大的路径，这个时候的一条路径就对应一个状态序列。<br>&emsp;&emsp;对于已知的模型参数 $\lambda=(A,B,\pi)$ 和观测 $O=o_{1},…,o_{T}$，维特比算法的步骤是：</p>
+<ul>
+<li>1.初始化</li>
+</ul>
+<script type="math/tex; mode=display">
+\delta_{1}=\pi_{i}b_{i}(o_{1}) , \ i=1,...,N \\
+\psi_{1}(i)=0 , \ i=1,...,N</script><ul>
+<li>2.递推，对于 $t=2,3,…,T$，有</li>
+</ul>
+<script type="math/tex; mode=display">
+\delta_{t}(i)=\max_{1 \le j \le N}\big[ \delta_{t-1}(j)a_{ji} \big]b_{i}(o_{t}) , \ i=1,...,N \\
+\psi_{t}(i)=\arg\max_{1 \le j \le N}\big[ \delta_{t-1}(j)a_{ji} \big] , \ i=1,...,N</script><ul>
+<li>3.终止</li>
+</ul>
+<script type="math/tex; mode=display">
+P^{*}=\max_{1 \le j \le N}\delta_{T}(i) \\
+i_{T}^{*}=\arg\max_{1 \le j \le N}\big[\delta_{T}(i)\big]</script><ul>
+<li>4.最优路径回溯，对于t=T-1,…,1，求得最优路径 $I^{<em>}=(i_{1}^{</em>},…,i_{T}^{*})$。</li>
+</ul>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><p>&emsp;&emsp;以下代码是按照《统计学习方法》中的算法步骤实现的，代码对应的公式也有注释。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line">state_dict = &#123;<span class="number">0</span>: <span class="string">'晴天'</span>, <span class="number">1</span>: <span class="string">'黄昏'</span>, <span class="number">2</span>: <span class="string">'雨天'</span>&#125;</span><br><span class="line">observe_dict = &#123;<span class="number">0</span>: <span class="string">'前10名'</span>, <span class="number">2</span>: <span class="string">'10-20名'</span>, <span class="number">3</span>: <span class="string">'20名以后'</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;定义HMM类，包括了上述的三种问题求解的方法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HMM</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, n_state_=None, run_type_=<span class="string">'probability'</span>, m_observe_=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                 state_transfer_=None, observe_prob_=None, start_prob_=None, observe_=None, max_step=<span class="number">100</span>)</span>:</span></span><br><span class="line">        <span class="comment"># 概率计算问题</span></span><br><span class="line">        <span class="keyword">if</span> run_type_ == <span class="string">'probability'</span>:</span><br><span class="line">            <span class="keyword">if</span> n_state_ <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">or</span> state_transfer_ <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">or</span> start_prob_ <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">or</span> observe_prob_ <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">or</span> m_observe_ <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">or</span> observe_ <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">                <span class="keyword">raise</span> ValueError(<span class="string">'missing parameter for HMM &#123;&#125;'</span>.format(run_type_))</span><br><span class="line">            self.observe_prob = observe_prob_</span><br><span class="line">            self.n_state = n_state_</span><br><span class="line">            self.m_observe = m_observe_</span><br><span class="line">            self.state_transfer = state_transfer_</span><br><span class="line">            self.start_prob = start_prob_</span><br><span class="line">            self.observe = observe_</span><br><span class="line">        <span class="comment"># 参数学习问题</span></span><br><span class="line">        <span class="keyword">elif</span> run_type_ == <span class="string">'learning'</span>:</span><br><span class="line">            <span class="keyword">if</span> m_observe_ <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">or</span> n_state_ <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">or</span> observe_ <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">                <span class="keyword">raise</span> ValueError(<span class="string">'missing parameter for HMM &#123;&#125;'</span>.format(run_type_))</span><br><span class="line">            self.n_state = n_state_</span><br><span class="line">            self.m_observe = m_observe_</span><br><span class="line">            self.observe = observe_</span><br><span class="line">            self.max_step = max_step</span><br><span class="line">            self.parameter_init()</span><br><span class="line">        <span class="comment"># 预测问题</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">if</span> n_state_ <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">or</span> state_transfer_ <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">or</span> start_prob_ <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">or</span> observe_prob_ <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">or</span> observe_ <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">                <span class="keyword">raise</span> ValueError(<span class="string">'missing parameter for HMM &#123;&#125;'</span>.format(run_type_))</span><br><span class="line">            self.observe_prob = observe_prob_</span><br><span class="line">            self.n_state = n_state_</span><br><span class="line">            self.state_transfer = state_transfer_</span><br><span class="line">            self.start_prob = start_prob_</span><br><span class="line">            self.observe = observe_</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 前向算法</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.T = len(self.observe)</span><br><span class="line">        self.alpha = np.matrix(np.zeros((self.T, self.n_state)))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># step1 初值，对应公式 10.15</span></span><br><span class="line">        prob = self.observe_prob[:, self.observe[<span class="number">0</span>]]</span><br><span class="line">        self.alpha[<span class="number">0</span>] = self.start_prob * prob.T.getA()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># step2 递推，对应公式 10.16</span></span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> range(<span class="number">1</span>, self.T):</span><br><span class="line">            tmp1 = self.observe_prob[:, self.observe[t]].T.getA()</span><br><span class="line">            tmp2 = (self.alpha[t<span class="number">-1</span>] * self.state_transfer).getA()</span><br><span class="line">            self.alpha[t] = tmp1 * tmp2</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 后向算法</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">backward</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.beta = np.matrix(np.zeros((self.T, self.n_state)))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># step1 初始化T时刻的后向概率为1，公式 10.19</span></span><br><span class="line">        self.beta[<span class="number">-1</span>] = np.ones((<span class="number">1</span>, self.n_state))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># step2 公式 10.20</span></span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> range(self.T - <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(self.n_state):</span><br><span class="line">                sum_ = <span class="number">0</span></span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> range(self.n_state):</span><br><span class="line">                    tmp1 = self.state_transfer[i, j]</span><br><span class="line">                    tmp2 = self.observe_prob[j, self.observe[self.T - <span class="number">1</span> - t]]</span><br><span class="line">                    tmp3 = self.beta[self.T - <span class="number">1</span> - t, j]</span><br><span class="line">                    sum_ += tmp1 * tmp2 * tmp3</span><br><span class="line">                self.beta[self.T - <span class="number">1</span> - <span class="number">1</span> - t, i] = sum_</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 初始化HMM模型参数，用于参数估计</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parameter_init</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="comment"># 初始状态向量</span></span><br><span class="line">        self.start_prob = np.array([<span class="number">1.0</span> / n_state] * self.n_state)</span><br><span class="line">        <span class="comment"># 状态转移概率矩阵</span></span><br><span class="line">        self.state_transfer = np.matrix(np.zeros((self.n_state, self.n_state)))</span><br><span class="line">        <span class="comment"># 观测概率矩阵</span></span><br><span class="line">        self.observe_prob = np.matrix(np.zeros((self.n_state, self.m_observe)))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(self.n_state):</span><br><span class="line">            random_list = [random.randint(<span class="number">0</span>, <span class="number">100</span>) <span class="keyword">for</span> t <span class="keyword">in</span> range(self.n_state)]</span><br><span class="line">            sum_ = sum(random_list)</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(self.n_state):</span><br><span class="line">                self.state_transfer[i, j] = random_list[j] / sum_</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(self.n_state):</span><br><span class="line">            random_list = [random.randint(<span class="number">0</span>, <span class="number">100</span>) <span class="keyword">for</span> t <span class="keyword">in</span> range(self.m_observe)]</span><br><span class="line">            sum_ = sum(random_list)</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(self.m_observe):</span><br><span class="line">                self.observe_prob[i, j] = random_list[j] / sum_</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 学习问题：估计模型参数</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">learning_parameters</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'learning'</span>)</span><br><span class="line">        self.T = len(self.observe)</span><br><span class="line"></span><br><span class="line">        step = <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> step &lt; self.max_step + <span class="number">1</span>:</span><br><span class="line">            print(<span class="string">'step: &#123;&#125;'</span>.format(step))</span><br><span class="line">            step += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># 计算前向后向概率</span></span><br><span class="line">            self.forward()</span><br><span class="line">            self.backward()</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 计算期望值</span></span><br><span class="line">            self.cal_gamma()</span><br><span class="line">            self.cal_xi()</span><br><span class="line"></span><br><span class="line">            <span class="comment"># EM算法估计参数</span></span><br><span class="line">            tmp_state_transfer = self.cal_state_transfer()</span><br><span class="line">            tmp_observe_prob = self.cal_observe_prob()</span><br><span class="line">            tmp_start_prob = self.cal_start_prob()</span><br><span class="line"></span><br><span class="line">            self.state_transfer = tmp_state_transfer</span><br><span class="line">            self.observe_prob = tmp_observe_prob</span><br><span class="line">            self.start_prob = tmp_start_prob</span><br><span class="line"></span><br><span class="line">        print(<span class="string">'learning done'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 给定模型初始状态概率和观测序列，计算t时刻处于状态i的概率，公式10.24</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">cal_gamma</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.gamma = np.zeros((self.T, self.n_state))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> range(self.T):</span><br><span class="line">            p_full = np.dot(self.alpha[t], self.beta[t].T)[<span class="number">0</span>, <span class="number">0</span>]</span><br><span class="line">            p = self.alpha[t].getA() * self.beta[t].getA()</span><br><span class="line">            self.gamma[t] = p / p_full</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 给定模型初始状态概率和观测序列，计算t时刻处于状态i且t+1时刻处于状态j的概率，公式10.26</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">cal_xi</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.xi = np.zeros((self.T<span class="number">-1</span>, self.n_state, self.n_state))</span><br><span class="line">        p_full = np.zeros(self.T<span class="number">-1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> range(self.T<span class="number">-1</span>):</span><br><span class="line">            sum_ = <span class="number">0</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(self.n_state):</span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> range(self.n_state):</span><br><span class="line">                    sum_ += self.alpha[t, i] * self.state_transfer[i, j] * \</span><br><span class="line">                            self.observe_prob[j, self.observe[t+<span class="number">1</span>]] * self.beta[t+<span class="number">1</span>, j]</span><br><span class="line">            p_full[t] = sum_</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> range(self.T<span class="number">-1</span>):</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(self.n_state):</span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> range(self.n_state):</span><br><span class="line">                    p = self.alpha[t, i] * self.state_transfer[i, j] * \</span><br><span class="line">                        self.observe_prob[j, self.observe[t+<span class="number">1</span>]] * self.beta[t+<span class="number">1</span>, j]</span><br><span class="line">                    self.xi[t][i][j] = p / p_full[t]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># EM算法计算状态转移矩阵</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">cal_state_transfer</span><span class="params">(self)</span>:</span></span><br><span class="line">        tmp_state_transfer = np.matrix(np.zeros((self.n_state, self.n_state)))</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(self.n_state):</span><br><span class="line">            sum_2 = self.gamma[:self.T - <span class="number">1</span>, i].sum()</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(self.n_state):</span><br><span class="line">                sum_1 = self.xi[:, i, j].sum()</span><br><span class="line">                tmp_state_transfer[i, j] = sum_1 / sum_2</span><br><span class="line">        <span class="keyword">return</span> tmp_state_transfer</span><br><span class="line"></span><br><span class="line">    <span class="comment"># EM算法计算观测概率矩阵</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">cal_observe_prob</span><span class="params">(self)</span>:</span></span><br><span class="line">        tmp_observe_prob = np.matrix(np.zeros((self.n_state, self.m_observe)))</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(self.n_state):</span><br><span class="line">            <span class="keyword">for</span> k <span class="keyword">in</span> range(self.m_observe):</span><br><span class="line">                sum_1 = <span class="number">0</span></span><br><span class="line">                sum_2 = <span class="number">0</span></span><br><span class="line">                <span class="keyword">for</span> t <span class="keyword">in</span> range(self.T):</span><br><span class="line">                    <span class="keyword">if</span> k == self.observe[t]:</span><br><span class="line">                        sum_1 += self.gamma[t, i]</span><br><span class="line">                    sum_2 += self.gamma[t, i]</span><br><span class="line">                tmp_observe_prob[i, k] = sum_1 / sum_2</span><br><span class="line">        <span class="keyword">return</span> tmp_observe_prob</span><br><span class="line"></span><br><span class="line">    <span class="comment"># EM算法计算初始概率向量</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">cal_start_prob</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.gamma[<span class="number">0</span>, :]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 状态预测算法，维特比算法，后续补充</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">predict_state</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;概率计算问题</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定义状态转移矩阵，即地图三种天气的状态转换</span></span><br><span class="line">state_transfer = np.matrix([[<span class="number">0.5</span>, <span class="number">0.3</span>, <span class="number">0.2</span>],</span><br><span class="line">                            [<span class="number">0.6</span>, <span class="number">0.2</span>, <span class="number">0.2</span>],</span><br><span class="line">                            [<span class="number">0.6</span>, <span class="number">0.3</span>, <span class="number">0.1</span>]])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义观测概率矩阵，即地图三种天气状态对应的观测概率</span></span><br><span class="line">observe_prob = np.matrix([[<span class="number">0.6</span>, <span class="number">0.3</span>, <span class="number">0.1</span>], [<span class="number">0.3</span>, <span class="number">0.5</span>, <span class="number">0.2</span>], [<span class="number">0.2</span>, <span class="number">0.5</span>, <span class="number">0.3</span>]])</span><br><span class="line"><span class="comment"># 状态数</span></span><br><span class="line">n_state = <span class="number">3</span></span><br><span class="line"><span class="comment"># 观测数</span></span><br><span class="line">m_observe = <span class="number">3</span></span><br><span class="line"><span class="comment"># 起始状态分布向量</span></span><br><span class="line">start_prob = np.array([<span class="number">0.5</span>, <span class="number">0.3</span>, <span class="number">0.2</span>])</span><br><span class="line"><span class="comment"># 观测序列，即连续5局的战绩[前10，前10，20开外，10-20，前10]</span></span><br><span class="line">observe = [<span class="number">0</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>]</span><br><span class="line">hmm = HMM(observe_prob_=observe_prob, n_state_=n_state,</span><br><span class="line">          m_observe_=m_observe, state_transfer_=state_transfer,</span><br><span class="line">          start_prob_=start_prob, observe_=observe)</span><br><span class="line"><span class="comment"># 前向概率计算</span></span><br><span class="line">hmm.forward()</span><br><span class="line"><span class="comment"># 后向概率计算</span></span><br><span class="line">hmm.backward()</span><br><span class="line"></span><br><span class="line">forward_p = hmm.alpha[<span class="number">-1</span>].sum()</span><br><span class="line">backward_p = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(n_state):</span><br><span class="line">    backward_p += hmm.start_prob[i] * hmm.observe_prob[i, observe[<span class="number">0</span>]] * hmm.beta[<span class="number">0</span>, i]</span><br><span class="line"></span><br><span class="line">print(<span class="string">'前向概率： &#123;&#125;'</span>.format(forward_p))</span><br><span class="line">print(<span class="string">'后向概率： &#123;&#125;'</span>.format(backward_p))</span><br></pre></td></tr></table></figure>
+<pre><code>前向概率： 0.0054589187999999995
+后向概率： 0.0054589187999999995
+</code></pre><p>&emsp;&emsp;参数学习问题</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">observe = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>]</span><br><span class="line">n_state = <span class="number">3</span></span><br><span class="line">m_observe = <span class="number">3</span></span><br><span class="line">hmm = HMM(n_state_=n_state, m_observe_=m_observe,</span><br><span class="line">          run_type_=<span class="string">'learning'</span>, observe_=observe,</span><br><span class="line">          max_step=<span class="number">10</span>)</span><br><span class="line">hmm.learning_parameters()</span><br><span class="line"></span><br><span class="line">print(<span class="string">'初始状态概率向量：'</span>)</span><br><span class="line">print(hmm.start_prob)</span><br><span class="line">print(<span class="string">'状态转移矩阵：'</span>)</span><br><span class="line">print(hmm.state_transfer)</span><br><span class="line">print(<span class="string">'观测概率矩阵：'</span>)</span><br><span class="line">print(hmm.observe_prob)</span><br></pre></td></tr></table></figure>
+<pre><code>learning
+step: 1
+step: 2
+step: 3
+step: 4
+step: 5
+step: 6
+step: 7
+step: 8
+step: 9
+step: 10
+learning done
+初始状态概率向量：
+[1.49529045e-05 9.99985047e-01 5.03432572e-13]
+状态转移矩阵：
+[[1.91880239e-01 5.57882397e-05 8.08063973e-01]
+ [1.70532635e-03 1.76861116e-13 9.98294674e-01]
+ [1.68273868e-01 1.19887600e-01 7.11838432e-01]]
+观测概率矩阵：
+[[2.85459304e-01 7.25724096e-02 6.41968286e-01]
+ [9.99774837e-01 3.54499362e-05 1.89713434e-04]
+ [8.22150576e-03 6.25644638e-01 3.66133857e-01]]
+</code></pre><h1 id="enjoy-it"><a href="#enjoy-it" class="headerlink" title="enjoy it!"></a>enjoy it!</h1><p>参考资料：<a href="https://www.zhihu.com/question/20962240" target="_blank" rel="noopener">https://www.zhihu.com/question/20962240</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="刘力铭 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/uncategorized/SVM三部曲之SVM终极推导/" rel="next" title="SVM三部曲之SVM终极推导">
+                <i class="fa fa-chevron-left"></i> SVM三部曲之SVM终极推导
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/keji2.jpg"
+                alt="刘力铭" />
+            
+              <p class="site-author-name" itemprop="name">刘力铭</p>
+              <p class="site-description motion-element" itemprop="description">趣事之多 吾知甚少 学无止境 唯有努力</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">博文</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/nanyoullm" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:nanyoullm@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#先举个栗子"><span class="nav-number">1.</span> <span class="nav-text">先举个栗子</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本概念"><span class="nav-number">2.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问题解法"><span class="nav-number">3.</span> <span class="nav-text">问题解法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概率计算问题"><span class="nav-number">3.1.</span> <span class="nav-text">概率计算问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数学习问题"><span class="nav-number">3.2.</span> <span class="nav-text">参数学习问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#预测问题"><span class="nav-number">3.3.</span> <span class="nav-text">预测问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码实现"><span class="nav-number">4.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#enjoy-it"><span class="nav-number">5.</span> <span class="nav-text">enjoy it!</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-Lim Lau"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lim的博客</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <script type="text/javascript" opacity="0.5" zIndex="-2" count="50" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>
