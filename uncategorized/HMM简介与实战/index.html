@@ -88,10 +88,11 @@
 <meta property="og:description" content="&amp;emsp;&amp;emsp;有差不多3个星期没有更新博客了，清明假期回了趟江西也是把我堵怕了。不过这段时间也抽空回顾了下隐马尔可夫（HMM），同时动手写了下算法，今天总算是整理地差不多了。&amp;emsp;&amp;emsp;隐马尔可夫（HMM）模型描是一个关于时序的概率模型，描述由一个隐藏的马尔可夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生观测随机序列的过程。下面来回顾一下吧！">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/hmm/show_state.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/hmm/chiji.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/hmm/forward1.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/hmm/forward2.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/hmm/backward.png">
-<meta property="og:updated_time" content="2018-04-09T00:01:10.637Z">
+<meta property="og:updated_time" content="2018-04-09T00:10:02.624Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HMM简介与实战">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;有差不多3个星期没有更新博客了，清明假期回了趟江西也是把我堵怕了。不过这段时间也抽空回顾了下隐马尔可夫（HMM），同时动手写了下算法，今天总算是整理地差不多了。&amp;emsp;&amp;emsp;隐马尔可夫（HMM）模型描是一个关于时序的概率模型，描述由一个隐藏的马尔可夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生观测随机序列的过程。下面来回顾一下吧！">
@@ -337,6 +338,8 @@
 <li>2.朋友B只知道我们连续5局的成绩，他希望估计出HMM模型的三个参数 $(\pi,A,B)$;</li>
 <li>3.朋友C已知了HMM模型的参数和我们连续5局的成绩，她希望能猜测出这5局的地图天气分别是什么；</li>
 </ul>
+<p>&emsp;&emsp;最后一局终于吃鸡，上张吃鸡图。</p>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/hmm/chiji.png" width="400"></p>
 <h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><p>&emsp;&emsp;HMM模型由初始状态概率向量 $\pi$ 、状态转移矩阵 $A$、观测概率矩阵 $B$ 组成。$\pi$ 和 $A$ 决定了状态序列，$B$ 决定了观测序列，这三个参数称为HMM的三要素。<br>&emsp;&emsp;可以看出来，HMM做了两个基本假设：</p>
 <ul>
 <li>1.齐次马尔可夫性假设：隐藏的马尔可夫链在任意时刻 $t$ 的状态只依赖于前一时刻的状态，与其他时刻的状态及观测无关；</li>
