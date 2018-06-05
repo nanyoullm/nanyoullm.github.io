@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/nvidia/xrzjxs.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/nvidia/nvidia-smi.png">
-<meta property="og:updated_time" content="2018-06-05T15:33:17.147Z">
+<meta property="og:updated_time" content="2018-06-05T15:37:05.160Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ubuntu &amp; Nvidia驱动修复">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;好吧，我知道我很久没写博客了，我会改的。&amp;emsp;&amp;emsp;这篇博文记录一下解决 Ubuntu 下 Nvidia 驱动和 cuda 失效问题的解决过程。">
@@ -378,8 +378,9 @@ options nouveau modeset=0</code></li>
 <li>期间看到了这篇<a href="https://blog.csdn.net/u010159842/article/details/54344683" target="_blank" rel="noopener">文章</a>。拉到最下面可以看到考虑先安装 cuda，过程中选择不安装 nvidia 驱动。然后再安装 nvidia 驱动；</li>
 <li>安装 cuda，<code>sudo sh cuda_&lt;version&gt;_linux.run</code>；</li>
 <li>安装最新的 nvidia 驱动，<code>sudo apt-get install nvidia-396</code>；</li>
-<li>重启进入降级的内核系统，输入 <code>nvidia-smi</code> 看到以下信息：<br><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/nvidia/nvidia-smi.png" width="400"></li>
+<li>重启进入降级的内核系统，输入 <code>nvidia-smi</code> 看到以下信息：</li>
 </ol>
+<p><img src="https://raw.githubusercontent.com/nanyoullm/blog_code/master/img/from_notebook/nvidia/nvidia-smi.png" width="400"></p>
 <p>&emsp;&emsp;成功了…情绪逐渐稳定。</p>
 <h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>&emsp;&emsp;这次修复确实走了不少的弯路，建议可以取消 Ubuntu 的自动更新，防止内核的自动升级。好啦，我要去训练我的智障机器人啦！</p>
 <h1 id="enjoy-it"><a href="#enjoy-it" class="headerlink" title="enjoy it!"></a>enjoy it!</h1>
